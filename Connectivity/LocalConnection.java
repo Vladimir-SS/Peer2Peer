@@ -1,9 +1,8 @@
 package Connectivity;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class LocalConnection implements Connection {
@@ -20,22 +19,61 @@ public class LocalConnection implements Connection {
     }
 
     @Override
-    public String getNameIncomingFile() {
-        return "haha.txt";
+    //formatul numelui: &nume.ext#dim_fisier_bytes*
+    //ar trebui sa existe un hand-shaking aici (??)
+    public FileOutputStream getNameIncomingFile() {
+        try {
+            String fileName = Arrays.toString(reader.readAllBytes());
+            String file = fileName.substring(fileName.indexOf("&") + 1, fileName.indexOf("#"));
+            String lengthFile = fileName.substring(fileName.indexOf("#") + 1, fileName.indexOf("*"));
+            int fileSize = Integer.parseInt(lengthFile);
+
+            return createFile(file);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+        return null;
     }
 
     @Override
-    public void receiveFile(String fileName) {
-        // read file
+    public void receiveFile(FileOutputStream foStream) {
+        byte[] readBuffer = new byte[8192];
+        Thread readRunnable = new Thread() {
+            public void run() {
+                while (true) {
+                    try {
+                        int num = reader.read(readBuffer);
+                        if (num > 0) {
+                            byte[] tempArray = new byte[num];
+                            System.arraycopy(readBuffer, 0, tempArray, 0, num);
+                            writeToFile(foStream, tempArray);
+                        } else if (num < 0){
+                            break;
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        readRunnable.start();
+    }
 
-        // read file in new thread
-
-        // vvvvvvvvv TEST -- Delete when u start working
-
+    private FileOutputStream createFile(String fileName) {
+        File dstFile = new File("./" + fileName);
         try {
-            System.out.println(Arrays.toString(reader.readAllBytes()));
-        } catch (IOException e) {
-            e.printStackTrace();
+            return new FileOutputStream(dstFile);
+        } catch (FileNotFoundException fn) {
+            fn.printStackTrace();
+        }
+        return null;
+    }
+
+    private void writeToFile(FileOutputStream foStream, byte[] buff) {
+        try {
+            foStream.write(buff);
+        } catch (IOException io) {
+            io.printStackTrace();
         }
     }
 
