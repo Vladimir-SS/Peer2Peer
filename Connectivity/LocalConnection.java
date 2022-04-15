@@ -78,8 +78,23 @@ public class LocalConnection implements Connection {
     }
 
     @Override
-    public void sendFile(String fileName) {
+    public void sendFile(String fileName) throws IOException {
         // send file size
+        byte[] buffer = new byte[Integer.MAX_VALUE];
+        String filePath = "";
+        Thread sendFile = new Thread() {
+            public void run() {
+                byte[] buffer = new byte[Integer.MAX_VALUE];
+                try {
+                    FileInputStream fileInputStream = new FileInputStream(fileName);
+                    int bytes = fileInputStream.read(buffer, 0, buffer.length);
+                    FileOutputStream fileOutputStream = new FileOutputStream(fileName);
+                    fileOutputStream.write(bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
 
         // send file in new Thread
 

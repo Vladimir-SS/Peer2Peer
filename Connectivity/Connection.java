@@ -8,5 +8,5 @@ import java.io.OutputStream;
 public interface Connection {
     FileOutputStream getNameIncomingFile();
     void receiveFile(FileOutputStream foStream);
-    void sendFile(String fileName);
+    void sendFile(String fileName) throws IOException;
 }

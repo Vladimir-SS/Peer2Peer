@@ -21,7 +21,7 @@ public class Peer{
             try {
                 for (var connection : connections) {
 
-                    String nameIncomingFile  = connection.getNameIncomingFile();
+                    String nameIncomingFile  = String.valueOf(connection.getNameIncomingFile());
                     //!! Add exception here
                     if (nameIncomingFile != null)
                         return connection;
