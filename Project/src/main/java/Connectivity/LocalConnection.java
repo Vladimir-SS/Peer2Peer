@@ -80,30 +80,33 @@ public class LocalConnection implements Connection {
     @Override
     public void sendFile(String fileName) throws IOException {
         // send file size
-        byte[] buffer = new byte[Integer.MAX_VALUE];
+        byte[] buffer = new byte[8192];
         String filePath = "";
         Thread sendFile = new Thread() {
             public void run() {
-                byte[] buffer = new byte[Integer.MAX_VALUE];
+                byte[] buffer = new byte[8192];
                 try {
                     FileInputStream fileInputStream = new FileInputStream(fileName);
                     int bytes = fileInputStream.read(buffer, 0, buffer.length);
                     FileOutputStream fileOutputStream = new FileOutputStream(fileName);
                     fileOutputStream.write(bytes);
+                    System.out.println("File successfully send");
                 } catch (IOException e) {
+                    System.out.println("Error sending file");
                     e.printStackTrace();
                 }
             }
         };
+        sendFile.start();
 
         // send file in new Thread
 
         //vvvvvvvv Test - Delete when u start working
-        System.out.println("I'll send data");
-        try {
-            writer.write("Custom Message!".getBytes());
-        } catch (IOException e) {
-            System.err.println("Nope, smth not working :(");
-        }
+//        System.out.println("I'll send data");
+//        try {
+//            writer.write("Custom Message!".getBytes());
+//        } catch (IOException e) {
+//            System.err.println("Nope, smth not working :(");
+//        }
     }
 }
