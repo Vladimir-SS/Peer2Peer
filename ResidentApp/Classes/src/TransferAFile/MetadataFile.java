@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class MetadataFile {
 
-    public Map<String, String> getAllData(File f) throws IOException {
+    public static Map<String, String> getAllData(File f) throws IOException {
         Map<String, String> fileData=new HashMap<>();
 
         if(f.exists())
@@ -26,10 +26,13 @@ public class MetadataFile {
 
             BasicFileAttributes view= Files.readAttributes(file, BasicFileAttributes.class);
             fileData.put("creationTime",String.valueOf(view.creationTime()));
-            fileData.put("creationTime",String.valueOf(view.creationTime()));
-            fileData.put("creationTime",String.valueOf(view.creationTime()));
-            fileData.put("creationTime",String.valueOf(view.creationTime()));
-            fileData.put("creationTime",String.valueOf(view.creationTime()));
+            fileData.put("lastAccessTime",String.valueOf(view.lastAccessTime()));
+            fileData.put("lastModifiedTime",String.valueOf(view.lastModifiedTime()));
+
+            fileData.put("isDirectory",String.valueOf(view.isDirectory()));
+            fileData.put("isOther",String.valueOf(view.isOther()));
+            fileData.put("size2",String.valueOf(view.size()));
+
 
         }
         else{
@@ -39,8 +42,5 @@ public class MetadataFile {
 
     }
 
-    public static void main(String[] args) {
-        File f= new File("D:\\git\\GitHub\\Tw\\Animals\\index.html");
-        System.out.println(getAllData(f));
-    }
+
 }
