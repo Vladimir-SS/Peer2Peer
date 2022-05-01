@@ -8,10 +8,17 @@ public class ReceiverTest {
     public static void main(String[] args) throws IOException {
         Peer peer = new Peer(4444);
         System.out.println("Waiting for Connection...");
-        peer.waitingConnection();
+        //peer.waitingConnection();
         System.out.println("Waiting for Info...");
-        File file = new File(ReceiverTest.class.getResource("/").getPath() + "/test.txt");
+        System.out.println(ReceiverTest.class.getClassLoader().getResource("./").getPath() + "test.txt");
+        File file = new File(ReceiverTest.class.getClassLoader().getResource("./").getPath() + "test.txt");
         FileOutputStream fileOut = new FileOutputStream(file);
-        peer.get(0).receiveFile(fileOut);
+        while(true) { // Waiting for the server to receive the connection
+            //peer.checkActiveConnections();
+            if (peer.get("192.168.100.9") != null) {
+                peer.get("192.168.100.9").receiveFile(fileOut);
+                break;
+            }
+        }
     }
 }

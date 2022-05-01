@@ -1,4 +1,5 @@
 import Connectivity.Peer;
+
 import java.io.IOException;
 import java.net.URL;
 
@@ -11,11 +12,16 @@ public class SenderTest {
             var localIpList = peer.getDevices();
             System.out.println(localIpList);
             System.out.println("Connecting...");
-            peer.connectDevice(9,4444);
+            peer.connectDevice("192.168.100.9",4444);
             System.out.println("Sending...");
-            URL resource = ReceiverTest.class.getClassLoader().getResource("message.txt");
-            peer.get(0).sendFile(resource.getPath());
-
+            URL resource = SenderTest.class.getClassLoader().getResource("message.txt");
+            while(true) {   // Waiting for a receiver to accept the connection
+                //peer.checkActiveConnections();
+                if(peer.get("192.168.100.9") != null) {
+                    peer.get("192.168.100.9").sendFile(resource.getPath());
+                    break;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

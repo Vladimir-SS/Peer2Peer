@@ -1,21 +1,26 @@
 package Connectivity;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Peer{
     protected int port;
-    protected ServerSocket serverSocket;
-    List<Connection> connections = new ArrayList<>();
+    private ConnectionsManager connectionsManager = null;
 
     public Peer(int port) throws IOException {
         this.port = port;
-        this.serverSocket = new ServerSocket(port);
+        startConnectionsManager();
+    }
+
+    private void startConnectionsManager() {
+        connectionsManager = ConnectionsManager.getInstance(port);
+        new Thread(connectionsManager).start();
     }
 
     public List<String> getDevices() throws InterruptedException, IOException {
@@ -88,15 +93,21 @@ public class Peer{
         return IPsList;
     }
 
-    public Connection incomingFile(){
+    public synchronized void checkActiveConnections() {
+        for (Map.Entry<String,Connection> connection : connectionsManager.connections.entrySet()) {
+            System.out.println(connection.getValue().getName());
+        }
+    }
+
+    public synchronized Connection incomingFile(){
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                for (var connection : connections) {
+                for (Map.Entry<String,Connection> connection : connectionsManager.connections.entrySet()) {
 
-                    String nameIncomingFile  = String.valueOf(connection.getNameIncomingFile());
+                    String nameIncomingFile  = String.valueOf(connection.getValue().getNameIncomingFile());
                     //!! Add exception here
                     if (nameIncomingFile != null)
-                        return connection;
+                        return connection.getValue();
                 }
                 wait(1000);
             } catch (InterruptedException ex) {
@@ -107,35 +118,14 @@ public class Peer{
         return null;
     }
 
-    public void waitingConnection(){
-
-        Socket clientSocket;
-        try {
-            clientSocket = this.serverSocket.accept();
-
-        } catch (IOException e) {
-            throw new RuntimeException( "Error accepting client connection", e );
-        }
-
-        //!! more exceptions
-        try {
-            System.out.println("New client!");
-            connections.add(new LocalConnection(clientSocket));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        System.out.println("Server Stopped.") ;
-    }
-
-    public void connectDevice(int deviceNumber,int devicePort) throws IOException {
+    public void connectDevice(String deviceIP,int devicePort) throws IOException {
         //!! change with dynamic ipv4
-        Connection connection = new LocalConnection(new Socket("192.168.100." + deviceNumber, devicePort));
-
-        connections.add(connection);
+        Connection connection = new LocalConnection(new Socket(deviceIP, devicePort));
+        connection.setName(deviceIP);
+        connectionsManager.connections.put(connection.getName(),connection);
     }
 
-    public Connection get(int index){
-        return connections.get(index);
+    public Connection get(String ip){
+        return connectionsManager.connections.get(ip);
     }
 }

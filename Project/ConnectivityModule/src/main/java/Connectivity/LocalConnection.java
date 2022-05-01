@@ -1,17 +1,19 @@
 package Connectivity;
+
 import java.io.*;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 public class LocalConnection implements Connection {
     protected Socket clientSocket;
+    private String name;
 
     InputStream reader;
     OutputStream writer;
 
     public LocalConnection(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
-
         this.reader  = clientSocket.getInputStream();
         this.writer = clientSocket.getOutputStream();
     }
@@ -36,6 +38,7 @@ public class LocalConnection implements Connection {
     @Override
     public void receiveFile(FileOutputStream foStream) {
         byte[] readBuffer = new byte[8192];
+        System.out.println("Receiving file");
         Thread readRunnable = new Thread() {
             public void run() {
                 while (true) {
@@ -45,7 +48,7 @@ public class LocalConnection implements Connection {
                             byte[] tempArray = new byte[num];
                             System.arraycopy(readBuffer, 0, tempArray, 0, num);
                             writeToFile(foStream, tempArray);
-                        } else if (num < 0){
+                        } else {
                             break;
                         }
                     } catch (IOException e) {
@@ -80,31 +83,37 @@ public class LocalConnection implements Connection {
         // send file size
         byte[] buffer = new byte[8192];
         String filePath = "";
+        FileInputStream fileInputStream = new FileInputStream(fileName);
         Thread sendFile = new Thread() {
             public void run() {
                 byte[] buffer = new byte[8192];
-                try {
-                    FileInputStream fileInputStream = new FileInputStream(fileName);
-                    int bytes = fileInputStream.read(buffer, 0, buffer.length);
-                    FileOutputStream fileOutputStream = new FileOutputStream(fileName);
-                    fileOutputStream.write(bytes);
-                    System.out.println("File successfully send");
-                } catch (IOException e) {
-                    System.out.println("Error sending file");
-                    e.printStackTrace();
+                while (true) {
+                    try {
+                        int bytes = fileInputStream.read(buffer);
+                        if (bytes > 0) {
+                            writer.write(buffer);
+                        } else {
+                            break;
+                        }
+
+                    } catch (IOException e) {
+                        System.out.println("Error sending file");
+                        e.printStackTrace();
+                    }
                 }
+                System.out.println("File successfully send");
             }
         };
         sendFile.start();
+    }
 
-        // send file in new Thread
+    @Override
+    public String getName() {
+        return name;
+    }
 
-        //vvvvvvvv Test - Delete when u start working
-//        System.out.println("I'll send data");
-//        try {
-//            writer.write("Custom Message!".getBytes());
-//        } catch (IOException e) {
-//            System.err.println("Nope, smth not working :(");
-//        }
+    @Override
+    public void setName(String name) {
+        this.name = name;
     }
 }
