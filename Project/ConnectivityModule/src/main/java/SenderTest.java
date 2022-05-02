@@ -12,13 +12,13 @@ public class SenderTest {
             var localIpList = peer.getDevices();
             System.out.println(localIpList);
             System.out.println("Connecting...");
-            peer.connectDevice("192.168.100.9",4444);
+            peer.connectDevice("10.100.58.217",4444);
             System.out.println("Sending...");
             URL resource = SenderTest.class.getClassLoader().getResource("message.txt");
             while(true) {   // Waiting for a receiver to accept the connection
                 //peer.checkActiveConnections();
-                if(peer.get("192.168.100.9") != null) {
-                    peer.get("192.168.100.9").sendFile(resource.getPath());
+                if(peer.get("10.100.58.217") != null) {
+                    peer.get("10.100.58.217").sendFile(resource.getPath());
                     break;
                 }
             }

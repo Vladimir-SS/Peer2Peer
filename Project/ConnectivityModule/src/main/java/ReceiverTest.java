@@ -15,8 +15,8 @@ public class ReceiverTest {
         FileOutputStream fileOut = new FileOutputStream(file);
         while(true) { // Waiting for the server to receive the connection
             //peer.checkActiveConnections();
-            if (peer.get("192.168.100.9") != null) {
-                peer.get("192.168.100.9").receiveFile(fileOut);
+            if (peer.get("10.100.58.217") != null) {
+                peer.get("10.100.58.217").receiveFile(fileOut);
                 break;
             }
         }

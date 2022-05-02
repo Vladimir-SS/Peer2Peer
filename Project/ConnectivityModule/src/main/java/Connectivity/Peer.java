@@ -24,8 +24,8 @@ public class Peer{
     }
 
     public List<String> getDevices() throws InterruptedException, IOException {
-        return getIPsUsingPing();
-        //return getIPsUsingCMD();
+//        return getIPsUsingPing();
+        return getIPsUsingCMD();
     }
 
     private List<String> getIPsUsingPing() throws InterruptedException {

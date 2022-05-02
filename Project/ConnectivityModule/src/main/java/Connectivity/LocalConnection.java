@@ -89,10 +89,12 @@ public class LocalConnection implements Connection {
                 byte[] buffer = new byte[8192];
                 while (true) {
                     try {
-                        int bytes = fileInputStream.read(buffer);
-                        if (bytes > 0) {
-                            writer.write(buffer);
-                        } else {
+
+                        int bytes =fileInputStream.read(buffer,0, buffer.length);
+                        if(bytes>0){
+                            writer=clientSocket.getOutputStream();
+                            writer.write(buffer,0,bytes);
+                        }else{
                             break;
                         }
 
