@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -91,6 +92,27 @@ public class Peer{
         stderr.close();
         //System.out.println("Done");
         return IPsList;
+    }
+
+    static Map<String,String> devices = new HashMap<>();
+
+    public static void getDevicesFromSubnet(String subnet) throws IOException {
+        int timeout=1000;
+        for(int i = 1; i < 255; i++)
+        {
+            int finalI = i;
+            new Thread(() -> {
+                String host=subnet + "." + finalI;
+                try {
+                    if (InetAddress.getByName(host).isReachable(timeout)){
+                        System.out.println(InetAddress.getByName(host).getHostName() + ", IP adress : " + host + " is reachable");
+                        devices.put(host,InetAddress.getByName(host).getHostName());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
     }
 
     public synchronized void checkActiveConnections() {
