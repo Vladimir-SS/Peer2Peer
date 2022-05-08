@@ -1,11 +1,12 @@
 import Connectivity.Peer;
+import Exceptions.PeerDisconnectedException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class ReceiverTest {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, PeerDisconnectedException {
         Peer peer = new Peer(4444);
         System.out.println("Waiting for Connection...");
         //peer.waitingConnection();

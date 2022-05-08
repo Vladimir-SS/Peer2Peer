@@ -1,4 +1,5 @@
 import Connectivity.Peer;
+import Exceptions.PeerDisconnectedException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,9 +23,7 @@ public class SenderTest {
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException | PeerDisconnectedException e) {
             e.printStackTrace();
         }
 
