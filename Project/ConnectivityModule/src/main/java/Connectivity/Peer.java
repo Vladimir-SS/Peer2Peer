@@ -1,5 +1,8 @@
 package Connectivity;
 
+import Exceptions.PeerAlreadyConnected;
+import Exceptions.PeerDisconnectedException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -140,14 +143,31 @@ public class Peer{
         return null;
     }
 
-    public void connectDevice(String deviceIP,int devicePort) throws IOException {
-        //!! change with dynamic ipv4
-        Connection connection = new LocalConnection(new Socket(deviceIP, devicePort));
-        connection.setName(deviceIP);
-        connectionsManager.connections.put(connection.getName(),connection);
+    private synchronized boolean isConnected(String deviceIP){
+        for (Map.Entry<String,Connection> connection : connectionsManager.connections.entrySet()) {
+            if (connection.getValue().getName().equals(deviceIP)) {
+                return true;
+            }
+        }
+        return false;
     }
 
-    public Connection get(String ip){
-        return connectionsManager.connections.get(ip);
+    public void connectDevice(String deviceIP,int devicePort) throws IOException, PeerAlreadyConnected {
+        //!! change with dynamic ipv4
+        if (!isConnected(deviceIP)) {
+            Connection connection = new LocalConnection(new Socket(deviceIP, devicePort));
+            connection.setName(deviceIP);
+            connectionsManager.connections.put(connection.getName(), connection);
+        } else {
+            throw new PeerAlreadyConnected();
+        }
+    }
+
+    public Connection get(String ip) throws PeerDisconnectedException {
+        if (isConnected(ip)) {
+            return connectionsManager.connections.get(ip);
+        } else {
+            throw new PeerDisconnectedException(ip);
+        }
     }
 }

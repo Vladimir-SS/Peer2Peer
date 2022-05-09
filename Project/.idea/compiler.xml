@@ -12,6 +12,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="Connectivity" target="16" />
       <module name="UIModule" target="17" />
     </bytecodeTargetLevel>
   </component>
