@@ -1,4 +1,5 @@
 import Connectivity.Peer;
+import Exceptions.PeerDisconnectedException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -17,9 +18,13 @@ public class TestConnectivitySender {
             URL resource = TestConnectivitySender.class.getClassLoader().getResource("message.txt");
             while(true) {   // Waiting for a receiver to accept the connection
                 //peer.checkActiveConnections();
-                if(peer.get("169.254.222.108") != null) {
-                    peer.get("169.254.222.108").sendFile(resource.getPath());
-                    break;
+                try {
+                    if(peer.get("169.254.222.108") != null) {
+                        peer.get("169.254.222.108").sendFile(resource.getPath());
+                        break;
+                    }
+                } catch (PeerDisconnectedException e) {
+
                 }
             }
         } catch (IOException e) {

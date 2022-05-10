@@ -1,4 +1,5 @@
 import Connectivity.Peer;
+import Exceptions.PeerDisconnectedException;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -15,9 +16,13 @@ public class TestConnectivityReceiver {
         FileOutputStream fileOut = new FileOutputStream(file);
         while(true) { // Waiting for the server to receive the connection
             //peer.checkActiveConnections();
-            if (peer.get("10.20.0.14") != null) {
-                peer.get("10.20.0.14").receiveFile(fileOut);
-                break;
+            try {
+                if (peer.get("10.20.0.14") != null) {
+                    peer.get("10.20.0.14").receiveFile(fileOut);
+                    break;
+                }
+            } catch (PeerDisconnectedException e) {
+
             }
         }
     }
