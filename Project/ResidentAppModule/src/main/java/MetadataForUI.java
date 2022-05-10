@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //to do:
-//-getAllNoBackupData should return all not synchronised files from all devices; need list of devices with their params (
+//-getAllNoBackupData should return all not synchronised files from all devices; need list od devices with their params (
 
 public class MetadataForUI {
     private String name;
@@ -26,7 +26,7 @@ public class MetadataForUI {
 
     public MetadataForUI(String name, String time, String device, Integer multipleDevice, String extension) {
         this.name = name;
-        this.time = time;       //last modified time
+        this.time = time;
         this.device = device;
         this.extension = extension;
         this.multipleDevice = multipleDevice;
