@@ -33,7 +33,7 @@ public class MetadataFile {
             fileData.put("isDirectory",String.valueOf(view.isDirectory()));
             fileData.put("isOther",String.valueOf(view.isOther()));
             fileData.put("size2",String.valueOf(view.size()));
-            fileData.put("lasPush","");
+            fileData.put("lastPush","");
         }
         else{
             System.out.println("File doesn't exist");
@@ -145,6 +145,7 @@ public class MetadataFile {
     }
     public static void updateAFile(String nameWithExtension,String pathForFiles, Map<String, File> data, LocalDate whenPushed)throws  IOException{
 
+        System.out.println(data);
         File fisier= data.get(nameWithExtension);
         if(fisier.isFile()) {
             System.out.println("Update started");
