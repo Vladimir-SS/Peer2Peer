@@ -67,16 +67,25 @@ public class MetadataForUI {
                     JsonParser parser = new JsonParser();
                     tree = parser.parse(reader);
                     element=tree.getAsJsonObject();
-                    if(mode==1){        //1 for no backup files list    -- name, time, device, extension
-                        if((element.get("lastPush").getAsString().equals("null")||element.get("lastPush").getAsString().equals("")) && fileIsInSelectedFolderToSync(pathToSync, element.get("path").getAsString())){
-                            filesList.add(new MetadataForUI(getOnlyFileName(jsonFileNames[i]), element.get("lastModifiedTime").getAsString(), getDeviceName(), getExtension(element.get("name").getAsString())));
-                        }
-                    }
-                    else{               //else for new files            --name, time, device, multipleDevices, extension
-                        if(!element.get("lastPush").getAsString().equals("null")&&!element.get("lastPush").getAsString().equals(""))
-                             if(element.get("lastPush").getAsString().compareTo(element.get("lastModifiedTime").getAsString())<0){
-                                filesList.add(new MetadataForUI(getOnlyFileName(jsonFileNames[i]), element.get("lastModifiedTime").getAsString(), getDeviceName(), findMultipleDeviceValue(), getExtension(element.get("name").getAsString())));
-                             }
+
+                    switch (mode){
+                        case 1:         //no backup : name, last modif. time, device name, extension
+                            if((element.get("lastPush").getAsString().equals("null")||element.get("lastPush").getAsString().equals("")) && fileIsInSelectedFolderToSync(pathToSync, element.get("path").getAsString())){
+                                filesList.add(new MetadataForUI(getOnlyFileName(jsonFileNames[i]), element.get("lastModifiedTime").getAsString(), getDeviceName(), getExtension(element.get("name").getAsString())));
+                            }
+                            break;
+                        case 2:         //new files : name, last modif, device name, multiple device, ext
+                            if(!element.get("lastPush").getAsString().equals("null")&&!element.get("lastPush").getAsString().equals(""))
+                                if(element.get("lastPush").getAsString().compareTo(element.get("lastModifiedTime").getAsString())<0){
+                                    filesList.add(new MetadataForUI(getOnlyFileName(jsonFileNames[i]), element.get("lastModifiedTime").getAsString(), getDeviceName(), findMultipleDeviceValue(), getExtension(element.get("name").getAsString())));
+                                }
+                            break;
+                        case 3:         //synced : name, last push time, device name, ext
+                            if(!element.get("lastPush").getAsString().equals("null")&&!element.get("lastPush").getAsString().equals(""))
+                                if(element.get("lastPush").getAsString().compareTo(element.get("lastModifiedTime").getAsString())>0){
+                                    filesList.add(new MetadataForUI(getOnlyFileName(jsonFileNames[i]), element.get("lastPush").getAsString(), getDeviceName(), getExtension(element.get("name").getAsString())));
+                                }
+                            break;
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -100,6 +109,11 @@ public class MetadataForUI {
     public static List<MetadataForUI> getNewFiles(String pathForFiles){
         List<MetadataForUI> newFileList=getRequiredFilesList(pathForFiles, "", 2);
         return newFileList;
+    }
+
+    public static List<MetadataForUI> getSyncedFiles(String pathForFiles){
+        List<MetadataForUI> syncedFiles=getRequiredFilesList(pathForFiles, "", 3);
+        return syncedFiles;
     }
 
     private static String getExtension(String fullFileName){

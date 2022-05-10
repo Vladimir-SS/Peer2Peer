@@ -43,6 +43,9 @@ public class verificari {
             metadataForUIList=MetadataForUI.getNewFiles(pathForFiles);
             System.out.println("New files:");
             System.out.println(metadataForUIList);
+            metadataForUIList=MetadataForUI.getSyncedFiles(pathForFiles);
+            System.out.println("Synced files:");
+            System.out.println(metadataForUIList);
 
         }catch (Exception e) {
             System.out.println(e);
