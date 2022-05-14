@@ -9,7 +9,7 @@ import java.util.Map;
 public class ConnectionsManager implements Runnable {
 
     private static volatile ConnectionsManager instance = null;
-    protected int serverPort = 8080;
+    protected int serverPort;
     protected ServerSocket serverSocket = null;
     protected boolean isStopped = false;
     protected Thread runningThread = null;

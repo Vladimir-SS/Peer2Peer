@@ -8,17 +8,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.net.UnknownHostException;
+import java.util.*;
 
 public class Peer{
     protected int port;
     private ConnectionsManager connectionsManager = null;
+    private Broadcast broadcast;
 
     public Peer(int port) throws IOException {
         this.port = port;
+        this.broadcast = new Broadcast(port,5);
         startConnectionsManager();
     }
 
@@ -27,9 +27,17 @@ public class Peer{
         new Thread(connectionsManager).start();
     }
 
-    public List<String> getDevices() throws InterruptedException, IOException {
-//        return getIPsUsingPing();
-        return getIPsUsingCMD();
+    public InetAddress getIP() throws UnknownHostException {
+        return InetAddress.getLocalHost();
+    }
+
+    public Set<InetAddress> getDevices() throws InterruptedException, IOException {
+        System.out.println("Searching for connections!");
+        var addresses = broadcast.getAddresses(10, false);
+        broadcast.close();
+        return addresses;
+        //return getIPsUsingPing();
+        //return getIPsUsingCMD();
     }
 
     private List<String> getIPsUsingPing() throws InterruptedException {
