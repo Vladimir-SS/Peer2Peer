@@ -9,17 +9,15 @@ public class SenderTest {
     public static void main(String[] args) {
         try {
             System.out.println("Making Peer...");
-            Peer peer = new Peer(7337);
+            Peer peer = new Peer(4444);
             var localIpList = peer.getDevices();
-            System.out.println(localIpList);
-            System.out.println("Connecting...");
-            peer.connectDevice("10.100.58.217",4444);
-            System.out.println("Sending...");
+            System.out.println("Found devices: " + localIpList);
+            peer.connectDevice("192.168.1.9",4444);
             URL resource = SenderTest.class.getClassLoader().getResource("message.txt");
             while(true) {   // Waiting for a receiver to accept the connection
                 //peer.checkActiveConnections();
-                if(peer.get("10.100.58.217") != null) {
-                    peer.get("10.100.58.217").sendFile(resource.getPath());
+                if(peer.get("192.168.1.9") != null) {
+                    peer.get("192.168.1.9").sendFile(resource.getPath());
                     break;
                 }
             }
