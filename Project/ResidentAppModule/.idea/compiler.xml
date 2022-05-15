@@ -7,12 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="ResidentAppModule" />
-        <module name="ConnectivityModule" />
-        <module name="MainMenu" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="UIModule" target="17" />
-    </bytecodeTargetLevel>
   </component>
 </project>
