@@ -1,4 +1,5 @@
 import Connectivity.Peer;
+import Exceptions.PeerDisconnectedException;
 
 import java.io.IOException;
 import java.net.URL;
@@ -7,24 +8,20 @@ public class TestConnectivitySender {
 
     public static void main(String[] args) {
         try {
-            System.out.println("Start...");
-            Peer peer = new Peer(7337);
+            System.out.println("Making Peer...");
+            Peer peer = new Peer(4444);
             var localIpList = peer.getDevices();
-            System.out.println(localIpList);
-            System.out.println("Connecting...");
-            peer.connectDevice("169.254.222.108",4444);
-            System.out.println("Sending...");
-            URL resource = TestConnectivitySender.class.getClassLoader().getResource("message.txt");
-            while(true) {   // Waiting for a receiver to accept the connection
+            System.out.println("Found devices: " + localIpList);
+            peer.connectDevice("192.168.100.74", 4444);
+            URL resource = SenderTest.class.getClassLoader().getResource("message.txt");
+            while (true) {   // Waiting for a receiver to accept the connection
                 //peer.checkActiveConnections();
-                if(peer.get("169.254.222.108") != null) {
-                    peer.get("169.254.222.108").sendFile(resource.getPath());
+                if (peer.get("192.168.100.74") != null) {
+                    peer.get("192.168.100.74").sendFile(resource.getPath());
                     break;
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (IOException | InterruptedException | PeerDisconnectedException e) {
             e.printStackTrace();
         }
 
