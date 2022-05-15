@@ -12,38 +12,37 @@ import java.util.List;
 public class SyncFiles {
     static List<String> syncedFiles;
     static List<String> directoryPaths;
-    static private void sendFileToAll(List<String> targets, String source, String fileName)  throws IOException{
+
+    static private void sendFileToAll(List<String> targets, String source, String fileName) throws IOException {
         Path sourceDir = Paths.get(source);
-        for(String target : targets)
-        {
+        for (String target : targets) {
             Path targetDir = Paths.get(target + "\\" + fileName);
             Files.copy(sourceDir, targetDir, StandardCopyOption.REPLACE_EXISTING);
         }
     }
-    static private File pickVersion(List<File> versions)
-    {
+
+    static private File pickVersion(List<File> versions) {
         File lastModif = versions.get(0);
-        for(File vers : versions) {
-            if(lastModif.lastModified() < vers.lastModified())
-            {
+        for (File vers : versions) {
+            if (lastModif.lastModified() < vers.lastModified()) {
                 lastModif = vers;
             }
         }
         return lastModif;
     }
-    static private File getFileFromDir(File file, String dirPath)
-    {
+
+    static private File getFileFromDir(File file, String dirPath) {
         return new File(dirPath + "\\" + file.getName());
     }
-    static private boolean findFile(File file, String path)
-    {
+
+    static private boolean findFile(File file, String path) {
         //System.out.println("Searching " + file.getName() + " in " + path);
         File appDirectory = new File(path);
         File[] appDirectoryFiles = appDirectory.listFiles();
-        String filename = file.getName().substring(0, file.getName().length()-4);
+        String filename = file.getName().substring(0, file.getName().length() - 4);
         String filesearch = filename + ".json";
         //System.out.println("Searching " + filesearch);
-        if(appDirectoryFiles != null) {
+        if (appDirectoryFiles != null) {
             for (File appFile : appDirectoryFiles) {
                 if (appFile.getName().equals(filesearch)) {
                     //System.out.println("Found " + filesearch);
@@ -53,18 +52,16 @@ public class SyncFiles {
         }
         return false;
     }
-    static private void SyncDevice(String path)
-    {
+
+    static private void SyncDevice(String path) {
         //iterate through device app folder
         String filesPath = path + "\\files";
         File appDirectory = new File(path);
         File[] appDirectoryFiles = appDirectory.listFiles();
-        if(appDirectoryFiles != null)
-        {
-            for(File appFile : appDirectoryFiles)
-            {
+        if (appDirectoryFiles != null) {
+            for (File appFile : appDirectoryFiles) {
                 String name = appFile.getName();
-                if(!name.contains(".json") && !name.equals("files")) {
+                if (!name.contains(".json") && !name.equals("files")) {
                     if (findFile(appFile, filesPath)) {
                         //update info files
                         System.out.println("Found " + name);
@@ -74,14 +71,12 @@ public class SyncFiles {
                     }
                 }
             }
-        }
-        else{
+        } else {
             System.out.println("Directory not found.");
         }
     }
 
-    static private void SyncAllDevices() throws IOException
-    {
+    static private void SyncAllDevices() throws IOException {
         //iterate through all devices
         directoryPaths = new ArrayList<>();
         syncedFiles = new ArrayList<>();
@@ -91,25 +86,24 @@ public class SyncFiles {
         directoryPaths.add("");//this device folder
         directoryPaths.add("");//other device
         //for each file not in syncedFiles iterate through other devices
-        for(int i = 0; i < directoryPaths.size(); i++)
-        {
+        for (int i = 0; i < directoryPaths.size(); i++) {
             System.out.println("-------------------------------------------------");
             System.out.println("Searching in " + directoryPaths.get(i));
             String crtDir = directoryPaths.get(i);
             File appDirectory = new File(crtDir);
             File[] appDirectoryFiles = appDirectory.listFiles();
-            if(appDirectoryFiles != null) {
+            if (appDirectoryFiles != null) {
                 for (File appFile : appDirectoryFiles) {
                     System.out.println("File " + appFile.getName() + " : ");
-                    if(!syncedFiles.contains(appFile.getName()) && !appFile.getName().equals("files")){//a file in this dir is not synced
+                    if (!syncedFiles.contains(appFile.getName()) && !appFile.getName().equals("files")) {//a file in this dir is not synced
                         System.out.println("--not synced");
                         List<File> fileVersions = new ArrayList<>();//getting all versions
                         fileVersions.add(appFile);
-                        for(int j = 0; j < directoryPaths.size(); j++)//searching for it in other devices
+                        for (int j = 0; j < directoryPaths.size(); j++)//searching for it in other devices
                         {
-                            if(i != j )//avoiding current device folder
+                            if (i != j)//avoiding current device folder
                             {
-                                if(findFile(appFile, directoryPaths.get(j) + "\\files"))//found file in other device
+                                if (findFile(appFile, directoryPaths.get(j) + "\\files"))//found file in other device
                                     fileVersions.add(getFileFromDir(appFile, directoryPaths.get(j)));//adding to versions
                                 else System.out.println(appFile.getName() + " not in both");
                             }
@@ -118,7 +112,7 @@ public class SyncFiles {
                         //then sending it to all devices
                         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                         System.out.println("VERSIONS:");
-                        for(File vers : fileVersions) {
+                        for (File vers : fileVersions) {
                             System.out.println("VERSION: " + vers.getName() + " " + sdf.format(vers.lastModified()));
                         }
                         //choosing the last version
@@ -128,16 +122,13 @@ public class SyncFiles {
                         //this file is synced in all devices therefore ignoring it in the other devices directories
                         sendFileToAll(directoryPaths, lastVersion.getAbsolutePath(), lastVersion.getName());
                         syncedFiles.add(appFile.getName());
-                    }
-                    else System.out.println("--is synced");
-
+                    } else System.out.println("--is synced");
                 }
             }
         }
     }
 
-    public static void Sync() throws IOException
-    {
+    public static void Sync() throws IOException {
         System.out.println("Starting syncronization.");
         System.out.println("Syncronizing files on this device...");
         //get this device info
@@ -149,6 +140,5 @@ public class SyncFiles {
         System.out.println("Syncronizing all devices...");
         SyncAllDevices();
         System.out.println("Finished syncronization");
-
     }
 }
