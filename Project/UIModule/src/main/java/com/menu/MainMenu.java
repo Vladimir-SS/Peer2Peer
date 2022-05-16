@@ -1,4 +1,4 @@
-package com.menu;
+package com.Menu;
 
 import javax.swing.*;
 import java.awt.*;
@@ -154,6 +154,26 @@ public class MainMenu extends JPanel {
         }
 
         lastButtonPressed= (JButton) actionEvent.getSource();
+
+        lastButtonPressed.setBackground( whenSelectedBackgroundColor );
+    }
+
+    public JButton getButtonWithName(String name){
+        for(JButton button:listButtons){
+            if(button.getText().equals( name )){
+                return button;
+            }
+        }
+        return null;
+    }
+
+    public void setLastButtonPressed(String name){
+
+        if(lastButtonPressed!=null){
+            lastButtonPressed.setBackground( backgroundColor );
+        }
+
+        lastButtonPressed=getButtonWithName( name );
 
         lastButtonPressed.setBackground( whenSelectedBackgroundColor );
     }
