@@ -1,8 +1,7 @@
-package com.sync;
+package com.SettingsPage;
 
 
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicBorders;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 

@@ -24,6 +24,5 @@ public class TestConnectivitySender {
         } catch (IOException | InterruptedException | PeerDisconnectedException e) {
             e.printStackTrace();
         }
-
     }
 }

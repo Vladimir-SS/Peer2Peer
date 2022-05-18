@@ -1,4 +1,4 @@
-package com.sync;
+package com.SyncPage;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -7,9 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-
 import static SyncFiles.SyncFiles.Sync;
-
 
 public class SyncPage extends JPanel implements ActionListener {
 

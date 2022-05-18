@@ -1,6 +1,6 @@
-package com.menu;
+package com.Menu;
 
-import com.sync.SyncPage;
+import com.SyncPage.*;
 
 
 import javax.swing.*;
@@ -8,7 +8,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class Main {
 
