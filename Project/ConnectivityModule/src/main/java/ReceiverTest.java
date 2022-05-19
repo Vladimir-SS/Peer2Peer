@@ -9,14 +9,8 @@ import java.util.Scanner;
 
 public class ReceiverTest {
     public static void main(String[] args) throws IOException, PeerDisconnectedException, InterruptedException {
-        Scanner input = new Scanner(System.in);
-        System.out.println("*** To start a connection enter a port ***:");
-        int port = Integer.parseInt(input.nextLine());
 
-        while(!Port.isAvailable(port)) {
-            System.out.println("The port " + port + " is already used. Enter a new port: ");
-            port = Integer.parseInt(input.nextLine());
-        }
+        int port = Port.getPort();
 
         Peer peer = new Peer(port); // 7337
         System.out.println("Your ip is: " + peer.getIP());
