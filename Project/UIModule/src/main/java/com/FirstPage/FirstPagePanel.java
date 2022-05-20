@@ -23,6 +23,8 @@ public class FirstPagePanel extends JPanel {
     private final int eastMargin;
     private final int westMargin;
 
+    private final FirstPageContentPanel firstPageContentPanel;
+
     /**
      * Constructor for the FirstPagePanel.This constructor will make a panel that will have an empty space on the east,west,north and south according to the values from the class
      * @param widthPage the width of the page
@@ -79,7 +81,7 @@ public class FirstPagePanel extends JPanel {
         this.add( emptySpace ,BorderLayout.WEST );
 
         //Center
-        var firstPageContentPanel=new FirstPageContentPanel( widthPage- eastMargin - westMargin ,heightPage- northMargin - southMargin , title );
+        firstPageContentPanel=new FirstPageContentPanel( widthPage- eastMargin - westMargin ,heightPage- northMargin - southMargin , title );
         this.add( firstPageContentPanel ,BorderLayout.CENTER );
     }
 
@@ -101,5 +103,13 @@ public class FirstPagePanel extends JPanel {
         }
 
         return percent*length/100;
+    }
+
+    /**
+     * Gets the port field of the panel
+     * @return an instance of the class TextFieldWithPrompt being the port input field
+     */
+    public TextFieldWithPrompt getPortField(){
+        return firstPageContentPanel.getPortField();
     }
 }
