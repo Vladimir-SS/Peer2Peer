@@ -1,18 +1,14 @@
 import Connectivity.Peer;
-import Connectivity.Port;
 import Exceptions.PeerDisconnectedException;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class ReceiverTest {
     public static void main(String[] args) throws IOException, PeerDisconnectedException, InterruptedException {
 
-        int port = Port.getPort();
-
-        Peer peer = new Peer(port); // 7337
+        Peer peer = new Peer(); // 7337
         System.out.println("Your ip is: " + peer.getIP());
         var localIpList = peer.getDevices();
         System.out.println(localIpList);
