@@ -1,3 +1,5 @@
+import com.google.gson.stream.JsonReader;
+
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,11 +21,12 @@ public class verificari {
 
         try {
            Map<String,File> fis = MetadataFile.getAllFileFromDir(f);
-            String pathForFiles ="D:\\IP\\IPProjectB2\\Project\\ResidentAppModule\\src\\main\\java\\Files";
+
+            String pathForFiles ="C:\\Users\\Ana_A\\Desktop\\IPProjectB2\\Project\\ResidentAppModule\\src\\main\\java\\files";
 
            /// Sterg toate datele dintr-un fisier (  in caz ca se va schimba folderul pt push
             File dir= new File(pathForFiles);
-           // MetadataFile.deleteFilesFromDirectory(dir);
+            //MetadataFile.deleteFilesFromDirectory(dir);
 
            /// create all the
             MetadataFile.exportDirToJson(fis,pathForFiles);
@@ -38,6 +41,8 @@ public class verificari {
             metadataForUIList=MetadataForUI.getAllNoBackupFiles(pathForFiles, f.getPath());
             //noBck=MetadataForUI.getAllNoBackupFiles(pathForFiles, f.getPath()+"\\pictures\\template\\raccoon_title.jpg");
             //noBck=MetadataForUI.getAllNoBackupFiles(pathForFiles, f.getPath()+"\\pictures\\template"); //-> returns all files in template folder, including template dir itself
+            MetadataFile.commit(pathForFiles, f.getPath());
+
             System.out.println("No backup files:");
             System.out.println(metadataForUIList);
             metadataForUIList=MetadataForUI.getNewFiles(pathForFiles);
@@ -47,9 +52,13 @@ public class verificari {
             System.out.println("Synced files:");
             System.out.println(metadataForUIList);
 
+            System.out.println("Getter demo:");
+            metadataForUIList.stream().forEach(i->System.out.println(i.getName()));
+
         }catch (Exception e) {
             System.out.println(e);
         }
 
     }
+
 }

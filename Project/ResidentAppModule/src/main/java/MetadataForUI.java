@@ -154,6 +154,10 @@ public class MetadataForUI {
         this.device = device;
     }
 
+    public Integer getMultipleDevice() {
+        return multipleDevice;
+    }
+
     public String getExtension() {
         return extension;
     }
