@@ -81,7 +81,6 @@ public class MetadataFile {
     public static void exportDirToJson( Map<String, File> mapWithInfo, String path) throws IOException
     {
 //     directory = path catre folder-ul unde se vor salva fisierele
-
         try {
             int contor=0;
             BufferedWriter bw = null;
@@ -127,12 +126,17 @@ public class MetadataFile {
 
             }
             bw.close();
+
         }catch (Exception e)
         {
             System.out.println(e);
         }
 
     }
+
+
+
+
     public static void deleteFilesFromDirectory(File directory){
         File filesList[] = directory.listFiles();
         for(File file : filesList)

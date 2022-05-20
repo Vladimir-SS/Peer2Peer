@@ -4,20 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3206f0cb-c2bc-46fb-9097-37142b9bcede" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="452dc4f9-dc11-45c8-a7c1-664f20a123b9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../ResidentAppModule/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../ResidentAppModule/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-      </list>
-    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
@@ -32,7 +25,7 @@
       </MavenGeneralSettings>
     </option>
   </component>
-  <component name="ProjectId" id="299k2NdTHmPd2Bx98SzuQ9eYPCz" />
+  <component name="ProjectId" id="29Ewt9h73Jtn44QwPgEfTQne9GF" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -42,28 +35,22 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../ConnectivityModule" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15722656" />
     <property name="project.structure.side.proportion" value="0.0" />
-  </component>
-  <component name="RunManager">
-    <configuration default="true" type="Application" factoryName="Application">
-      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Program Files\Java\javafx-sdk-18\lib&quot; --add-modules=javafx.base,javafx.controls,javafx.graphics,javafx.media" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="3206f0cb-c2bc-46fb-9097-37142b9bcede" name="Changes" comment="" />
-      <created>1652532572235</created>
+      <changelist id="452dc4f9-dc11-45c8-a7c1-664f20a123b9" name="Changes" comment="" />
+      <created>1652691769871</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1652532572235</updated>
-      <workItem from="1652691785881" duration="44000" />
+      <updated>1652691769871</updated>
+      <workItem from="1652691771321" duration="12000" />
+      <workItem from="1652691831201" duration="841000" />
     </task>
     <servers />
   </component>
