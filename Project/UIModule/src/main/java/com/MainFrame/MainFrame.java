@@ -9,6 +9,7 @@ import java.util.List;
 import com.ConnectionPage.ConPage;
 import com.FilePage.FilePage;
 import com.FirstPage.FirstPageContentPanel;
+import com.FirstPage.PortValidator;
 import com.Menu.*;
 import com.SettingsPage.SettingsPage;
 import com.SyncPage.*;
@@ -23,26 +24,26 @@ public class MainFrame {
     private static final int buttonRadius=20;
     private static final int panelRadius = 50;
 
-    private JFrame mainFrame;
+    private final JFrame mainFrame;
 
-    private CardLayout cardLayoutPages;
-    private CardLayout cardLayoutWholePages;
+    private final CardLayout cardLayoutPages;
+    private final CardLayout cardLayoutWholePages;
 
     //The panel which will contain the page associated with a button
-    private JPanel panelSidePageContainer;
-    private JPanel panelWholePageContainer;
-    private JPanel pagePanel;
+    private final JPanel panelSidePageContainer;
+    private final JPanel panelWholePageContainer;
+    private final JPanel pagePanel;
 
-    private MainMenu menuPanel;
+    private final MainMenu menuPanel;
 
-    private JPanel syncPage;
-    private JPanel connectionPage;
-    private JPanel filePage;
-    private FirstPageContentPanel firstPage;
-    private SettingsPage settingsPage;
+    private final JPanel syncPage;
+    private final JPanel connectionPage;
+    private final JPanel filePage;
+    private final FirstPageContentPanel firstPage;
+    private final SettingsPage settingsPage;
 
     //Basically,the name of the button whose page is going to appear first after we press the Connect button
-    private String nameFirstButton="Files";
+    private final String nameFirstButton="Files";
 
 
     public MainFrame(){
@@ -144,11 +145,23 @@ public class MainFrame {
 
     private void whenConnectButtonPressed( ActionEvent e ) {
 
-        //Set who the first button is according to the first page after pressing Connect on the FirstPage
-        menuPanel.setLastButtonPressed( nameFirstButton );
+        var portField=firstPage.getPortField();
 
-        cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
-        cardLayoutPages.show( panelSidePageContainer ,"filePage" );
+        var portInformation= new PortValidator( portField.getText() );
+
+        if(portInformation.isValid()){
+            //TODO
+            //add required functionalities
+
+            //Set who the first button is according to the first page after pressing Connect on the FirstPage
+            menuPanel.setLastButtonPressed( nameFirstButton );
+
+            cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
+            cardLayoutPages.show( panelSidePageContainer ,"filePage" );
+        }
+        else{
+            JOptionPane.showMessageDialog( null,portInformation.getErrorMessage(),"Port error",JOptionPane.ERROR_MESSAGE );
+        }
     }
 
     private void whenSettingsButtonPressed( ActionEvent e ) {
@@ -157,6 +170,7 @@ public class MainFrame {
     }
 
     private void whenDisconnectButtonPressed( ActionEvent e ) {
+
         cardLayoutWholePages.show( panelWholePageContainer,"firstPage" );
     }
 }
