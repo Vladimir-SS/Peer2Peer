@@ -8,7 +8,7 @@ import java.util.Map;
 public class verificari {
     public static void main(String[] args) {
 
-        File f= new File("D:\\git");
+        File f= new File("D:\\html");
 //        File f= new File("D:\\QT");
         try{
             System.out.println(MetadataFile.getAllData(f));
@@ -18,16 +18,21 @@ public class verificari {
         }
 
         try {
-           Map<String,File> fis = MetadataFile.getAllFileFromDir(f);
+            Map<String,File> fis = MetadataFile.getAllFileFromDir(f);
             String pathForFiles ="D:\\IP\\IPProjectB2\\Project\\ResidentAppModule\\src\\main\\java\\Files";
 
-           /// Sterg toate datele dintr-un fisier (  in caz ca se va schimba folderul pt push
+            /// Sterg toate datele dintr-un fisier (  in caz ca se va schimba folderul pt push
             File dir= new File(pathForFiles);
-           // MetadataFile.deleteFilesFromDirectory(dir);
+//            MetadataFile.deleteFilesFromDirectory(dir);
 
-           /// create all the
+            /// create all the
             MetadataFile.exportDirToJson(fis,pathForFiles);
-            MetadataFile.updateAFile("sample.txt",pathForFiles,fis,LocalDate.now());
+
+            DatasFromJsons datasFromJsons= new DatasFromJsons(pathForFiles);
+            System.out.printf("here");
+            System.out.println(datasFromJsons.getFileWithData());
+
+//            MetadataFile.updateAFile("sample.txt",pathForFiles,fis,LocalDate.now());
             //MetadataFile.updateAFile("sample.txt",pathForFiles,fis);
             //MetadataFile.updateAllFiles(pathForFiles,fis,LocalDate.now());
 
