@@ -4,7 +4,7 @@ import Exceptions.PeerDisconnectedException;
 import java.io.IOException;
 import java.net.URL;
 
-public class SenderTest {
+class SenderTest {
 
     public static void main(String[] args) {
         try {

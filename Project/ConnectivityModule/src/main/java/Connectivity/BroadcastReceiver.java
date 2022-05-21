@@ -7,17 +7,19 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class BroadcastReceiver extends Thread {
+/*default*/ class BroadcastReceiver extends Thread {
     private final DatagramSocket socket;
     private final Set<InetAddress> addresses;
+    private final Set<InetAddress> toIgnore;
 
     private final int timeout;
 
 
-    BroadcastReceiver(int port, int timeout) throws UnknownHostException, SocketException {
+    BroadcastReceiver(int port, int timeout, Set<InetAddress> toIgnore) throws UnknownHostException, SocketException {
         this.timeout = timeout;
         this.addresses = new HashSet<>();
         this.socket = new DatagramSocket(port, InetAddress.getByName("0.0.0.0"));
+        this.toIgnore = toIgnore;
     }
 
     @Override
@@ -43,7 +45,7 @@ public class BroadcastReceiver extends Thread {
                     socket.receive(p);
                     var inetAddress = p.getAddress();
 
-                    if(!Arrays.equals(inetAddress.getAddress(), myIPv4)) {
+                    if(!toIgnore.contains(inetAddress)) {
                         addresses.add(inetAddress);
                         System.out.println(inetAddress.getHostAddress() + " is reachable: ");
                     }
