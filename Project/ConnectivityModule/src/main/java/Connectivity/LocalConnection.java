@@ -1,5 +1,7 @@
 package Connectivity;
 
+import Exceptions.CryptoException;
+
 import java.io.*;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -45,13 +47,17 @@ public class LocalConnection implements Connection {
                     try {
                         int num = reader.read(readBuffer);
                         if (num > 0) {
-                            byte[] tempArray = new byte[num];
-                            System.arraycopy(readBuffer, 0, tempArray, 0, num);
+                            byte[] decryptedBytes = CryptoUtils.decryptBytes(readBuffer);
+                            byte[] tempArray = new byte[decryptedBytes.length];
+                            System.arraycopy(decryptedBytes, 0, tempArray, 0, decryptedBytes.length);
                             writeToFile(foStream, tempArray);
                         } else {
                             break;
                         }
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (CryptoException e) {
+                        System.out.println("Error encrypt bytes");
                         e.printStackTrace();
                     }
                 }
@@ -80,26 +86,26 @@ public class LocalConnection implements Connection {
 
     @Override
     public void sendFile(String fileName) throws IOException {
-        // send file size
-        byte[] buffer = new byte[8192];
-        String filePath = "";
         FileInputStream fileInputStream = new FileInputStream(fileName);
         Thread sendFile = new Thread() {
             public void run() {
                 byte[] buffer = new byte[8192];
                 while (true) {
                     try {
-
-                        int bytes =fileInputStream.read(buffer,0, buffer.length);
+                        int bytes = fileInputStream.read(buffer,0, buffer.length);
                         if(bytes>0){
-                            writer=clientSocket.getOutputStream();
-                            writer.write(buffer,0,bytes);
+                            byte[] encryptedBytes = CryptoUtils.encryptBytes(buffer);
+                            writer = clientSocket.getOutputStream();
+                            writer.write(encryptedBytes,0,encryptedBytes.length);
                         }else{
                             break;
                         }
 
                     } catch (IOException e) {
                         System.out.println("Error sending file");
+                        e.printStackTrace();
+                    } catch (CryptoException e) {
+                        System.out.println("Error encrypt bytes");
                         e.printStackTrace();
                     }
                 }

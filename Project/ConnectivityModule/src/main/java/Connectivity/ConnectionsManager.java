@@ -1,8 +1,19 @@
 package Connectivity;
 
+import javax.crypto.Cipher;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.net.ServerSocket;
 import java.io.IOException;
 import java.net.Socket;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +28,8 @@ public class ConnectionsManager implements Runnable {
 
     private ConnectionsManager(int port) {
         this.serverPort = port;
+        CryptoUtils.setSecretKey();
+        CryptoUtils.setIvParameterSpec();
     }
 
     protected static ConnectionsManager getInstance(int port) {
@@ -81,5 +94,4 @@ public class ConnectionsManager implements Runnable {
             throw new RuntimeException("Cannot open port 8080", e);
         }
     }
-
 }
