@@ -45,17 +45,17 @@ public class PortValidator {
     private void verifyValidity(String text){
         //Testing possible values of text
         if(text==null){
-            errorMessage="Text tried is null";
+            errorMessage="Text tried is null!";
             return;
         }
 
         if(text.equals( "" )){
-            errorMessage="The text given is empty";
+            errorMessage="The text given is empty!";
             return;
         }
 
         if(text.length()>5){
-            errorMessage="The input given is too long to be a port number";
+            errorMessage="The input given is too long to be a port number!";
             return;
         }
 
@@ -65,7 +65,7 @@ public class PortValidator {
             portNumber=Integer.parseInt( text );
         }
         catch (NumberFormatException e){
-            errorMessage="The input given is not a valid number";
+            errorMessage="The input given is not a valid number!";
             return;
         }
 
@@ -84,9 +84,6 @@ public class PortValidator {
             errorMessage="The port number cannot be between [0,1023] since these are well-known ports!";
             return;
         }
-
-        //TODO
-        //Check if the port given is taken by another app
 
         //Passed all the tests
         this.portNumber=portNumber;

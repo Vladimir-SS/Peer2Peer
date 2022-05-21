@@ -185,41 +185,53 @@ public class Peer{
         System.out.println("*** To start a connection enter a port ***:");
         int port = Integer.parseInt(input.nextLine());
 
-        try{
-            while(!this.isAvailable(port)) {
-                System.out.println("The port " + port + " is already used. Enter a new port: ");
-                port = Integer.parseInt(input.nextLine());
-            }
-        }catch(IOException e) {
-            throw new PortException(port);
+        while(!isAvailable(port)) {
+            System.out.println("The port " + port + " is already used. Enter a new port: ");
+            port = Integer.parseInt(input.nextLine());
         }
         return port;
     }
 
-    public boolean isAvailable(int port) throws PortException{
+    public static boolean isAvailable(int port) {
+        /*
+        TODO
+        Add IllegalArgumentException without ruining the code
+
+        if(port<1024||port>65353){
+            throw new IllegalArgumentException("Not a valid port number : "+port);
+        }
+
+         */
+
+
         ServerSocket tempSocket = null;
         DatagramSocket tempDatagram = null;
 
         try {
-            tempSocket = new ServerSocket(port);
-            tempSocket.setReuseAddress(true);
-            tempDatagram = new DatagramSocket(port);
-            tempDatagram.setReuseAddress(true);
+            tempSocket = new ServerSocket( port );
+            tempSocket.setReuseAddress( true );
+            tempDatagram = new DatagramSocket( port );
+            tempDatagram.setReuseAddress( true );
             return true;
         } catch (IOException e) {
-            throw new PortException(port);
         } finally {
+
             if (tempDatagram != null) {
-                tempDatagram.close();
+                try {
+                    tempDatagram.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
             if (tempSocket != null) {
                 try {
                     tempSocket.close();
                 } catch (IOException e) {
-
+                    //empty,should not be thrown
                 }
             }
         }
-//        return false;
+        return false;
     }
 }

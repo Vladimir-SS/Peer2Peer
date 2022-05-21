@@ -3,9 +3,12 @@ package com.MainFrame;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import Connectivity.Peer;
+import Exceptions.PortException;
 import com.ConnectionPage.ConPage;
 import com.FilePage.FilePage;
 import com.FirstPage.FirstPageContentPanel;
@@ -45,6 +48,9 @@ public class MainFrame {
     //Basically,the name of the button whose page is going to appear first after we press the Connect button
     private final String nameFirstButton="Files";
 
+    //Maybe enter bellow variables necessary for Connectivity and ResidentApp
+
+    private int portNumber;
 
     public MainFrame(){
 
@@ -143,21 +149,32 @@ public class MainFrame {
         cardLayoutPages.show( panelSidePageContainer ,"filePage" );
     }
 
-    private void whenConnectButtonPressed( ActionEvent e ) {
+    private void whenConnectButtonPressed( ActionEvent e ){
 
         var portField=firstPage.getPortField();
 
         var portInformation= new PortValidator( portField.getText() );
 
         if(portInformation.isValid()){
-            //TODO
-            //add required functionalities
 
-            //Set who the first button is according to the first page after pressing Connect on the FirstPage
-            menuPanel.setLastButtonPressed( nameFirstButton );
+            int portNumber=portInformation.getPortNumber();
 
-            cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
-            cardLayoutPages.show( panelSidePageContainer ,"filePage" );
+
+            this.portNumber=-1;
+
+            if(Peer.isAvailable( portNumber )){
+                //the port is good,we save it
+                this.portNumber=portNumber;
+
+                //Set who the first button is according to the first page after pressing Connect on the FirstPage
+                menuPanel.setLastButtonPressed( nameFirstButton );
+
+                cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
+                cardLayoutPages.show( panelSidePageContainer ,"filePage" );
+            }
+            else{
+                JOptionPane.showMessageDialog( null,"The port is already taken!","Port error",JOptionPane.ERROR_MESSAGE );
+            }
         }
         else{
             JOptionPane.showMessageDialog( null,portInformation.getErrorMessage(),"Port error",JOptionPane.ERROR_MESSAGE );
