@@ -9,6 +9,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -143,7 +145,7 @@ public class MetadataFile {
     public static void updateAFile(String nameWithExtension,String pathForFiles, Map<String, File> data)throws  IOException {updateAFile(nameWithExtension,pathForFiles,data,null);
 
     }
-    public static void updateAFile(String nameWithExtension,String pathForFiles, Map<String, File> data, LocalDate whenPushed)throws  IOException{
+    public static void updateAFile(String nameWithExtension,String pathForFiles, Map<String, File> data, LocalDateTime whenPushed)throws  IOException{
 
         System.out.println(data);
         File fisier= data.get(nameWithExtension);
@@ -201,7 +203,7 @@ public class MetadataFile {
         else System.out.println("Something is wrong");
 
     }
-    public static void updateAllFiles(String pathForFiles, Map<String, File> data, LocalDate whenPushed)throws  IOException{
+    public static void updateAllFiles(String pathForFiles, Map<String, File> data, ZonedDateTime whenPushed)throws  IOException{
         //     directory = path catre folder-ul unde se vor salva fisierele
 
         try {
