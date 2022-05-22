@@ -2,7 +2,6 @@ package com.FirstPage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 /**
  * Represents a panel that holds the content of the first page(such as the title,text,input fields,buttons)
@@ -39,6 +38,8 @@ public class FirstPageContentPanel extends JPanel {
 
     //The connect button
     private RoundedButton connectButton;
+
+    private final TextFieldWithPrompt portField;
 
     /**
      * Constructor for the FirstPageContentPanel class.It should display the elements similar to:
@@ -112,7 +113,7 @@ public class FirstPageContentPanel extends JPanel {
         int contentHeight = computePercentOf( height - titleLabel.getHeight() - 2 * marginTitle , 100 - marginContentBottomPercent );
 
         //Create label for text which describes the options
-        JLabel textLabel=new JLabel("Log in to an existing environment");
+        JLabel textLabel=new JLabel("Choose a port for the application");
         textLabel.setForeground( Color.black );
         textLabel.setFont( contentPanelFont );
         textLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
@@ -123,14 +124,14 @@ public class FirstPageContentPanel extends JPanel {
         contentPanel.add( Box.createVerticalStrut( computePercentOf( contentHeight ,emptySpaceHeightPercent ) ) );
 
         //Create Field input
-        TextFieldWithPrompt passwordField=new TextFieldWithPrompt( "Password",contentPanelFont );
-        passwordField.setBackground( fieldBackgroundColor );
-        passwordField.setFont( contentPanelFont );
-        passwordField.setAlignmentX( Component.CENTER_ALIGNMENT );
-        passwordField.setMaximumSize( new Dimension(computePercentOf( contentWidth ,inputMaximumWidthPercent ),computePercentOf( contentHeight ,inputMaximumHeightPercent )) );
-        passwordField.setFocusable( true );
+        portField=new TextFieldWithPrompt( "Port number",contentPanelFont );
+        portField.setBackground( fieldBackgroundColor );
+        portField.setFont( contentPanelFont );
+        portField.setAlignmentX( Component.CENTER_ALIGNMENT );
+        portField.setMaximumSize( new Dimension(computePercentOf( contentWidth ,inputMaximumWidthPercent ),computePercentOf( contentHeight ,inputMaximumHeightPercent )) );
+        portField.setFocusable( true );
 
-        contentPanel.add( passwordField );
+        contentPanel.add( portField );
 
         //Create empty space between
         contentPanel.add( Box.createVerticalStrut(  computePercentOf( contentHeight ,emptySpaceHeightPercent ) ) );
@@ -146,7 +147,6 @@ public class FirstPageContentPanel extends JPanel {
         connectButton.setBackground( buttonBackgroundColor );
         connectButton.setAlignmentX( Component.CENTER_ALIGNMENT );
         connectButton.setFont( contentPanelFont );
-        connectButton.addActionListener( this::connectButtonClicked );
         connectButton.setBorder( null );
 
         //Create connect button panel
@@ -205,13 +205,11 @@ public class FirstPageContentPanel extends JPanel {
         return percent*length/100;
     }
 
-    public void connectButtonClicked( ActionEvent e ) {
-        if(e.getSource()==connectButton){
-
-        }
-    }
-
     public RoundedButton getConnectButton(){
         return connectButton;
+    }
+
+    public TextFieldWithPrompt getPortField(){
+        return portField;
     }
 }

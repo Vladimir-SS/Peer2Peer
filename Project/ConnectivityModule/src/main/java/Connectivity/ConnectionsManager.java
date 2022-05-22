@@ -1,5 +1,7 @@
 package Connectivity;
 
+import Exceptions.PortException;
+
 import java.net.ServerSocket;
 import java.io.IOException;
 import java.net.Socket;
@@ -35,7 +37,11 @@ public class ConnectionsManager implements Runnable {
         synchronized (this) {
             this.runningThread = Thread.currentThread();
         }
-        openServerSocket();
+        try {
+            openServerSocket();
+        } catch (PortException e) {
+            e.printStackTrace();
+        }
         Socket clientSocket;
         while (!isStopped()) {
             try {
@@ -74,11 +80,11 @@ public class ConnectionsManager implements Runnable {
         }
     }
 
-    private void openServerSocket() {
+    private void openServerSocket() throws PortException {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot open port 8080", e);
+        }  catch (IOException e) {
+            throw new PortException(serverPort);
         }
     }
 
