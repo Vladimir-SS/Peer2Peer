@@ -9,13 +9,15 @@ import java.util.List;
 //to do:
 //-getAllNoBackupData should return all not synchronised files from all devices; need list od devices with their params (
 
-public class MetadataForUI {
+public class MetadataForUI implements MetadataInterface{
     private String name;
     private String time;        //last modified time
     private String device;
     private String extension;
     private Integer multipleDevice;
 
+    public MetadataForUI() {
+    }
 
     private MetadataForUI(String name, String time, String device, String extension) {
         this.name = name;
@@ -37,24 +39,24 @@ public class MetadataForUI {
     //pathToSync: only files in this dir will be synchronised
     // for all connected devices: getNoBackupFiles(pathOfJsonMetadata); glue them all in one big list
     // if other devices will be checked, their params will be stored inside this class
-    public static List<MetadataForUI> getAllNoBackupFiles(String currentDeviceMetadataPath, String pathToSync){
+    public List<MetadataForUI> getAllNoBackupFiles(String currentDeviceMetadataPath, String pathToSync){
         List<MetadataForUI> noBackupFiles=new ArrayList<>();
         noBackupFiles=getNoBackupFiles(currentDeviceMetadataPath, pathToSync);
         return noBackupFiles;
     }
 
-    private static String getDeviceName(){
+    public String getDeviceName(){
         String name="current";
         //???????
         return name;
     }
 
-    private static Integer findMultipleDeviceValue(){
+    public Integer findMultipleDeviceValue(){
         //?????????????
         return 1;
     }
 
-    private static List<MetadataForUI> getRequiredFilesList(String pathForFiles, String pathToSync, Integer mode){
+    public List<MetadataForUI> getRequiredFilesList(String pathForFiles, String pathToSync, Integer mode){
         List<MetadataForUI> filesList=new ArrayList<>();
         File directory = new File(pathForFiles);
         String[] jsonFileNames = directory.list();
@@ -100,23 +102,24 @@ public class MetadataForUI {
     //returns a list of MetadataForUI ob; use getters for attributes
     //pathForMetadataFiles: dir where all .json files are stored; is updated when this function is called
     //will have to be called for all connected devices; unable to do that rn
-    public static List<MetadataForUI> getNoBackupFiles(String pathForFiles, String pathToSync){
+    public List<MetadataForUI> getNoBackupFiles(String pathForFiles, String pathToSync){
         List<MetadataForUI> noBackupFileList=getRequiredFilesList(pathForFiles, pathToSync, 1);
         return noBackupFileList;
     }
 
     //gets all files for which lastPush<lastModified
-    public static List<MetadataForUI> getNewFiles(String pathForFiles){
+    public List<MetadataForUI> getNewFiles(String pathForFiles){
         List<MetadataForUI> newFileList=getRequiredFilesList(pathForFiles, "", 2);
         return newFileList;
     }
 
-    public static List<MetadataForUI> getSyncedFiles(String pathForFiles){
-        List<MetadataForUI> syncedFiles=getRequiredFilesList(pathForFiles, "", 3);
+    public List<MetadataForUI> getSyncedFiles(String pathForFiles){
+        MetadataForUI metadataForUI=new MetadataForUI();
+        List<MetadataForUI> syncedFiles=metadataForUI.getRequiredFilesList(pathForFiles, "", 3);
         return syncedFiles;
     }
 
-    private static String getExtension(String fullFileName){
+    public String getExtension(String fullFileName){
         int lastIndexOf = fullFileName.lastIndexOf(".");
         if (lastIndexOf == -1) {
             return "";
@@ -124,7 +127,7 @@ public class MetadataForUI {
         return fullFileName.substring(lastIndexOf);
     }
 
-    private  static String getOnlyFileName(String fullFileName){
+    public String getOnlyFileName(String fullFileName){
         int lastIndexOf = fullFileName.lastIndexOf(".");
         if (lastIndexOf == -1) {
             return "";
@@ -132,7 +135,7 @@ public class MetadataForUI {
         return fullFileName.substring(0,lastIndexOf);
     }
 
-    private static boolean fileIsInSelectedFolderToSync(String pathToSync, String filePath){
+    public boolean fileIsInSelectedFolderToSync(String pathToSync, String filePath){
         if(filePath.contains(pathToSync))
             return true;
         return false;
