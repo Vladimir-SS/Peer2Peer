@@ -12,12 +12,12 @@ public class TestConnectivitySender {
             Peer peer = new Peer();
             var localIpList = peer.getDevices();
             System.out.println("Found devices: " + localIpList);
-            peer.connectDevice("192.168.100.74", 4444);
+            peer.connectDevice("192.168.56.1", 4444);
             URL resource = SenderTest.class.getClassLoader().getResource("message.txt");
             while (true) {   // Waiting for a receiver to accept the connection
                 //peer.checkActiveConnections();
-                if (peer.get("192.168.100.74") != null) {
-                    peer.get("192.168.100.74").sendFile(resource.getPath());
+                if (peer.get("192.168.56.1") != null) {
+                    peer.get("192.168.56.1").sendFile(resource.getPath());
                     break;
                 }
             }
