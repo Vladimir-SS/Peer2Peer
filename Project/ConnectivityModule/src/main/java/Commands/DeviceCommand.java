@@ -12,14 +12,14 @@ public class DeviceCommand implements Command{
 
     List<InetAddress> lastSearch = new ArrayList<>();
 
-    public void getDevices(Peer peer, String[] arguments) throws Exception{
+    public void getNewDevices(Peer peer, String[] arguments) throws Exception{
 
         if(arguments.length != 1)
             throw manual();
 
         try {
             System.out.println("Searching devices...");
-            lastSearch = new ArrayList<>(peer.getDevices(false));
+            lastSearch = new ArrayList<>(peer.getNewDevices(false));
             AtomicInteger index = new AtomicInteger();
 
             if(lastSearch.size() == 0)
@@ -50,20 +50,18 @@ public class DeviceCommand implements Command{
         if(arguments.length == 0)
             throw manual();
 
-        switch (arguments[0]){
-            case "--get-all":
-            case "-g":
-                getDevices(peer, arguments);
-                break;
-
-            case "-connect-to":
-            case "-c":
-                connectTo(peer, arguments);
-                break;
-
-            default:
-                throw manual();
+        switch (arguments[0]) {
+            case "--get-new", "-ga" -> getNewDevices(peer, arguments);
+            case "--connect-to", "-ct" -> connectTo(peer, arguments);
+            case "--connected", "-c" -> connectedDevices(peer, arguments);
+            default -> throw manual();
         }
+
+    }
+
+    private void connectedDevices(Peer peer, String[] arguments) throws Exception{
+        if(arguments.length != 1)
+            throw manual();
 
 
     }

@@ -27,10 +27,14 @@ public class Peer {
      * @return Available devices after listening to broadcasts.
      * @throws IOException Broadcasting is not working
      */
-    public Set<InetAddress> getDevices(boolean async) throws IOException {
+    public Set<InetAddress> getNewDevices(boolean async) throws IOException {
         var addresses = broadcast.getAddresses(10, async);
         broadcast.close();
         return addresses;
+    }
+
+    public List<Connection> getConnectedDevices(){
+        return new ArrayList<>(connectionsManager.connections);
     }
 
     public synchronized Connection incomingFile() {
