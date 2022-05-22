@@ -25,6 +25,7 @@ public class verificari {
 
             String pathForFiles ="C:\\Users\\nicol\\OneDrive\\Desktop\\IP-interface\\IPProjectB2\\Project\\ResidentAppModule\\src\\main\\java\\files";
 
+
            /// Sterg toate datele dintr-un fisier (  in caz ca se va schimba folderul pt push
             File dir= new File(pathForFiles);
             //MetadataFile.deleteFilesFromDirectory(dir);

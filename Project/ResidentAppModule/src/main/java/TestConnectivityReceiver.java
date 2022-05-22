@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class TestConnectivityReceiver {
     public static void main(String[] args) throws IOException, PeerDisconnectedException, InterruptedException {
-        Peer peer = new Peer(7337);
+        Peer peer = new Peer();
         System.out.println("Your ip is: " + peer.getIP());
         var localIpList = peer.getDevices();
         System.out.println(localIpList);
