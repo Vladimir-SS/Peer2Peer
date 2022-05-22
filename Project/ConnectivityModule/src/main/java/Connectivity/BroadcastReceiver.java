@@ -51,7 +51,6 @@ import java.util.concurrent.TimeUnit;
                     }
                     String str = new String(p.getData(), 0, p.getLength());
                 } catch (IOException e) {
-                    System.out.println(e.getMessage());
                 }
             }
     }

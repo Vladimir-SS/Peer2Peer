@@ -1,52 +1,47 @@
 package Connectivity;
 
 import Exceptions.PeerAlreadyConnected;
-import Exceptions.PeerDisconnectedException;
-import Exceptions.PortException;
 
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
 
 public class Peer {
-    protected int port;
     private ConnectionsManager connectionsManager = null;
     private final Broadcast broadcast;
 
-    public Peer() throws IOException {
-        int port = this.getPort();
-        this.port = port;
+    public Peer(int port) throws IOException {
         this.broadcast = new Broadcast(port, 5);
-        startConnectionsManager();
+        startConnectionsManager(port);
     }
 
-    private void startConnectionsManager() {
+    private void startConnectionsManager(int port) {
         connectionsManager = ConnectionsManager.getInstance(port);
         new Thread(connectionsManager).start();
     }
 
-    public Set<InetAddress> getDevices() throws InterruptedException, IOException {
-        System.out.println("Searching for connections!");
-        var addresses = broadcast.getAddresses(10, false);
+    /**
+     *
+     * @param async If this variable is set to "true",
+     *              the function returns an empty container which will be later filled.
+     * @return Available devices after listening to broadcasts.
+     * @throws IOException Broadcasting is not working
+     */
+    public Set<InetAddress> getDevices(boolean async) throws IOException {
+        var addresses = broadcast.getAddresses(10, async);
         broadcast.close();
         return addresses;
-    }
-
-    public synchronized void checkActiveConnections() {
-        for (Map.Entry<String, Connection> connection : connectionsManager.connections.entrySet()) {
-            System.out.println(connection.getValue().getName());
-        }
     }
 
     public synchronized Connection incomingFile() {
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                for (Map.Entry<String, Connection> connection : connectionsManager.connections.entrySet()) {
+                for (Connection connection : connectionsManager.connections) {
 
-                    String nameIncomingFile = String.valueOf(connection.getValue().getNameIncomingFile());
-                    //!! Add exception here
+                    String nameIncomingFile = String.valueOf(connection.getNameIncomingFile());
+                    //TODO: Add exception here
                     if (nameIncomingFile != null)
-                        return connection.getValue();
+                        return connection;
                 }
                 wait(1000);
             } catch (InterruptedException ex) {
@@ -57,44 +52,22 @@ public class Peer {
         return null;
     }
 
-    private synchronized boolean isConnected(String deviceIP) {
-        for (Map.Entry<String, Connection> connection : connectionsManager.connections.entrySet()) {
-            if (connection.getValue().getName().equals(deviceIP)) {
-                return true;
-            }
-        }
-        return false;
+    private synchronized boolean isConnected(Connection connection) {
+        return connectionsManager.connections.contains(connection);
     }
 
-    public void connectDevice(String deviceIP, int devicePort) throws IOException, PeerAlreadyConnected {
-        //!! change with dynamic ipv4
-        if (!isConnected(deviceIP)) {
-            Connection connection = new LocalConnection(new Socket(deviceIP, devicePort));
-            connection.setName(deviceIP);
-            connectionsManager.connections.put(connection.getName(), connection);
+    public void connectDevice(InetAddress device) throws IOException, PeerAlreadyConnected {
+        LocalConnection connection = new LocalConnection(device, getPort());
+
+        if (!isConnected(connection)) {
+            connectionsManager.connections.add(connection);
         } else {
             throw new PeerAlreadyConnected();
         }
     }
 
-    public Connection get(String ip) throws PeerDisconnectedException {
-        if (isConnected(ip)) {
-            return connectionsManager.connections.get(ip);
-        } else {
-            throw new PeerDisconnectedException(ip);
-        }
-    }
-
-    public int getPort() throws PortException {
-        Scanner input = new Scanner(System.in);
-        System.out.println("*** To start a connection enter a port ***:");
-        int port = Integer.parseInt(input.nextLine());
-
-        while (!isAvailable(port)) {
-            System.out.println("The port " + port + " is already used. Enter a new port: ");
-            port = Integer.parseInt(input.nextLine());
-        }
-        return port;
+    public int getPort(){
+        return connectionsManager.serverPort;
     }
 
     public static boolean isAvailable(int port) {
@@ -106,7 +79,7 @@ public class Peer {
         }
          */
         try (ServerSocket tempSocket = new ServerSocket(port);
-             DatagramSocket tempDatagram = new DatagramSocket(port);) {
+             DatagramSocket tempDatagram = new DatagramSocket(port)) {
             tempSocket.setReuseAddress(true);
             tempDatagram.setReuseAddress(true);
             return true;
