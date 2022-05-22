@@ -27,7 +27,7 @@ public class SettingsPage extends JPanel implements ActionListener {
     //private final JPanel OptionPanel;
 
     private String userN="LaptopD406";
-    private int dimension=2;
+    private int dimension=5;
     private int theme=1;
 
     private com.SettingsPage.MyButton disconnect;
@@ -114,7 +114,7 @@ public class SettingsPage extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ae){
 
                 userN = inputUML.getText(); //perform your operation
-                System.out.println(userN);
+
                 if (userN.length()<=30)
                     user.setText(userN);
                 else
@@ -246,12 +246,19 @@ public class SettingsPage extends JPanel implements ActionListener {
 
     }
 
+
     @Override
     public void actionPerformed(ActionEvent e) {
 
 
     }
-
+    public int getFontSize(){
+        return dimension;
+    }
+    public void setFontSize(int dimension)
+    {
+        this.dimension=dimension;
+    }
     public JButton getDisconnectButton(){
         return disconnect;
     }

@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class TestConnectivityReceiver {
     public static void main(String[] args) throws IOException, PeerDisconnectedException, InterruptedException {
-        Peer peer = new Peer(7337);
+        Peer peer = new Peer();
         System.out.println("Your ip is: " + peer.getIP());
         var localIpList = peer.getDevices();
         System.out.println(localIpList);
@@ -18,8 +18,8 @@ public class TestConnectivityReceiver {
         FileOutputStream fileOut = new FileOutputStream(file);
         while (true) { // Waiting for the server to receive the connection
             peer.checkActiveConnections();
-            if (peer.get("192.168.100.74") != null) {
-                peer.get("192.168.100.74").receiveFile(fileOut);
+            if (peer.get("192.168.56.1") != null) {
+                peer.get("192.168.56.1").receiveFile(fileOut);
                 break;
             }
         }

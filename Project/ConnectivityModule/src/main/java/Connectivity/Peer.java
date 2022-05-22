@@ -2,13 +2,12 @@ package Connectivity;
 
 import Exceptions.PeerAlreadyConnected;
 import Exceptions.PeerDisconnectedException;
+import Exceptions.PortException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.*;
 import java.util.*;
 
 public class Peer{
@@ -16,7 +15,9 @@ public class Peer{
     private ConnectionsManager connectionsManager = null;
     private Broadcast broadcast;
 
-    public Peer(int port) throws IOException {
+    public Peer() throws IOException {
+//        this.port = port;
+        int port = this.getPort();
         this.port = port;
         this.broadcast = new Broadcast(port,5);
         startConnectionsManager();
@@ -177,5 +178,60 @@ public class Peer{
         } else {
             throw new PeerDisconnectedException(ip);
         }
+    }
+
+    public int getPort() throws PortException {
+        Scanner input = new Scanner(System.in);
+        System.out.println("*** To start a connection enter a port ***:");
+        int port = Integer.parseInt(input.nextLine());
+
+        while(!isAvailable(port)) {
+            System.out.println("The port " + port + " is already used. Enter a new port: ");
+            port = Integer.parseInt(input.nextLine());
+        }
+        return port;
+    }
+
+    public static boolean isAvailable(int port) {
+        /*
+        TODO
+        Add IllegalArgumentException without ruining the code
+
+        if(port<1024||port>65353){
+            throw new IllegalArgumentException("Not a valid port number : "+port);
+        }
+
+         */
+
+
+        ServerSocket tempSocket = null;
+        DatagramSocket tempDatagram = null;
+
+        try {
+            tempSocket = new ServerSocket( port );
+            tempSocket.setReuseAddress( true );
+            tempDatagram = new DatagramSocket( port );
+            tempDatagram.setReuseAddress( true );
+            return true;
+        } catch (IOException e) {
+        } finally {
+
+            if (tempDatagram != null) {
+                try {
+                    tempDatagram.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (tempSocket != null) {
+                try {
+                    tempSocket.close();
+                } catch (IOException e) {
+                    //empty,should not be thrown
+                }
+            }
+        }
+        return false;
     }
 }

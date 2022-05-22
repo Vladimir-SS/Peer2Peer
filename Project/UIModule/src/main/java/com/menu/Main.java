@@ -1,4 +1,4 @@
-package com.Menu;
+package com.menu;
 
 import com.SyncPage.*;
 
@@ -38,10 +38,10 @@ public class Main {
             listButtonsName.add( "Settings" );
 
             MainMenu menuPanel = new MainMenu( mainMenuInitialWidth , mainMenuInitialHeight , buttonRadius , listButtonsName );
-            SyncPage syncPage = new SyncPage(mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius);
+            //SyncPage syncPage = new SyncPage(mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius,dimension);
 
             frame.add( menuPanel , BorderLayout.WEST );
-            frame.add(syncPage, BorderLayout.CENTER);
+            //frame.add(syncPage, BorderLayout.CENTER);
 
 
             frame.pack();
