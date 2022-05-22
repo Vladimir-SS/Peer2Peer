@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.StringTokenizer;
 
 
@@ -46,7 +47,7 @@ public class MetadataFile {
     {
         Map<String,String> dates = getAllData(dir);
         String[] pathnames;
-        if(dates.get("isDirectory")=="true") {
+        if(Objects.equals(dates.get("isDirectory"), "true")) {
             Map<String,File> allFiles= new HashMap<>();
             pathnames=dir.list();
             for (String pathname : pathnames ){
@@ -274,11 +275,9 @@ public class MetadataFile {
         Map<String,String> fileB = new HashMap<>();
         fileB=getAllData(secondFile);
 //        boolean isEq=true;
-        if(!(fileA.get("name").equals(fileB.get("name"))
-                ||fileA.get("size").equals(fileB.get("size"))||
-                fileA.get("lastModifiedTime").equals(fileB.get("lastModifiedTime"))))
-            return false;
-        return true;
+        return fileA.get("name").equals(fileB.get("name"))
+                || fileA.get("size").equals(fileB.get("size")) ||
+                fileA.get("lastModifiedTime").equals(fileB.get("lastModifiedTime"));
     }
 
 
@@ -326,7 +325,7 @@ public class MetadataFile {
                 String fileN=new String(p.getFileName().toString());
                 if(sharedFiles.containsKey(fileN))          //verif. daca fis inca exista
                     if(sharedFiles.get(fileN).getPath().equals(lastPush.getKey()))      //verifica path-ul sa fie identic
-                        updateAFile(fileN, pathForFiles, sharedFiles, LocalDate.parse(lastPush.getValue()));    //update lastPush
+                        updateAFile(fileN, pathForFiles, sharedFiles, LocalDateTime.from(LocalDate.parse(lastPush.getValue())));    //update lastPush
         }
     }
 }

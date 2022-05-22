@@ -8,14 +8,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Connectivity.Peer;
-import Exceptions.PortException;
 import com.ConnectionPage.ConPage;
+import com.misc.DataController;
 import com.FilePage.FilePage;
 import com.FirstPage.FirstPageContentPanel;
 
 import com.menu.*;
 import com.FirstPage.PortValidator;
-import com.Menu.*;
 
 import com.SettingsPage.SettingsPage;
 import com.SyncPage.*;
@@ -178,11 +177,7 @@ public class MainFrame {
 
         var portField=firstPage.getPortField();
 
-// FontChangingInterface
-        cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
-        cardLayoutPages.show( panelSidePageContainer ,"filePage" );
-        dimension=settingsPage.getFontSize();
-        filePage.setFontFilePage(dimension);
+
 
 
 // port
@@ -199,11 +194,22 @@ public class MainFrame {
                 //the port is good,we save it
                 this.portNumber=portNumber;
 
+                try {
+                    DataController.setPeer(new Peer(portNumber));
+                } catch (IOException ex) {
+                    //TODO: George: is this the right way to do it?
+                    return;
+                }
+
+
                 //Set who the first button is according to the first page after pressing Connect on the FirstPage
                 menuPanel.setLastButtonPressed( nameFirstButton );
 
+                // FontChangingInterface
                 cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
                 cardLayoutPages.show( panelSidePageContainer ,"filePage" );
+                dimension=settingsPage.getFontSize();
+                filePage.setFontFilePage(dimension);
             }
             else{
                 JOptionPane.showMessageDialog( null,"The port is already taken!","Port error",JOptionPane.ERROR_MESSAGE );

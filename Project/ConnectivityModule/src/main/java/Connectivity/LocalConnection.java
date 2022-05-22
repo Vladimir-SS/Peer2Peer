@@ -5,10 +5,10 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LocalConnection implements Connection {
     protected Socket clientSocket;
-    private String name = null;
 
     InputStream reader;
     OutputStream writer;
@@ -113,11 +113,32 @@ public class LocalConnection implements Connection {
 
     @Override
     public String getName() {
-        return name == null ? clientSocket.getInetAddress().getHostName() : name;
+        return clientSocket.getInetAddress().getHostName();
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public String getAddress() {
+        return clientSocket.getInetAddress().getHostAddress();
+    }
+
+    @Override
+    public void close() throws IOException {
+        clientSocket.close();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LocalConnection that = (LocalConnection) o;
+        if(clientSocket.equals(that.clientSocket))
+            return true;
+
+        return clientSocket.getLocalAddress().equals(that.clientSocket.getLocalAddress());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientSocket.getLocalAddress());
     }
 }

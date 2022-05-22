@@ -68,6 +68,6 @@ public class DeviceCommand implements Command{
 
     @Override
     public Exception manual() {
-        return new Exception("(--get-all | -g) | (--connect-to <index> | -ct <index>) | (--connected | -c)");
+        return new Exception("(--find | -f) | (--connect-to <index> | -ct <index>) | (--connected | -c)");
     }
 }
