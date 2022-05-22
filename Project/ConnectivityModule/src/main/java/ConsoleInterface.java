@@ -3,10 +3,7 @@ import Commands.DeviceCommand;
 import Connectivity.Peer;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class ConsoleInterface {
 
@@ -20,19 +17,24 @@ public class ConsoleInterface {
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
 
-        System.out.println("*** To start a connection enter a port ***:");
-        int port = Integer.parseInt(input.nextLine());
+        do {
+            System.out.println("*** To start a connection enter a port ***:");
+            int port = Integer.parseInt(input.nextLine());
+            System.out.println("Port: " + port);
 
-        while (!Peer.isAvailable(port)) {
-            System.out.println("The port " + port + " is already used. Enter a new port: ");
-            port = Integer.parseInt(input.nextLine());
-        }
+            try {
+                if(!Peer.isAvailable(port)) {
+                    System.out.println("Port already in use");
+                    continue;
+                }
+                peer = new Peer(port);
+                break;
+            } catch (Exception e) {
+                System.out.println("Peer Error: " + e.getMessage());
+            }
+        }while (true);
 
-        try {
-            peer = new Peer(4444);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+
 
         while (true) {
             String line = input.nextLine();
@@ -40,6 +42,9 @@ public class ConsoleInterface {
 
             if(params.length == 0)
                 continue;
+
+            if(Objects.equals(params[0], "exit"))
+                break;
 
             if(!commands.containsKey(params[0]))
             {
@@ -53,6 +58,12 @@ public class ConsoleInterface {
             } catch (Exception e) {
                 System.out.println(params[0] + ": " + e.getMessage());
             }
+        }
+
+        try {
+            peer.close();
+        } catch (IOException e) {
+            System.out.println("Couldn't close program: " + e.getMessage());
         }
     }
 }

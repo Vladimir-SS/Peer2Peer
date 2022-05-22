@@ -2,23 +2,21 @@ package Connectivity;
 
 import Exceptions.PeerAlreadyConnected;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
 
-public class Peer {
-    private ConnectionsManager connectionsManager = null;
+public class Peer implements Closeable {
+    private final ConnectionsManager connectionsManager;
     private final Broadcast broadcast;
 
     public Peer(int port) throws IOException {
         this.broadcast = new Broadcast(port, 5);
-        startConnectionsManager(port);
-    }
-
-    private void startConnectionsManager(int port) {
         connectionsManager = ConnectionsManager.getInstance(port);
         new Thread(connectionsManager).start();
     }
+
 
     /**
      *
@@ -90,5 +88,12 @@ public class Peer {
         } catch (IOException ignored) {
         }
         return false;
+    }
+
+    @Override
+    public void close() throws IOException {
+        broadcast.close();
+        //TODO: Close connectionsManager
+        connectionsManager.stop();
     }
 }
