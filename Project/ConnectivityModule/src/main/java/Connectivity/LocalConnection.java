@@ -1,21 +1,27 @@
 package Connectivity;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class LocalConnection implements Connection {
     protected Socket clientSocket;
-    private String name;
 
     InputStream reader;
     OutputStream writer;
 
-    public LocalConnection(Socket clientSocket) throws IOException {
+    /*defalt*/ LocalConnection(Socket clientSocket) throws IOException {
         this.clientSocket = clientSocket;
         this.reader  = clientSocket.getInputStream();
         this.writer = clientSocket.getOutputStream();
+    }
+
+    /*defalt*/ LocalConnection(InetAddress address, int port) throws IOException {
+        this(new Socket(address, port));
+
     }
 
     @Override
@@ -39,24 +45,22 @@ public class LocalConnection implements Connection {
     public void receiveFile(FileOutputStream foStream) {
         byte[] readBuffer = new byte[8192];
         System.out.println("Receiving file");
-        Thread readRunnable = new Thread() {
-            public void run() {
-                while (true) {
-                    try {
-                        int num = reader.read(readBuffer);
-                        if (num > 0) {
-                            byte[] tempArray = new byte[num];
-                            System.arraycopy(readBuffer, 0, tempArray, 0, num);
-                            writeToFile(foStream, tempArray);
-                        } else {
-                            break;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+        Thread readRunnable = new Thread(() -> {
+            while (true) {
+                try {
+                    int num = reader.read(readBuffer);
+                    if (num > 0) {
+                        byte[] tempArray = new byte[num];
+                        System.arraycopy(readBuffer, 0, tempArray, 0, num);
+                        writeToFile(foStream, tempArray);
+                    } else {
+                        break;
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-        };
+        });
         readRunnable.start();
     }
 
@@ -84,38 +88,57 @@ public class LocalConnection implements Connection {
         byte[] buffer = new byte[8192];
         String filePath = "";
         FileInputStream fileInputStream = new FileInputStream(fileName);
-        Thread sendFile = new Thread() {
-            public void run() {
-                byte[] buffer = new byte[8192];
-                while (true) {
-                    try {
+        Thread sendFile = new Thread(() -> {
+            byte[] buffer1 = new byte[8192];
+            while (true) {
+                try {
 
-                        int bytes =fileInputStream.read(buffer,0, buffer.length);
-                        if(bytes>0){
-                            writer=clientSocket.getOutputStream();
-                            writer.write(buffer,0,bytes);
-                        }else{
-                            break;
-                        }
-
-                    } catch (IOException e) {
-                        System.out.println("Error sending file");
-                        e.printStackTrace();
+                    int bytes = fileInputStream.read(buffer1,0, buffer1.length);
+                    if(bytes>0){
+                        writer=clientSocket.getOutputStream();
+                        writer.write(buffer1,0,bytes);
+                    }else{
+                        break;
                     }
+
+                } catch (IOException e) {
+                    System.out.println("Error sending file");
+                    e.printStackTrace();
                 }
-                System.out.println("File successfully send");
             }
-        };
+            System.out.println("File successfully send");
+        });
         sendFile.start();
     }
 
     @Override
     public String getName() {
-        return name;
+        return clientSocket.getInetAddress().getHostName();
     }
 
     @Override
-    public void setName(String name) {
-        this.name = name;
+    public String getAddress() {
+        return clientSocket.getInetAddress().getHostAddress();
+    }
+
+    @Override
+    public void close() throws IOException {
+        clientSocket.close();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LocalConnection that = (LocalConnection) o;
+        if(clientSocket.equals(that.clientSocket))
+            return true;
+
+        return clientSocket.getLocalAddress().equals(that.clientSocket.getLocalAddress());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(clientSocket.getLocalAddress());
     }
 }

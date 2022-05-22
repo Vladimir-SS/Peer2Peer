@@ -3,42 +3,38 @@ package Connectivity;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.*;
+import java.util.List;
+import java.util.Set;
 
-public class BroadcastSender implements Runnable, Closeable {
+/*default*/ class BroadcastSender implements Runnable, Closeable {
     private final DatagramSocket sender;
-    private final DatagramPacket packet;
+    private final List<DatagramPacket> packages;
 
-
-    private static InetAddress getBroadcastIP() throws UnknownHostException, SocketException {
-        InetAddress localHost = Inet4Address.getLocalHost();
-        NetworkInterface networkInterface = NetworkInterface.getByInetAddress(localHost);
-
-        var rv = networkInterface.getInterfaceAddresses().get(0).getBroadcast();
-        System.out.println(rv);
-        return rv;
-    }
-
-    BroadcastSender(int port) throws SocketException, UnknownHostException {
-        sender = new DatagramSocket();
-        sender.setBroadcast(true);
-
+    BroadcastSender(int port, List<InetAddress> sendTo) throws SocketException {
+        this.sender = new DatagramSocket();
+        this.sender.setBroadcast(true);
         byte[] message = new byte[0];
-
-        System.out.println(InetAddress.getLocalHost().getHostAddress());
-        packet = new DatagramPacket(message, 0, getBroadcastIP(), port);
+        this.packages = sendTo
+                .stream()
+                .map(inetAddress -> new DatagramPacket(message, 0, inetAddress, port))
+                .toList();
     }
+
+
 
     @Override
     public void run() {
-        try {
-            sender.send(packet);
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
+        packages.forEach(packet -> {
+            try {
+                sender.send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         sender.close();
     }
 }
