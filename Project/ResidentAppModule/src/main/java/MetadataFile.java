@@ -1,17 +1,12 @@
-import com.google.gson.Gson;
+import com.google.gson.*;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 
 public class MetadataFile {
 
@@ -281,5 +276,51 @@ public class MetadataFile {
     }
 
 
+    //pathForFiles: path to .json files
+    //pathToSharedDir: path to the dir that is being shared on this device
+    // reface fis. cu .json:
+    //      -- fis vechi sunt sterse
+    //      -- fis noi sunt adaugate
+    //      -- pt fis care deja existau sunt "refacute" toate prop in afara de lastPush
+    public static void commit(String pathForFiles, String pathToSharedDir) throws IOException {
+        File directory = new File(pathForFiles);
+        String[] jsonFileNames = directory.list();
+        Map<String, String> lastPushValues = new HashMap<>();
 
+        // luam lastPush pt fiecare fis
+        for(int i=0; i<jsonFileNames.length; i++) {
+            if(!jsonFileNames[i].equals("allFiles.json")&&jsonFileNames[i].contains(".json")){
+                JsonElement tree;
+                JsonObject element=new JsonObject();
+                try (Reader reader = Files.newBufferedReader(Paths.get(pathForFiles + "//" + jsonFileNames[i]))) {      //just reads all .json
+                    JsonParser parser = new JsonParser();
+                    tree = parser.parse(reader);
+                    element=tree.getAsJsonObject();
+                    if(!element.get("lastPush").getAsString().equals(""))
+                        lastPushValues.put(element.get("path").getAsString(), element.get("lastPush").getAsString());       // in lastPushValues vom avea toate fis care au lastPush setat
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Something went wrong when fetching info from infoFiles)");
+                }
+            }
+        }
+
+        //stergem toate fis json + numberOfFiles
+        deleteFilesFromDirectory(directory);
+
+        // refacem fis json (fis. care aveau lastPush setat il au acum ""
+        File f = new File(pathToSharedDir);
+        Map<String, File> sharedFiles = getAllFileFromDir(f);
+        exportDirToJson(sharedFiles, pathForFiles);
+
+        // pt toate fisierele care deja existau, rescriem val lui lastPush
+        for(Map.Entry<String, String> lastPush: lastPushValues.entrySet()){     //toate val lui lastPush inainte sa refacem fis cu json
+                //System.out.println(lastPush.getKey());
+                Path p=Paths.get(lastPush.getKey());
+                String fileN=new String(p.getFileName().toString());
+                if(sharedFiles.containsKey(fileN))          //verif. daca fis inca exista
+                    if(sharedFiles.get(fileN).getPath().equals(lastPush.getKey()))      //verifica path-ul sa fie identic
+                        updateAFile(fileN, pathForFiles, sharedFiles, LocalDate.parse(lastPush.getValue()));    //update lastPush
+        }
+    }
 }
