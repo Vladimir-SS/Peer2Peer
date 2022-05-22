@@ -28,12 +28,10 @@ public class SyncPage extends JPanel implements ActionListener {
     private String fileChoserFile = new String();
     private JFormattedTextField fileChoserTextField;
     private JLabel fileChoserLabel;
-    private int dimension;
 
-    public SyncPage(int menuWidth, int menuHeight, int appWidth, int appHeight, int radius, int dimension){
+    public SyncPage(int menuWidth, int menuHeight, int appWidth, int appHeight, int radius){
         super();
 
-        this.dimension=dimension;
         this.setLayout(new BorderLayout());
 
         pageWidth = appWidth-menuWidth;
@@ -57,12 +55,12 @@ public class SyncPage extends JPanel implements ActionListener {
 
         JLabel syncText = new JLabel();
         syncText.setText("Synchronize all files");
-        syncText.setFont(new Font( "Comic sans",Font.PLAIN,dimension+28 ));
+        syncText.setFont(new Font( "Comic sans",Font.PLAIN,28 ));
         syncText.setBounds(50,20,(int) (container1Width-container1Width/2),50);
         syncPanel.add(syncText);
 
         syncButton = new MyButton("Synchronize files");
-        syncButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+28));
+        syncButton.setFont(new Font("Comic Sans",Font.PLAIN,28));
         syncButton.setBackground(buttoncolor);
         syncButton.setFocusable(false);
         syncButton.setBorder(new LineBorder(Color.BLACK));
@@ -102,10 +100,10 @@ public class SyncPage extends JPanel implements ActionListener {
 
 
         fileChoserButton = new MyButton("Browse directory");
-        fileChoserButton.setFont(new Font( "Comic sans",Font.PLAIN,dimension+18 ));
+        fileChoserButton.setFont(new Font( "Comic sans",Font.PLAIN,18 ));
         fileChoserButton.setBackground(buttoncolor);
         fileChoserButton.setFocusable(false);
-        fileChoserButton.setBounds(20,60,250,30);
+        fileChoserButton.setBounds(20,60,170,30);
         fileChoserButton.setBorder(new LineBorder(Color.BLACK));
         fileChoserButton.setPressedBackgroundColor(buttonPressedcolor);
         fileChoserButton.addActionListener(this);
@@ -133,9 +131,6 @@ public class SyncPage extends JPanel implements ActionListener {
 
     }
 
-
-
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == fileChoserButton) {
@@ -156,13 +151,6 @@ public class SyncPage extends JPanel implements ActionListener {
                 ex.printStackTrace();
             }
         }
-    }
-    public int getFontSize(){
-        return dimension;
-    }
-    public void setFontSyncPage(int dimension)
-    {
-        this.dimension=dimension;
     }
 
 }

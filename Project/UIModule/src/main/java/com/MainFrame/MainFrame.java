@@ -12,11 +12,8 @@ import Exceptions.PortException;
 import com.ConnectionPage.ConPage;
 import com.FilePage.FilePage;
 import com.FirstPage.FirstPageContentPanel;
-
-import com.menu.*;
 import com.FirstPage.PortValidator;
 import com.Menu.*;
-
 import com.SettingsPage.SettingsPage;
 import com.SyncPage.*;
 
@@ -42,16 +39,14 @@ public class MainFrame {
 
     private final MainMenu menuPanel;
 
-    private SyncPage syncPage;
-    private ConPage connectionPage;
-    private FilePage filePage;
-    private FirstPageContentPanel firstPage;
-    private SettingsPage settingsPage;
+    private final JPanel syncPage;
+    private final JPanel connectionPage;
+    private final JPanel filePage;
+    private final FirstPageContentPanel firstPage;
+    private final SettingsPage settingsPage;
 
     //Basically,the name of the button whose page is going to appear first after we press the Connect button
-    private String nameFirstButton="Files";
-    private int dimension=5;
-
+    private final String nameFirstButton="Files";
 
     //Maybe enter bellow variables necessary for Connectivity and ResidentApp
 
@@ -92,11 +87,9 @@ public class MainFrame {
         panelSidePageContainer =new JPanel();
         panelSidePageContainer.setLayout( cardLayoutPages );
 
-        syncPage = new SyncPage(mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius, dimension);
-        connectionPage=new ConPage( mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius ,dimension);
-        filePage=new FilePage( mainMenuInitialWidth,mainMenuInitialHeight,dimension );
-
-
+        syncPage = new SyncPage(mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius);
+        connectionPage=new ConPage( mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius );
+        filePage=new FilePage( mainMenuInitialWidth,mainMenuInitialHeight );
 
         firstPage=new FirstPageContentPanel( appWidth,appHeight,"Welcome to MyP2P" );
 
@@ -140,52 +133,26 @@ public class MainFrame {
         mainFrame.pack();
         mainFrame.setVisible(true);
     }
-    public int getDimension(){
-        return dimension;
-    }
 
     private void whenSyncButtonPressed( ActionEvent e ) {
         cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
-
-        dimension=settingsPage.getFontSize();
-        syncPage.setFontSyncPage(dimension);
-        syncPage=syncPage = new SyncPage(mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius, dimension);
-        panelSidePageContainer.add( syncPage,"syncPage" );
         cardLayoutPages.show( panelSidePageContainer ,"syncPage" );
     }
 
     private void whenConnButtonPressed( ActionEvent e ) {
         cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
-        dimension=settingsPage.getFontSize();
-        connectionPage.setFontConPage(dimension);
-        connectionPage=new ConPage( mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius ,dimension);
-        panelSidePageContainer.add( connectionPage,"connPage" );
         cardLayoutPages.show( panelSidePageContainer ,"connPage" );
-
     }
 
     private void whenFileButtonPressed( ActionEvent e ) {
         cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
-        dimension=settingsPage.getFontSize();
-        filePage.setFontFilePage(dimension);
-        filePage=new FilePage( mainMenuInitialWidth,mainMenuInitialHeight,dimension );
-        panelSidePageContainer.add( filePage,"filePage" );
         cardLayoutPages.show( panelSidePageContainer ,"filePage" );
-
     }
 
     private void whenConnectButtonPressed( ActionEvent e ){
 
         var portField=firstPage.getPortField();
 
-// FontChangingInterface
-        cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
-        cardLayoutPages.show( panelSidePageContainer ,"filePage" );
-        dimension=settingsPage.getFontSize();
-        filePage.setFontFilePage(dimension);
-
-
-// port
         var portInformation= new PortValidator( portField.getText() );
 
         if(portInformation.isValid()){
@@ -212,19 +179,15 @@ public class MainFrame {
         else{
             JOptionPane.showMessageDialog( null,portInformation.getErrorMessage(),"Port error",JOptionPane.ERROR_MESSAGE );
         }
-// end port
     }
 
     private void whenSettingsButtonPressed( ActionEvent e ) {
         cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
         cardLayoutPages.show( panelSidePageContainer ,"settingsPage" );
-        dimension=settingsPage.getFontSize();
     }
 
     private void whenDisconnectButtonPressed( ActionEvent e ) {
 
         cardLayoutWholePages.show( panelWholePageContainer,"firstPage" );
-        dimension=settingsPage.getFontSize();
-
     }
 }

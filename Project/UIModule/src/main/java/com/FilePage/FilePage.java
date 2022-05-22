@@ -4,9 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class FilePage extends JPanel {
-    private int dimension=5;
 
-    public FilePage(int width,int height, int dimension){
+    public FilePage(int width,int height){
 
         this.setPreferredSize( new Dimension(width,height) );
 
@@ -59,7 +58,7 @@ public class FilePage extends JPanel {
         pathPanel.setBorder(BorderFactory.createStrokeBorder(new BasicStroke(2.0f)));
 
         JLabel pathLabel = new JLabel("Path:");
-        pathLabel.setFont(new Font("Verdana",1,dimension+20));
+        pathLabel.setFont(new Font("Verdana",1,20));
         pathPanel.add(pathLabel);
 
         JPanel mainPanel = new JPanel();
@@ -69,19 +68,16 @@ public class FilePage extends JPanel {
 
         JButton sync = new JButton("Sync");
         sync.setBounds(375-surplusX,240,100,50);
-        sync.setFont(new Font("Comic Sans",Font.PLAIN,dimension+14));
         sync.setFocusable(false);
         sync.setBackground(new Color(212,186,158,255));
 
         JButton newButton = new JButton("New");
         newButton.setBounds(375-surplusX,310,100,50);
-        newButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+14));
         newButton.setFocusable(false);
         newButton.setBackground(new Color(212,186,158,255));
 
         JButton noBackup = new JButton("No Backup");
         noBackup.setBounds(375-surplusX,380,100,50);
-        noBackup.setFont(new Font("Comic Sans",Font.PLAIN,dimension+6));
         noBackup.setFocusable(false);
         noBackup.setBackground(new Color(212,186,158,255));
 
@@ -94,14 +90,5 @@ public class FilePage extends JPanel {
         this.add(pathPanel);
         this.add(mainPanel);
         this.add(label);
-    }
-
-
-    public int getDimension() {
-        return dimension;
-    }
-
-    public void setFontFilePage(int dimension) {
-        this.dimension = dimension;
     }
 }

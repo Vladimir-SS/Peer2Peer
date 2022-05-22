@@ -1,13 +1,10 @@
-package com.menu;
-
-import com.FirstPage.RoundedButton;
+package com.Menu;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Represents a main menu for the application that contains 0 or more buttons
@@ -91,7 +88,7 @@ public class MainMenu extends JPanel {
 
         listButtons=new ArrayList<>();
         for ( String buttonName : listButtonsName ) {
-            listButtons.add( new RoundedButton( buttonName, buttonCornerRadius,true ) );
+            listButtons.add( new RoundedButton( buttonName, buttonCornerRadius ) );
         }
 
         for(JButton button:listButtons){
