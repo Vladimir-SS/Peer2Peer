@@ -8,8 +8,9 @@ public class SenderTest {
 
     public static void main(String[] args) {
         try {
+
             System.out.println("Making Peer...");
-            Peer peer = new Peer(4444);
+            Peer peer = new Peer();
             var localIpList = peer.getDevices();
             System.out.println("Found devices: " + localIpList);
             peer.connectDevice("192.168.1.9",4444);
