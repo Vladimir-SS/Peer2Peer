@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class LocalConnection implements Connection {
     protected Socket clientSocket;
-    private String name;
+    private String name = null;
 
     InputStream reader;
     OutputStream writer;
@@ -113,7 +113,7 @@ public class LocalConnection implements Connection {
 
     @Override
     public String getName() {
-        return name;
+        return name == null ? clientSocket.getInetAddress().getHostName() : name;
     }
 
     @Override

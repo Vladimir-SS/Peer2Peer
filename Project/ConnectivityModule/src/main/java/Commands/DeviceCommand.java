@@ -12,14 +12,14 @@ public class DeviceCommand implements Command{
 
     List<InetAddress> lastSearch = new ArrayList<>();
 
-    public void getNewDevices(Peer peer, String[] arguments) throws Exception{
+    public void findDevices(Peer peer, String[] arguments) throws Exception{
 
         if(arguments.length != 1)
             throw manual();
 
         try {
             System.out.println("Searching devices...");
-            lastSearch = new ArrayList<>(peer.getNewDevices(false));
+            lastSearch = new ArrayList<>(peer.findDevices(false));
             AtomicInteger index = new AtomicInteger();
 
             if(lastSearch.size() == 0)
@@ -51,7 +51,7 @@ public class DeviceCommand implements Command{
             throw manual();
 
         switch (arguments[0]) {
-            case "--get-new", "-ga" -> getNewDevices(peer, arguments);
+            case "--find", "-f" -> findDevices(peer, arguments);
             case "--connect-to", "-ct" -> connectTo(peer, arguments);
             case "--connected", "-c" -> connectedDevices(peer, arguments);
             default -> throw manual();
@@ -62,12 +62,12 @@ public class DeviceCommand implements Command{
     private void connectedDevices(Peer peer, String[] arguments) throws Exception{
         if(arguments.length != 1)
             throw manual();
-
-
+        AtomicInteger index = new AtomicInteger();
+        peer.getConnectedDevices().forEach(device -> System.out.println(index.getAndIncrement() + ": " + device));;
     }
 
     @Override
     public Exception manual() {
-        return new Exception("(--get-all | -g) | (--connect-to <index> | -c <index>)");
+        return new Exception("(--get-all | -g) | (--connect-to <index> | -ct <index>) | (--connected | -c)");
     }
 }
