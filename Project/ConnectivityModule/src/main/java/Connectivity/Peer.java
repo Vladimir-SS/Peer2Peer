@@ -26,9 +26,7 @@ public class Peer implements Closeable {
      * @throws IOException Broadcasting is not working
      */
     public Set<InetAddress> findDevices(boolean async) throws IOException {
-        var addresses = broadcast.getAddresses(5, async);
-        broadcast.close();
-        return addresses;
+        return broadcast.getAddresses(5, async);
     }
 
     public List<Connection> getConnectedDevices(){

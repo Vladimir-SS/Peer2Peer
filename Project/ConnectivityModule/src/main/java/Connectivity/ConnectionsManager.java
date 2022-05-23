@@ -55,9 +55,14 @@ import java.util.Set;
                 throw new RuntimeException(
                         "Error accepting client connection", e);
             }
-            System.out.println("Peer: " + clientSocket.getRemoteSocketAddress().toString() + " connected!");
+
             try {
-                connections.add(new LocalConnection(clientSocket));
+                LocalConnection connection = new LocalConnection(clientSocket);
+                if(!connections.contains(connection)) {
+                    connections.add(connection);
+                    System.out.println("Peer: " + clientSocket.getRemoteSocketAddress().toString() + " connected!");
+                }
+                else connection.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
