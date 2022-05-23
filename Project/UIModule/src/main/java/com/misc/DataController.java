@@ -57,9 +57,12 @@ public class DataController {
         }
     }
 
-//    public static Peer getPeer() {
-//        return peer;
-//    }
+    public static void closePeer(){
+        try {
+            peer.close();
+        } catch (IOException ignored) {
+        }
+    }
 
     public static void setPeer(Peer peer) {
         DataController.peer = peer;

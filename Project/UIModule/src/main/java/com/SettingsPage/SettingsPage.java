@@ -1,5 +1,7 @@
 package com.SettingsPage;
 
+import com.misc.DataController;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -211,6 +213,8 @@ public class SettingsPage extends JPanel implements ActionListener {
         disconnect.setBounds(210,500,160,40);
         disconnect.setPressedBackgroundColor(buttonPressedcolor);
         syncPanel.add(disconnect);
+
+        disconnect.addActionListener(event -> DataController.closePeer());
 
         /*
         disconnect.addActionListener(new ActionListener(){
