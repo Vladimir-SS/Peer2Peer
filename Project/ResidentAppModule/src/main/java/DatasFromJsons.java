@@ -29,7 +29,7 @@ public class DatasFromJsons extends MetadataFile {
     public Map<String, Map<String, String>> getFileWithData() {
         return fileWithData;
     }
-    public DatasFromJsons(String pathForDirectory) {
+    public DatasFromJsons(String pathForDirectory) {  ///
         this.pathForDirectory = pathForDirectory;
         File folder = new File(pathForDirectory);
         if(!folder.isDirectory())
@@ -86,52 +86,64 @@ public class DatasFromJsons extends MetadataFile {
         return gson.fromJson(jsonString, DatasFromJsons.class);
     }
 
-    private boolean hasToGetUpload(Map<String, String> dataClient2,Map<String, String> dataClient1 ){
-        List<String> listWithParameters = new ArrayList<>();
-        listWithParameters.add("lastPush");
-        listWithParameters.add("size");
-        listWithParameters.add("lastModifiedTime");
-        if(Integer.parseInt(dataClient2.get(listWithParameters.get(1))) > Integer.parseInt(dataClient1.get(listWithParameters.get(1)))){
-
-            if(!(dataClient1.get(listWithParameters.get(0)).equals(null) || dataClient1.get(listWithParameters.get(0)).equals("")) && !(dataClient2.get(listWithParameters.get(0)).equals(null) || dataClient2.get(listWithParameters.get(0)).equals("")))
-            {
-
-                ZonedDateTime c1 = ZonedDateTime.parse(dataClient1.get(listWithParameters.get(0)));
-                System.out.println(c1);
-                ZonedDateTime  c2 = ZonedDateTime.parse(dataClient2.get(listWithParameters.get(0)));
-                System.out.println(c2);
-                if(c2.isAfter(c1))
-                {
-                    return true;
-                }
-                else return true;
-            }
-            else
-            {
-
-//                if(!(dataClient1.get(listWithParameters.get(0)).equals(null) || dataClient1.get(listWithParameters.get(0)).equals("")))
+//    private boolean hasToGetUpload(Map<String, String> dataClient2,Map<String, String> dataClient1 ){
+//        List<String> listWithParameters = new ArrayList<>();
+//        listWithParameters.add("lastPush");
+//        listWithParameters.add("size");
+//        listWithParameters.add("lastModifiedTime");
+//        if(Integer.parseInt(dataClient2.get(listWithParameters.get(1))) > Integer.parseInt(dataClient1.get(listWithParameters.get(1)))){
+//
+//            if(!(dataClient1.get(listWithParameters.get(0)).equals(null) || dataClient1.get(listWithParameters.get(0)).equals("")) && !(dataClient2.get(listWithParameters.get(0)).equals(null) || dataClient2.get(listWithParameters.get(0)).equals("")))
+//            {
+//
+//                ZonedDateTime c1 = ZonedDateTime.parse(dataClient1.get(listWithParameters.get(0)));
+//                System.out.println(c1);
+//                ZonedDateTime  c2 = ZonedDateTime.parse(dataClient2.get(listWithParameters.get(0)));
+//                System.out.println(c2);
+//                if(c2.isAfter(c1))
 //                {
-                ZonedDateTime  c1 =ZonedDateTime.parse(dataClient1.get(listWithParameters.get(2)));
-                ZonedDateTime  c2 =ZonedDateTime.parse(dataClient2.get(listWithParameters.get(2)));
-                    if(c2.isAfter(c1))
-                    {
-                        return true;
-                    }
-                    else return true;
+//                    return true;
 //                }
-            }
-        }
-        else
-        {
-            ZonedDateTime  c1 =ZonedDateTime.parse(dataClient1.get(listWithParameters.get(2)));
-            ZonedDateTime  c2 =ZonedDateTime.parse(dataClient2.get(listWithParameters.get(2)));
+//                else return true;
+//            }
+//            else
+//            {
+//
+////                if(!(dataClient1.get(listWithParameters.get(0)).equals(null) || dataClient1.get(listWithParameters.get(0)).equals("")))
+////                {
+//                ZonedDateTime  c1 =ZonedDateTime.parse(dataClient1.get(listWithParameters.get(2)));
+//                ZonedDateTime  c2 =ZonedDateTime.parse(dataClient2.get(listWithParameters.get(2)));
+//                    if(c2.isAfter(c1))
+//                    {
+//                        return true;
+//                    }
+//                    else return true;
+////                }
+//            }
+//        }
+//        else
+//        {
+//            ZonedDateTime  c1 =ZonedDateTime.parse(dataClient1.get(listWithParameters.get(2)));
+//            ZonedDateTime  c2 =ZonedDateTime.parse(dataClient2.get(listWithParameters.get(2)));
+//            if(c2.isAfter(c1))
+//            {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
+    private boolean hasToGetUpload(Map<String, String> dataClient2,Map<String, String> dataClient1 )
+    {
+            ZonedDateTime  c1 = ZonedDateTime.parse(dataClient1.get("lastModifiedTime"));
+            ZonedDateTime  c2 = ZonedDateTime.parse(dataClient2.get("lastModifiedTime"));
             if(c2.isAfter(c1))
             {
                 return true;
             }
-        }
-        return false;
+            return false;
     }
+
 
     public Map<String,Map<String,String>> fileShouldIGet(String otherClientJsonData)
     {
@@ -155,18 +167,15 @@ public class DatasFromJsons extends MetadataFile {
             if(!foundIt) response.put(name2, infoClient2.get(name2));
             else {
                 Map<String, String > dataClient2= infoClient2.get(name2);
-                System.out.println("\t\t "+dataClient2);
+//                System.out.println("\t\t "+dataClient2);
                 Map<String,String> dataClient1= fileWithData.get(name2);
-                System.out.println("\t\t "+dataClient1);
+//                System.out.println("\t\t "+dataClient1);
 //
                 System.out.println(hasToGetUpload(dataClient2,dataClient1));
                 if(hasToGetUpload(dataClient2,dataClient1)) {
 
-                    response.put(name2, infoClient2.get(name2));}
-
-
-
-
+                    response.put(name2, infoClient2.get(name2));
+                }
             }
         }
         return response;
