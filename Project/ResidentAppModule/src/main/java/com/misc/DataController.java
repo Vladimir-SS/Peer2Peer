@@ -24,6 +24,10 @@ public class DataController {
         }
     }
 
+    public static Peer getPeer() {
+        return peer;
+    }
+
     public static List<String[]> getLastFoundDevices() {
         return addresses.stream().
                 map(address -> new String[]{address.getHostName(), address.getHostAddress()})
