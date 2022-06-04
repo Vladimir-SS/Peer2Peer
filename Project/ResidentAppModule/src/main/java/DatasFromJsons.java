@@ -26,6 +26,9 @@ public class DatasFromJsons extends MetadataFile {
         return pathForDirectory;
     }
 
+
+
+    // Functie care creeaza un Map avand ca si cheie numele fisierului cu extensie, iar valoarea este un alt map care
     public Map<String, Map<String, String>> getFileWithData() {
         return fileWithData;
     }
@@ -55,7 +58,7 @@ public class DatasFromJsons extends MetadataFile {
 
                         } else {
                             //todo exception
-                            System.out.println("Nu eset un folder");
+                            System.out.println("Nu este un folder");
                         }
                     } catch (IOException e) {
                     e.printStackTrace();
