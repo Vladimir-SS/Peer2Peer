@@ -6,18 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ResidentAppModule" />
         <module name="ConnectivityModule" />
-        <module name="MainMenu" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="UIModule" target="17" />
+      <module name="Connectivity" target="16" />
+      <module name="ConnectivityModule" target="17" />
     </bytecodeTargetLevel>
-  </component>
-  <component name="JavacSettings">
-    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ConnectivityModule" options="--add-exports java.base/sun.nio.ch=ALL-UNNAMED" />
-    </option>
   </component>
 </project>

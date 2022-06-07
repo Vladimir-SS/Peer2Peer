@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import Connectivity.Peer;
+import connectivity.Peer;
 import com.ConnectionPage.ConPage;
 import com.misc.DataController;
 import com.FilePage.FilePage;
