@@ -17,7 +17,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="ConnectivityModule" options="--add-exports java.base/sun.nio.ch=ALL-UNNAMED" />
+      <module name="ConnectivityModule" options="" />
     </option>
   </component>
 </project>
