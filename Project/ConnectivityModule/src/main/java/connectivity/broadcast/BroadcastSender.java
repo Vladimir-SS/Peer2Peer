@@ -20,7 +20,6 @@ public class BroadcastSender implements Runnable, Closeable {
     }
 
 
-
     @Override
     public void run() {
         packages.forEach(packet -> {

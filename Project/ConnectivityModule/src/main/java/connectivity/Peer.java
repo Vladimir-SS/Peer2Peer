@@ -22,7 +22,6 @@ public class Peer implements Closeable {
         new Thread(connectionsManager).start();
     }
 
-
     /**
      *
      * @param async If this variable is set to "true",
