@@ -27,9 +27,11 @@ public class ConnectivityResident extends Thread {
         this.synchronizedDirectory = synchronizedDirectory;
     }
 
+
     public ConnectivityResident() {
         this(null, null);
     }
+
     public Peer getPeer() {
         return peer;
     }
@@ -53,7 +55,7 @@ public class ConnectivityResident extends Thread {
     }
 
     /**
-     *
+     * This method is used to send and create the json file.
      * @param connection
      * @param fileSystemTree
      * @throws FileNotFoundException
@@ -85,6 +87,12 @@ public class ConnectivityResident extends Thread {
     }
 
     //This exists because I have to deal with temp file not working
+    /**
+     * This method is used to create the FileSystemTree from the TreeDirectory.
+     * @param connection
+     * @param action
+     * @throws IOException
+     */
     private void sendAction(Connection connection, TreeActionsEnum action) throws IOException {
         TreeDirectory root = synchronizedDirectory.getTree();
         FileSystemTree fileSystemTree = new FileSystemTree(root, action);
@@ -104,6 +112,11 @@ public class ConnectivityResident extends Thread {
         sendAction(connection, TreeActionsEnum.Sync);
     }
 
+    /**
+     * @param connection
+     * @param fileSystemTree
+     * @throws IOException
+     */
     private void sendModifiedFiles(Connection connection, FileSystemTree fileSystemTree) throws IOException {
         TreeDirectory ourTree = synchronizedDirectory.getTree();
         TreeDeal action = new PushDeal(
@@ -116,6 +129,11 @@ public class ConnectivityResident extends Thread {
         action.deal();
     }
 
+
+    /**
+     * @param connection
+     * @param fileSystemTree
+     */
     public void incomingAction(Connection connection, FileSystemTree fileSystemTree){
         try {
 
@@ -138,6 +156,9 @@ public class ConnectivityResident extends Thread {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void run() {
         while (isAlive()) {

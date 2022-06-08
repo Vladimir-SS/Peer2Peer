@@ -15,12 +15,18 @@ import java.util.*;
 
 //TODO: MOVE THIS IN HIS OWN PACKAGE
 
+/**
+ * This class is used to establish a communication between the application
+ * and the user through the console.
+ * It displays instructions for the user and reads the commands given invoking
+ * the methods responsible for interpreting and executing them.
+ */
+
 public class ConsoleInterface {
 
     static final private Scanner input = new Scanner(System.in);
     static private Peer peer;
     static private SynchronizedDirectory synchronizedDirectory;
-
     private static final Map<String, Command> commands = new HashMap<>(){{
         put("device", new DeviceCommand());
         put("exit", new ExitCommand());
@@ -28,6 +34,10 @@ public class ConsoleInterface {
     }};
 
 
+    /**
+     * This method is used to instantiate a new Peer with a given port.
+     * It checks if the port is available and if a connection can be created with it.
+     */
     private static void setPort(){
         do {
             System.out.println("*** To start a connection enter a port ***:");
@@ -49,6 +59,11 @@ public class ConsoleInterface {
     }
 
 
+    /**
+     * This method is used to set the path to the folder destined for
+     * syncronization with the other devices, making sure that the
+     * path is valid.
+     */
     private static void setPath(){
         do{
             System.out.println("*** Enter path to synchronized folder ***:");
@@ -69,6 +84,12 @@ public class ConsoleInterface {
     }
 
 
+    /**
+     * The main function which will invoke the methods responsible for setting
+     * the port and the path.
+     * This is also the function used to read the commands given from the user.
+     * @param args The standard main function signature.
+     */
     public static void main(String[] args) {
 
         setPort();
