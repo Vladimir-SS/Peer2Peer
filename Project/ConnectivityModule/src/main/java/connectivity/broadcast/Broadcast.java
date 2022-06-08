@@ -8,7 +8,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-
+/**
+ * 
+ */
 public class Broadcast implements Closeable {
     private final BroadcastSender sender;
     private final ScheduledExecutorService executor;
