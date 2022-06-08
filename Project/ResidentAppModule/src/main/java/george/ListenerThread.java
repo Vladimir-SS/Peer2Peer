@@ -12,10 +12,11 @@ import static java.lang.System.exit;
 public class ListenerThread extends FileListener implements Runnable{
 
 
-    Path root;
+
 
     public ListenerThread(Path root) {
         super(root);
+
         this.root = root;
     }
 
@@ -73,13 +74,16 @@ public class ListenerThread extends FileListener implements Runnable{
 
                         switch (kind.toString()){
                             case "ENTRY_CREATE":
+                                System.out.println("created");
                                 createEvent(file);
 
                                 break;
                             case "ENTRY_MODIFY":
+                                System.out.println("modify");
                                 modifiedEvent(file);
                                 break;
                             case "ENTRY_DELETE":
+                                System.out.println("delete");
                                 deleteEvent(file);
                                 break;
 

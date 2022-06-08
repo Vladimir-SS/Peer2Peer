@@ -19,11 +19,14 @@ public  class FileListener {
         this.root=root;
 
 
+
+
+
+    }
+    public void startL(){
         ListenerThread t1 = new ListenerThread(root);
         Thread myThread = new Thread(t1);
         myThread.start();
-
-
 
     }
 
