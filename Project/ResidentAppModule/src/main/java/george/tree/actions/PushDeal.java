@@ -1,8 +1,8 @@
 package george.tree.actions;
 
 import connectivity.connection.Connection;
-import george.tree.NullTreeDirectory;
 import george.tree.TreeDirectory;
+import george.tree.WildcardTreeDirectory;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -23,23 +23,28 @@ public class PushDeal implements TreeDeal {
     }
 
     private void deal(Path path, TreeDirectory ourTree, TreeDirectory theirTree) throws IOException {
-        System.out.println("deal with directory: " + path);
+        System.out.println("DEAL DIRECTORY: " + path);
 
         for (Map.Entry<String, Long> pair : ourTree.getFiles().entrySet()) {
             String name = pair.getKey();
             Path newPath = path.resolve(name);
 
-            if(theirTree.containsFile(name) && pair.getValue() <= theirTree.getModified(name))
+            if (theirTree.containsFile(name) && pair.getValue() <= theirTree.getModified(name))
                 continue;
             connection.sendFile(root, newPath);
-            System.out.println("deal sent " + newPath);
+            System.out.println("DEAL SENT " + newPath);
         }
 
-        for (Map.Entry<String, TreeDirectory> pair : ourTree.getDirectories().entrySet()) {
-            TreeDirectory theirNextTree = theirTree.getSubDirectory(pair.getKey());
+        var ourDirectories = ourTree.getDirectories();
+        ourDirectories.remove(".peer");
 
-            if(theirNextTree == null)
-                theirNextTree = new NullTreeDirectory();
+        for (Map.Entry<String, TreeDirectory> pair : ourDirectories.entrySet()) {
+            String nameNextDirectory = pair.getKey();
+            System.out.println("DEAL NEXT DIRECTORY: " + nameNextDirectory);
+
+            TreeDirectory theirNextTree = theirTree.containsDirectory(nameNextDirectory)
+                    ? theirTree.getSubDirectory(nameNextDirectory)
+                    : new WildcardTreeDirectory();
 
             Path newPath = path.resolve(pair.getKey());
             deal(newPath, pair.getValue(), theirNextTree);

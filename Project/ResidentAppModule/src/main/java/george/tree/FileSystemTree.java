@@ -10,20 +10,20 @@ import java.nio.file.Paths;
 public class FileSystemTree{
     protected TreeDirectory root;
     protected TreeActionsEnum action;
-    protected Path rootPath;
+    protected String rootPath;
 
     public FileSystemTree(TreeDirectory root, TreeActionsEnum action) {
         this.root = root;
         this.action = action;
-        this.rootPath = Paths.get("");
+        this.rootPath = "";
+    }
+
+    public void setPath(Path path) {
+        this.rootPath = path.toString();
     }
 
     public Path getRootPath() {
-        return rootPath;
-    }
-
-    public void setRootPath(Path rootPath) {
-        this.rootPath = rootPath;
+        return Paths.get(rootPath);
     }
 
     public TreeActionsEnum getAction() {

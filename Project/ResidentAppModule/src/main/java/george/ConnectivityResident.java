@@ -34,10 +34,6 @@ public class ConnectivityResident extends Thread {
         return peer;
     }
 
-    public SynchronizedDirectory getSynchronizedDirectory() {
-        return synchronizedDirectory;
-    }
-
     public void setSynchronizedDirectory(SynchronizedDirectory synchronizedDirectory) {
         this.synchronizedDirectory = synchronizedDirectory;
     }
@@ -56,28 +52,31 @@ public class ConnectivityResident extends Thread {
         this.peer = peer;
     }
 
-
-
     /**
      *
-     *
      * @param connection
-     * @throws FileSystemException
+     * @param fileSystemTree
+     * @throws FileNotFoundException
      * @throws IOException
      */
-    private void sendFileSystemTree(Connection connection, FileSystemTree fileSystemTree) throws FileSystemException, IOException {
+    private void sendFileSystemTree(Connection connection, FileSystemTree fileSystemTree) throws FileNotFoundException, IOException {
+        Path root = synchronizedDirectory.getPath();
         Path tempFile;
 
         try{
-            tempFile = Files.createTempFile("action", ".json");
-            FileWriter writer = new FileWriter(tempFile.toFile());
-            fileSystemTree.toJSON(writer);
-            writer.close();
+            tempFile = Files.createTempFile(
+                    root.resolve(".peer"),
+                    "action",
+                    ".json"
+            );
+            FileWriter fileWriter = new FileWriter(tempFile.toFile());
+            fileSystemTree.toJSON(fileWriter);
+            fileWriter.close();
         } catch (IOException e) {
-            throw new FileSystemException("action.json");
+            throw new FileNotFoundException(".peer/action.json");
         }
 
-        connection.sendFile(tempFile, null);
+        connection.sendFile(root, root.relativize(tempFile));
 
         try {
             Files.delete(tempFile);
@@ -105,13 +104,13 @@ public class ConnectivityResident extends Thread {
         sendAction(connection, TreeActionsEnum.Sync);
     }
 
-    public void sendModifiedFiles(Connection connection, FileSystemTree fileSystemTree) throws IOException {
+    private void sendModifiedFiles(Connection connection, FileSystemTree fileSystemTree) throws IOException {
         TreeDirectory ourTree = synchronizedDirectory.getTree();
         TreeDeal action = new PushDeal(
                 connection,
                 ourTree,
                 fileSystemTree.root(),
-                synchronizedDirectory.path().resolve(fileSystemTree.getRootPath())
+                synchronizedDirectory.getPath().resolve(fileSystemTree.getRootPath())
         );
 
         action.deal();
@@ -122,10 +121,12 @@ public class ConnectivityResident extends Thread {
 
             switch (fileSystemTree.action()){
                 case Sync:
+                    System.out.println("Request Sync");
                     sendModifiedFiles(connection, fileSystemTree);
                     fetchFiles(connection);
                     break;
                 case Fetch:
+                    System.out.println("Request Fetch");
                     sendModifiedFiles(connection, fileSystemTree);
                 break;
                 case Delete:
@@ -140,9 +141,8 @@ public class ConnectivityResident extends Thread {
     @Override
     public void run() {
         while (isAlive()) {
-            System.out.println("Aliveee");
-            var entry = peer.incomingFile(synchronizedDirectory.path());
-            System.out.println("got smth");
+            System.out.println("Alive");
+            var entry = peer.incomingFile(synchronizedDirectory.getPath());
             Connection connection = entry.getKey();
             Path relativePath = entry.getValue();
 
@@ -150,16 +150,15 @@ public class ConnectivityResident extends Thread {
                 peer.disconnectDevice(connection);
                 continue;
             }
-            Path path = synchronizedDirectory.path().resolve(relativePath);
-
+            Path path = synchronizedDirectory.getPath().resolve(relativePath);
             String fileName = path.getFileName().toString();
-            System.out.println(fileName);
 
             if(
-                    relativePath.startsWith("peer")
+                    relativePath.startsWith(".peer")
                     && fileName.startsWith("action")
                     && fileName.endsWith(".json")
             ){
+                System.out.println("Action came");
                 try(InputStream inputStream = new FileInputStream(path.toFile())) {
                     Gson gson = new Gson();
                     Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));

@@ -1,18 +1,16 @@
 package george;
 
 import george.tree.TreeDirectory;
-import george.tree.WildcardTreeDirectory;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 
 public class  SynchronizedDirectory {
 
-    final private Path path;
+    protected Path path;
 
     public SynchronizedDirectory(Path path) {
         this.path = path;
@@ -31,9 +29,12 @@ public class  SynchronizedDirectory {
         }
     }
 
+    public Path getPath() {
+        return path;
+    }
 
     //The old File API would do just fine
-    private static TreeDirectory getTreeFromFile(File directory, TreeDirectory mirror) {
+    private static TreeDirectory getTreeFromFile(File directory) {
 
         TreeDirectory treeDirectory = new TreeDirectory();
         File[] children = directory.listFiles();
@@ -44,23 +45,17 @@ public class  SynchronizedDirectory {
         for (File file : children) {
             String fileName = file.getName();
 
-            if (file.isDirectory() && mirror.containsDirectory(fileName)) {
-                TreeDirectory directoryChild = getTreeFromFile(file, mirror.getSubDirectory(fileName));
+            if (file.isDirectory()) {
+                TreeDirectory directoryChild = getTreeFromFile(file);
                 treeDirectory.addDirectory(fileName, directoryChild);
-            } else {
-                if (mirror.containsFile(fileName))
-                    treeDirectory.addFile(fileName, file.lastModified());
-            }
+            } else
+                treeDirectory.addFile(fileName, file.lastModified());
         }
 
         return treeDirectory;
     }
 
     public TreeDirectory getTree() {
-        return getTreeMirrored(new WildcardTreeDirectory());
-    }
-
-    public TreeDirectory getTreeMirrored(TreeDirectory mirror) {
-        return getTreeFromFile(path.toFile(), mirror);
+        return getTreeFromFile(path.toFile());
     }
 }

@@ -99,7 +99,6 @@ public class ConsoleInterface {
                 command.run(Arrays.copyOfRange(params, 1, params.length));
             } catch (Exception e) {
                 System.out.println(params[0] + ": " + e.getMessage());
-                throw new RuntimeException(e);
             }
         }
     }
