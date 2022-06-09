@@ -1,7 +1,14 @@
 package com.FilePage;
 
+import com.misc.CustomTableModel;
+import com.misc.DataController;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class FilePage extends JPanel {
     private int dimension=5;
@@ -14,14 +21,14 @@ public class FilePage extends JPanel {
 
     private static int pageWidth, pageHeight;
 
-    private final JPanel container1, container2;
+    private JPanel container1, container2;
 
     private JTable connectedDevicesTable;
-    private final JTable foundConnectionsTable;
+    private JTable foundConnectionsTable;
 
 
 
-    public FilePage(int width,int height, int appWidth, int appHeight, int dimension){
+    public FilePage(int menuWidth, int menuHeight, int appWidth, int appHeight, int radius, int dimension){
         super();
         this.dimension=dimension;
         this.setLayout(new BorderLayout());
@@ -45,40 +52,8 @@ public class FilePage extends JPanel {
         filePagePanel.setLayout(null);
         filePagePanel.setPreferredSize(new Dimension((int) (container1Width-container1Width/2.5),container1Height));
 
-        List<String[]> data = new ArrayList<>();
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
-        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        List<String[]> data = IntStream.range(0, 20).map(new[]);
+
 
         filesTable = createFilesTable(data);
 

@@ -93,7 +93,7 @@ public class MainFrame {
 
         syncPage = new SyncPage(mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius, dimension);
         connectionPage=new ConPage( mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius ,dimension);
-        filePage=new FilePage( mainMenuInitialWidth,mainMenuInitialHeight,dimension );
+        filePage=new FilePage(mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius ,dimension);
 
 
 
@@ -167,7 +167,7 @@ public class MainFrame {
         cardLayoutWholePages.show( panelWholePageContainer,"pagePanel" );
         dimension=settingsPage.getFontSize();
         filePage.setFontFilePage(dimension);
-        filePage=new FilePage( mainMenuInitialWidth,mainMenuInitialHeight,dimension );
+        filePage=new FilePage( mainMenuInitialWidth, mainMenuInitialHeight, appWidth, appHeight, panelRadius ,dimension );
         panelSidePageContainer.add( filePage,"filePage" );
         cardLayoutPages.show( panelSidePageContainer ,"filePage" );
 
