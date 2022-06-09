@@ -140,9 +140,9 @@ public class ConnectionsManager implements Runnable {
     /**
      * This method will open a new socket, initializing the variable serverSocket with a new instance of ServerSocket
      * type, using as port the serverPort variable.
-     * @throws PortException A custom exception thrown if the given port is already in use
+     * @throws A custom exception thrown if the given port is already in use
      */
-    private void openServerSocket() throws PortException {
+    private void openServerSocket() throws  {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
         }  catch (IOException e) {

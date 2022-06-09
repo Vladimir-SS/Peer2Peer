@@ -53,8 +53,8 @@ public class ActionHandler {
     }
 
     //This exists because I have to deal with temp file not working
-    public void sendAction(Connection connection, TreeActionsEnum action) throws IOException {
-        TreeDirectory root = synchronizedDirectory.getTree();
+    public void sendAction(Connection connection, TreeActionsEnum action, Path ...paths) throws IOException {
+        TreeDirectory root = synchronizedDirectory.getTree(paths);
         FileSystemTree fileSystemTree = new FileSystemTree(root, action);
 
         try {

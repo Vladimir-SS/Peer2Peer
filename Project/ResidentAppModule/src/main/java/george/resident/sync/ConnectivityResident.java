@@ -47,23 +47,33 @@ public class ConnectivityResident {
         this.thread = new UpcomingFileThread(actionHandler, peerManager);
     }
 
-    private void actionFiles(int index, TreeActionsEnum action, Path... subPath) throws DeviceNotFound, IOException {
+    public void disconnect(){
+        thread.interrupt();
+        try {
+            thread.getPeerManager().getPeer().close();
+        } catch (IOException ignored) {
+
+        }
+    }
+
+    private void actionFiles(int index, TreeActionsEnum action, Path... paths) throws DeviceNotFound, IOException {
         thread.getActionHandler().sendAction(
                 thread.getPeerManager().getConnectedDevice(index),
-                action
+                action,
+                paths
         );
     }
 
-    public void fetchFiles(int index, Path... subPath) throws DeviceNotFound, IOException {
-        actionFiles(index, TreeActionsEnum.Fetch, subPath);
+    public void fetchFiles(int index, Path... paths) throws DeviceNotFound, IOException {
+        actionFiles(index, TreeActionsEnum.Fetch, paths);
     }
 
-    public void syncFiles(int index, Path... subPath) throws DeviceNotFound, IOException {
-        actionFiles(index, TreeActionsEnum.Sync, subPath);
+    public void syncFiles(int index, Path... paths) throws DeviceNotFound, IOException {
+        actionFiles(index, TreeActionsEnum.Sync, paths);
     }
 
-    public void deleteFiles(int index, Path... subPath) throws DeviceNotFound, IOException {
-        actionFiles(index, TreeActionsEnum.Delete, subPath);
+    public void deleteFiles(int index, Path... paths) throws DeviceNotFound, IOException {
+        actionFiles(index, TreeActionsEnum.Delete, paths);
     }
 
     public List<Device> findNewDevices() throws BroadcastFailedException {

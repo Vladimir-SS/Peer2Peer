@@ -21,7 +21,6 @@ public class PushDeal implements TreeDeal {
         this.theirTree = theirTree;
         this.root = root;
     }
-
     private void deal(Path path, TreeDirectory ourTree, TreeDirectory theirTree) throws IOException {
         System.out.println("DEAL DIRECTORY: " + path);
 

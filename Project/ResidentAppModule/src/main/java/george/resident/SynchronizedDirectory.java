@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 public class  SynchronizedDirectory {
 
@@ -52,7 +53,8 @@ public class  SynchronizedDirectory {
         return treeDirectory;
     }
 
-    public TreeDirectory getTree() {
-        return getTreeFromFile(path.toFile());
+    public TreeDirectory getTree(Path ...relativePath) {
+        Path absolutePath = Arrays.stream(relativePath).reduce(path, Path::resolve);
+        return getTreeFromFile(path.resolve(absolutePath).toFile());
     }
 }

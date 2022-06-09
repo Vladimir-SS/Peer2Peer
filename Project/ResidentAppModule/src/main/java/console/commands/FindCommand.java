@@ -6,6 +6,10 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FindCommand extends Command{
+    public FindCommand() {
+        super("find", "find");
+    }
+
     @Override
     public void run(String[] arguments) throws Exception {
         if(arguments.length != 0)
@@ -19,10 +23,5 @@ public class FindCommand extends Command{
             System.out.println("No devices found");
         else
             foundDevices.forEach(device -> System.out.println(index.getAndIncrement() + ". " + device));
-    }
-
-    @Override
-    public Exception manual() {
-        return new Exception("find");
     }
 }
