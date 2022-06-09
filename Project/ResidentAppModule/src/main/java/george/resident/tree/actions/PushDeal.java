@@ -27,11 +27,11 @@ public class PushDeal implements TreeDeal {
 
     /**
      * The method receives three parameters and perform synchronization between two devices starting from ourTree.
-     * In a recursive way all files that are in theirTree and not in ourTree will be sent to ourTree
-     * In the end both trees will have the same files
+     * In a recursive way all files that are in ourTree and not in theirTree will be sent to theirTree.
+     * The device that sent the request will have all the new/modified files.
      * @param path From where the method start.
-     * @param ourTree The tree that needs to be synchronized.
-     * @param theirTree The tree from where the synchronization is done.
+     * @param theirTree The tree that needs to be synchronized.
+     * @param ourTree The tree from where the synchronization is done.
      * @throws IOException This exception is thrown when the connection between the two devices does not work.
      */
     private void deal(Path path, TreeDirectory ourTree, TreeDirectory theirTree) throws IOException {

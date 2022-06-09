@@ -2,7 +2,7 @@ package george.resident.tree;
 
 /**
  * Helper class to create directory
- * Only George can explain it well enough
+ * Used by {@link PushDeal} to syncronize a requester to ourTree files.
  */
 public class WildcardTreeDirectory extends TreeDirectory {
     @Override
