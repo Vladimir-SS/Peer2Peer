@@ -43,7 +43,7 @@ public class BroadcastReceiver extends Thread {
      * @throws UnknownHostException
      * @throws SocketException
      */
-    BroadcastReceiver(int port, int timeout, Set<InetAddress> toIgnore) throws UnknownHostException, SocketException {
+    BroadcastReceiver(int port, int timeout, Set<InetAddress> toIgnore) throws BroadcastFailedException {
         this.timeout = timeout;
         this.addresses = new HashSet<>();
         try {

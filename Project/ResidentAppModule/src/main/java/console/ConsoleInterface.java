@@ -27,13 +27,14 @@ public class ConsoleInterface {
         if(args.length < 2){
             System.out.println("Not enough arguments: ");
             System.out.println("manual: " + manual);
+            System.exit(1);
         }
 
         int port = Integer.parseInt(args[0]);
         System.out.println("Port: " + port);
 
         Path path = Paths.get(args[1]);
-        System.out.println("Path: " + port);
+        System.out.println("Path: " + path);
 
         final Map<String, Command> commands = commandStream.collect(
                 Collectors.toMap(Command::getName, command -> command)

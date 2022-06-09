@@ -21,7 +21,9 @@ public class  SynchronizedDirectory {
 
         try {
             Files.createDirectory(peerPath);
-        } catch (IOException e) {
+        }
+        catch (FileAlreadyExistsException ignored){}
+        catch (IOException e) {
             throw new BadSyncDirectory(e);
         }
         //TODO: hide this folder

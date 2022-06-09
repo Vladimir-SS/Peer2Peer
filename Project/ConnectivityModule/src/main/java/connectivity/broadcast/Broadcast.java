@@ -116,13 +116,10 @@ public class Broadcast implements Closeable {
      * 
      * @param timeout A fixed amount of time in which a client can receive broadcast
      *                messages
-     * @param async   This variable set if the receiving of data is done
-     *                asynchronous or not
      * @return A set of addresses that are reachable from a client
-     * @throws SocketException
-     * @throws UnknownHostException
+     * @throws BroadcastFailedException
      */
-    public Set<InetAddress> getAddresses(int timeout, boolean async) throws SocketException, UnknownHostException {
+    public Set<InetAddress> getAddresses(int timeout) throws BroadcastFailedException {
         var ignoredAddresses = getAvailableInterfaces().stream()
                 .map(InterfaceAddress::getAddress)
                 .collect(Collectors.toSet());
