@@ -27,9 +27,11 @@ public class ConnectivityResident extends Thread {
         this.synchronizedDirectory = synchronizedDirectory;
     }
 
+
     public ConnectivityResident() {
         this(null, null);
     }
+
     public Peer getPeer() {
         return peer;
     }
@@ -53,9 +55,11 @@ public class ConnectivityResident extends Thread {
     }
 
     /**
-     *
-     * @param connection
-     * @param fileSystemTree
+     * This method is used to send and create the json file.
+     * @param connection The connection representing a device.
+     * @param fileSystemTree The object which will provide the
+     *                       method necessary for converting to
+     *                       json.
      * @throws FileNotFoundException
      * @throws IOException
      */
@@ -85,6 +89,13 @@ public class ConnectivityResident extends Thread {
     }
 
     //This exists because I have to deal with temp file not working
+    /**
+     * This method is used to create the FileSystemTree from the TreeDirectory, then
+     * send an action request to the specified device.
+     * @param connection The connection representing the device.
+     * @param action The type of action to be executed (fetch, sync or delete).
+     * @throws IOException
+     */
     private void sendAction(Connection connection, TreeActionsEnum action) throws IOException {
         TreeDirectory root = synchronizedDirectory.getTree();
         FileSystemTree fileSystemTree = new FileSystemTree(root, action);
@@ -96,14 +107,34 @@ public class ConnectivityResident extends Thread {
         }
     }
 
+    /**
+     * This method is used to invoke the method that will send the
+     * fetch action.
+     * @param connection The device the action is addressed to.
+     * @throws IOException
+     */
     public void fetchFiles(Connection connection) throws  IOException {
         sendAction(connection, TreeActionsEnum.Fetch);
     }
 
+    /**
+     *  This method is used to invoke the method that will send the
+     *  sync action.
+     * @param connection The device the action is addressed to.
+     * @throws IOException
+     */
     public void syncFiles(Connection connection) throws IOException {
         sendAction(connection, TreeActionsEnum.Sync);
     }
 
+    /**
+     * This method is used to send the modified files to a specified
+     * device by instantiating a new push deal with the required
+     * parameters.
+     * @param connection The device to be interacted with.
+     * @param fileSystemTree The object used to extract the root.
+     * @throws IOException
+     */
     private void sendModifiedFiles(Connection connection, FileSystemTree fileSystemTree) throws IOException {
         TreeDirectory ourTree = synchronizedDirectory.getTree();
         TreeDeal action = new PushDeal(
@@ -116,6 +147,14 @@ public class ConnectivityResident extends Thread {
         action.deal();
     }
 
+
+    /**
+     * This method is used to analyze the fileSystemTree in order to
+     * invoke the methods responsible for executing the given commands.
+     * @param connection The device to be interacted with.
+     * @param fileSystemTree The object through which the type of
+     *                       action is accessed.
+     */
     public void incomingAction(Connection connection, FileSystemTree fileSystemTree){
         try {
 
@@ -138,6 +177,11 @@ public class ConnectivityResident extends Thread {
         }
     }
 
+    /**
+     * The method responsible with checking on the status of the
+     * connection and whether or not an action has been requested,
+     * invoking the method which will further analyze the command.
+     */
     @Override
     public void run() {
         while (isAlive()) {
