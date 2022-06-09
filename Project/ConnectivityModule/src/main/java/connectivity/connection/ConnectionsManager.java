@@ -1,7 +1,5 @@
 package connectivity.connection;
 
-import connectivity.exceptions.PortException;
-
 import java.net.ServerSocket;
 import java.io.IOException;
 import java.net.Socket;

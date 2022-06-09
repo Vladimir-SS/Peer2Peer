@@ -1,6 +1,7 @@
-package george;
+package george.resident;
 
-import george.tree.TreeDirectory;
+import george.resident.exceptions.BadSyncDirectory;
+import george.resident.tree.TreeDirectory;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,21 +13,17 @@ public class  SynchronizedDirectory {
 
     protected Path path;
 
-    public SynchronizedDirectory(Path path) {
+    public SynchronizedDirectory(Path path) throws BadSyncDirectory {
         this.path = path;
 
         Path peerPath = path.resolve(".peer");
 
         try {
             Files.createDirectory(peerPath);
-            //TODO: hide this folder
-        } catch (FileAlreadyExistsException ignored){
-
+        } catch (IOException e) {
+            throw new BadSyncDirectory(e);
         }
-        catch (IOException e) {
-            System.err.println("Can't create \".peer\" directory");
-            throw new RuntimeException(e);
-        }
+        //TODO: hide this folder
     }
 
     public Path getPath() {

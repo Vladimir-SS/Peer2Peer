@@ -22,21 +22,7 @@ public class DeviceCommand extends Command{
      */
     public void findDevices(String[] arguments) throws Exception{
 
-        if(arguments.length != 1)
-            throw manual();
 
-        try {
-            System.out.println("Searching devices...");
-            lastSearch = new ArrayList<>(app.getPeer().findDevices(false));
-            AtomicInteger index = new AtomicInteger();
-
-            if(lastSearch.size() == 0)
-                System.out.println("No devices found");
-            else
-                lastSearch.forEach(device -> System.out.println(index.getAndIncrement() + ": " + device));
-        } catch (IOException e) {
-            throw new Exception("Broadcast Error");
-        }
     }
 
     /**

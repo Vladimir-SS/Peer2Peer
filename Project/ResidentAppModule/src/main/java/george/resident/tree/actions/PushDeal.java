@@ -1,8 +1,8 @@
-package george.tree.actions;
+package george.resident.tree.actions;
 
 import connectivity.connection.Connection;
-import george.tree.TreeDirectory;
-import george.tree.WildcardTreeDirectory;
+import george.resident.tree.TreeDirectory;
+import george.resident.tree.WildcardTreeDirectory;
 
 import java.io.IOException;
 import java.nio.file.Path;

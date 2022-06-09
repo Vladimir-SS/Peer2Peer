@@ -1,4 +1,4 @@
-package george.tree;
+package george.resident.tree;
 
 public class WildcardTreeDirectory extends TreeDirectory {
     @Override
@@ -9,8 +9,6 @@ public class WildcardTreeDirectory extends TreeDirectory {
     public boolean containsDirectory(String name) {
         return true;
     }
-
-
     @Override
     public TreeDirectory getSubDirectory(String name) {
         return this;

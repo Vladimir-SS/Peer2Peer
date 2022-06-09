@@ -1,8 +1,6 @@
 package console.commands;
 
-import connectivity.Peer;
-import george.ConnectivityResident;
-import george.SynchronizedDirectory;
+import george.resident.sync.ConnectivityResident;
 
 /**
  * The abstract class extended by individual commands: Device, Exit, Sync.
@@ -10,7 +8,7 @@ import george.SynchronizedDirectory;
  * by every command such that said command will execute accordingly.
  */
 public abstract class Command {
-    protected ConnectivityResident app = new ConnectivityResident();
+    protected ConnectivityResident app;
 
     public void setApp(ConnectivityResident app) {
         this.app = app;

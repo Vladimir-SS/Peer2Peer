@@ -1,5 +1,7 @@
 package connectivity.broadcast;
 
+import connectivity.exceptions.BroadcastFailedException;
+
 import java.io.Closeable;
 import java.net.*;
 import java.util.*;
@@ -17,7 +19,8 @@ public class Broadcast implements Closeable {
      */
     private final BroadcastSender sender;
     /**
-     * This executor is used send a message through broadcast at a fixed period of time
+     * This executor is used send a message through broadcast at a fixed period of
+     * time
      */
     private final ScheduledExecutorService executor;
     /**
@@ -26,20 +29,22 @@ public class Broadcast implements Closeable {
     private final int port;
 
     /**
-     * The constructor initializes the port with a given number and set the period of time for which the messages will
-     * be sent. It is also getting al the possible addresses of our local network and starts to send to them a message
+     * The constructor initializes the port with a given number and set the period
+     * of time for which the messages will
+     * be sent. It is also getting al the possible addresses of our local network
+     * and starts to send to them a message
      * at fixed period of time
-     * @param port A port number
+     * 
+     * @param port   A port number
      * @param period A period of time in seconds
      * @throws SocketException
      */
     public Broadcast(int port, int period) throws SocketException {
         this.port = port;
 
-        var broadcastAddresses =
-                getAvailableInterfaces().stream()
-                        .map(InterfaceAddress::getBroadcast)
-                        .toList();
+        var broadcastAddresses = getAvailableInterfaces().stream()
+                .map(InterfaceAddress::getBroadcast)
+                .toList();
 
         sender = new BroadcastSender(port, broadcastAddresses);
 
@@ -48,12 +53,14 @@ public class Broadcast implements Closeable {
     }
 
     /**
-     * This method receive a networkInterface and returns either an address interface of that network interface
+     * This method receive a networkInterface and returns either an address
+     * interface of that network interface
      * of which the broadcast address is not null, or null
+     * 
      * @param networkInterface A given network interface
      * @return An address interface that has a broadcast address, or null
      */
-    private static InterfaceAddress getAvailableAddress(NetworkInterface networkInterface){
+    private static InterfaceAddress getAvailableAddress(NetworkInterface networkInterface) {
 
         try {
             if (!networkInterface.isUp() || networkInterface.isLoopback() || networkInterface.isVirtual())
@@ -61,8 +68,7 @@ public class Broadcast implements Closeable {
 
             var interfaceAddresses = networkInterface.getInterfaceAddresses();
 
-            for (var address :
-                    interfaceAddresses) {
+            for (var address : interfaceAddresses) {
                 if (address.getBroadcast() != null)
                     return address;
             }
@@ -74,9 +80,12 @@ public class Broadcast implements Closeable {
     }
 
     /**
-     * This method search through all active network interfaces and creates a set list of all interface addresses of that
+     * This method search through all active network interfaces and creates a set
+     * list of all interface addresses of that
      * network interfaces that have an available broadcast address
-     * @return A set of all interface addresses of a user that have an available broadcast address
+     * 
+     * @return A set of all interface addresses of a user that have an available
+     *         broadcast address
      */
     private static Set<InterfaceAddress> getAvailableInterfaces() {
 
@@ -84,14 +93,13 @@ public class Broadcast implements Closeable {
 
         try {
 
-            for (Enumeration<NetworkInterface> interfaceEnumeration =
-                 NetworkInterface.getNetworkInterfaces();
-                 interfaceEnumeration.hasMoreElements(); ) {
+            for (Enumeration<NetworkInterface> interfaceEnumeration = NetworkInterface
+                    .getNetworkInterfaces(); interfaceEnumeration.hasMoreElements();) {
 
                 NetworkInterface networkInterface = interfaceEnumeration.nextElement();
                 InterfaceAddress availableAddress = getAvailableAddress(networkInterface);
 
-                if(availableAddress != null)
+                if (availableAddress != null)
                     interfaces.add(availableAddress);
 
             }
@@ -103,31 +111,32 @@ public class Broadcast implements Closeable {
     }
 
     /**
-     * This method returns a set of addresses that can be reached from the client who is calling this method
-     * @param timeout A fixed amount of time in which a client can receive broadcast messages
-     * @param async This variable set if the receiving of data is done asynchronous or not
+     * This method returns a set of addresses that can be reached from the client
+     * who is calling this method
+     * 
+     * @param timeout A fixed amount of time in which a client can receive broadcast
+     *                messages
+     * @param async   This variable set if the receiving of data is done
+     *                asynchronous or not
      * @return A set of addresses that are reachable from a client
      * @throws SocketException
      * @throws UnknownHostException
      */
     public Set<InetAddress> getAddresses(int timeout, boolean async) throws SocketException, UnknownHostException {
-        var ignoredAddresses =
-                getAvailableInterfaces().stream()
-                        .map(InterfaceAddress::getAddress)
-                        .collect(Collectors.toSet());
+        var ignoredAddresses = getAvailableInterfaces().stream()
+                .map(InterfaceAddress::getAddress)
+                .collect(Collectors.toSet());
 
         BroadcastReceiver receiver = new BroadcastReceiver(port, timeout, ignoredAddresses);
 
-        if(async)
-            receiver.start();
-        else
-            receiver.run();
+        receiver.run();
 
         return receiver.getAddresses();
     }
 
     /**
-     * This method is used to auto close the sender variable and the executor variable
+     * This method is used to auto close the sender variable and the executor
+     * variable
      */
     @Override
     public void close() {
