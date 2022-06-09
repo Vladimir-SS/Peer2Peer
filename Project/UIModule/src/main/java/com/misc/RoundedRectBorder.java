@@ -1,4 +1,4 @@
-package com.SyncPage;
+package com.misc;
 
 import javax.swing.border.Border;
 import java.awt.*;

@@ -1,4 +1,6 @@
-package com.SettingsPage;
+package com.misc;
+
+import com.misc.RoundedRectBorder;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicPanelUI;
@@ -18,6 +20,7 @@ public class DrawRoundRectangle extends JPanel {
                 paint(g, c);
             }
         });
-        this.setBorder(new com.SettingsPage.RoundedRectBorder(radius));
+        this.setBorder(new RoundedRectBorder(radius));
     }
 }
+

@@ -1,6 +1,6 @@
 package com.menu;
 
-import com.FirstPage.RoundedButton;
+import com.misc.RoundedButton;
 
 import javax.swing.*;
 import java.awt.*;

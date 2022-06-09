@@ -1,4 +1,4 @@
-package com.FirstPage;
+package com.misc;
 
 import javax.swing.*;
 import javax.swing.border.Border;

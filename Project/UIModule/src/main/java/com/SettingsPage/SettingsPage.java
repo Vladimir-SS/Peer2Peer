@@ -1,6 +1,8 @@
 package com.SettingsPage;
 
 import com.misc.DataController;
+import com.misc.DrawRoundRectangle;
+import com.misc.color.MyButton;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -32,7 +34,7 @@ public class SettingsPage extends JPanel implements ActionListener {
     private int dimension=5;
     private int theme=1;
 
-    private com.SettingsPage.MyButton disconnect;
+    private MyButton disconnect;
 
     private void setUserN(String text)
     {
@@ -134,7 +136,7 @@ public class SettingsPage extends JPanel implements ActionListener {
         history.setBounds(50,180,(int) (container1Width-container1Width/2),50);
         syncPanel.add(history);
 
-        com.SettingsPage.MyButton Remove1 = new com.SettingsPage.MyButton("History");
+        MyButton Remove1 = new MyButton("History");
         Remove1.setFont(new Font("Comic Sans",Font.PLAIN,18));
         Remove1.setBackground(buttoncolor);
         Remove1.setFocusable(false);
@@ -155,7 +157,8 @@ public class SettingsPage extends JPanel implements ActionListener {
         theme.setFont(new Font( "Comic sans",Font.PLAIN,26 ));
         theme.setBounds(70,280,(int) (container1Width-container1Width/2),50);
         syncPanel.add(theme);
-        com.SettingsPage.MyButton font= new com.SettingsPage.MyButton("");
+
+        MyButton font= new MyButton("");
         font.setFont(new Font("Comic Sans",Font.PLAIN,18));
         font.setBackground(buttoncolor);
         font.setFocusable(false);
@@ -205,7 +208,7 @@ public class SettingsPage extends JPanel implements ActionListener {
             }
         });
 
-        disconnect = new com.SettingsPage.MyButton("DISCONNECT");
+        disconnect = new MyButton("DISCONNECT");
         disconnect.setFont(new Font("Comic Sans",Font.PLAIN,20));
         disconnect.setBackground(buttoncolorgreen);
         disconnect.setFocusable(false);
@@ -229,7 +232,7 @@ public class SettingsPage extends JPanel implements ActionListener {
 
 
 
-        syncPanel.add( new com.SettingsPage.DrawRoundRectangle(radius)).setBounds(0,0,(int) (container1Width-container1Width/2.5),container1Height-39);
+        syncPanel.add( new DrawRoundRectangle(radius)).setBounds(0,0,(int) (container1Width-container1Width/2.5),container1Height-39);
 
 
         // Container for Time and Path Panels

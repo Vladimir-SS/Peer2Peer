@@ -1,10 +1,10 @@
 package com.SyncPage;
 
 import com.misc.CustomTableModel;
-import com.misc.color.ColorPallete;
+import com.misc.DrawRoundRectangle;
 import com.misc.color.ColorPalleteController;
 import com.misc.color.ColorPalleteEnum;
-import com.misc.color.LightThemeColorPallete;
+import com.misc.color.MyButton;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;

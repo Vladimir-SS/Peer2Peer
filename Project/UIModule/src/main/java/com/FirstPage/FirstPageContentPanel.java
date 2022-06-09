@@ -1,5 +1,7 @@
 package com.FirstPage;
 
+import com.misc.RoundedButton;
+
 import javax.swing.*;
 import java.awt.*;
 

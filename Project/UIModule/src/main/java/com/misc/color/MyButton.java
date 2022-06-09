@@ -1,11 +1,11 @@
-package com.SettingsPage;
+package com.misc.color;
 
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.*;
 
-class MyButton extends JButton {
+public class MyButton extends JButton {
 
     private Color pressedBackgroundColor;
 
