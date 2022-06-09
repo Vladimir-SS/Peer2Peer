@@ -7,7 +7,7 @@ import java.util.List;
 public final class FontState{
 
 
-    private static final List<Integer> baseDimensions = List.of(12, 16, 20, 24, 28, 32);
+    private static final List<Integer> baseDimensions = List.of(12, 16, 20, 24, 28, 6, 32);
     private static List<Font> fonts;
 
     static {
