@@ -9,6 +9,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
+/**
+ *  PushDeal class helps to transfer data between two devices
+ */
 public class PushDeal implements TreeDeal {
     private final Connection connection;
     private final TreeDirectory ourTree;
@@ -22,6 +25,15 @@ public class PushDeal implements TreeDeal {
         this.root = root;
     }
 
+    /**
+     * The method receives three parameters and perform synchronization between two devices starting from ourTree.
+     * In a recursive way all files that are in theirTree and not in ourTree will be sent to ourTree
+     * In the end both trees will have the same files
+     * @param path From where the method start.
+     * @param ourTree The tree that needs to be synchronized.
+     * @param theirTree The tree from where the synchronization is done.
+     * @throws IOException This exception is thrown when the connection between the two devices does not work.
+     */
     private void deal(Path path, TreeDirectory ourTree, TreeDirectory theirTree) throws IOException {
         System.out.println("DEAL DIRECTORY: " + path);
 
