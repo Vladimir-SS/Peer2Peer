@@ -4,7 +4,9 @@ import connectivity.broadcast.Broadcast;
 import connectivity.connection.Connection;
 import connectivity.connection.ConnectionsManager;
 import connectivity.connection.LocalConnection;
-import connectivity.exceptions.PeerAlreadyConnected;
+import connectivity.exceptions.BroadcastFailedException;
+import connectivity.exceptions.DeviceAlreadyConnectedException;
+import connectivity.exceptions.DeviceConnectException;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -16,22 +18,18 @@ public class Peer implements Closeable {
     private final ConnectionsManager connectionsManager;
     private final Broadcast broadcast;
 
-    public Peer(int port) throws IOException {
+    public Peer(int port) throws PortUnreachableException, SocketException {
+        if(!isAvailable(port))
+            throw new PortUnreachableException("port " + port + " is not available");
+
         this.broadcast = new Broadcast(port, 5);
         connectionsManager = ConnectionsManager.getInstance(port);
         new Thread(connectionsManager).start();
     }
 
 
-    /**
-     *
-     * @param async If this variable is set to "true",
-     *              the function returns an empty container which will be later filled.
-     * @return Available devices after listening to broadcasts.
-     * @throws IOException Broadcasting is not working
-     */
-    public Set<InetAddress> findDevices(boolean async) throws IOException {
-        return broadcast.getAddresses(5, async);
+    public Set<InetAddress> findDevices() throws BroadcastFailedException {
+        return broadcast.getAddresses(5);
     }
 
     public List<Connection> getConnectedDevices(){
@@ -60,18 +58,19 @@ public class Peer implements Closeable {
         return null;
     }
 
-    private synchronized boolean isConnected(Connection connection) {
-        return connectionsManager.getConnections().contains(connection);
-    }
-
-    public void connectDevice(InetAddress device) throws IOException, PeerAlreadyConnected {
-        LocalConnection connection = new LocalConnection(device, getPort());
-
-        if (!isConnected(connection)) {
-            connectionsManager.getConnections().add(connection);
-        } else {
-            throw new PeerAlreadyConnected();
+    public void connectDevice(InetAddress device) throws DeviceAlreadyConnectedException, DeviceConnectException {
+        LocalConnection connection;
+        try {
+            connection = new LocalConnection(device, getPort());
+        } catch (IOException e) {
+            throw new DeviceConnectException(e);
         }
+
+        var connections = connectionsManager.getConnections();
+        if (!connections.contains(connection))
+            connections.add(connection);
+        else
+            throw new DeviceAlreadyConnectedException();
     }
 
     public void disconnectDevice(Connection device) {

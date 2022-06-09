@@ -1,7 +1,7 @@
-package george.tree;
+package george.resident.tree;
 
 import com.google.gson.Gson;
-import george.tree.actions.TreeActionsEnum;
+import george.resident.tree.actions.TreeActionsEnum;
 
 import java.io.FileWriter;
 import java.nio.file.Path;
@@ -10,20 +10,16 @@ import java.nio.file.Paths;
 public class FileSystemTree{
     protected TreeDirectory root;
     protected TreeActionsEnum action;
-    protected Path rootPath;
+    protected String path;
 
     public FileSystemTree(TreeDirectory root, TreeActionsEnum action) {
         this.root = root;
         this.action = action;
-        this.rootPath = Paths.get("");
+        this.path = "";
     }
 
-    public Path getRootPath() {
-        return rootPath;
-    }
-
-    public void setRootPath(Path rootPath) {
-        this.rootPath = rootPath;
+    public Path getPath() {
+        return Paths.get(path);
     }
 
     public TreeActionsEnum getAction() {
@@ -31,16 +27,6 @@ public class FileSystemTree{
     }
 
     public TreeDirectory getRoot() {
-        return root;
-    }
-
-    //TODO: remove this... they're here from the record (no final variables with gson i guess)
-
-    public TreeActionsEnum action() {
-        return action;
-    }
-
-    public TreeDirectory root() {
         return root;
     }
 

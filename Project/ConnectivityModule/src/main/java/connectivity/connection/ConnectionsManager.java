@@ -1,7 +1,5 @@
 package connectivity.connection;
 
-import connectivity.exceptions.PortException;
-
 import java.net.ServerSocket;
 import java.io.IOException;
 import java.net.Socket;
@@ -64,7 +62,19 @@ public class ConnectionsManager implements Runnable {
                     connections.add(connection);
                     System.out.println("Peer: " + clientSocket.getRemoteSocketAddress().toString() + " connected!");
                 }
-                else connection.close();
+                else {
+                    //TODO: connections as HASHMAP<INTEGER/STRING, CONNECTION>
+                    connections .stream()
+                            .filter(c -> c.equals(connection))
+                            .findFirst()
+                            .ifPresent(c -> {
+                                try {
+                                    c.close();
+                                } catch (IOException ignored) {
+                                }
+                            });
+                    connections.add(connection);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,4 +1,4 @@
-package george.tree.actions;
+package george.resident.tree.actions;
 
 public enum TreeActionsEnum {
     Sync,

@@ -1,11 +1,9 @@
 package console.commands;
 
-import connectivity.Peer;
-import george.ConnectivityResident;
-import george.SynchronizedDirectory;
+import george.resident.sync.ConnectivityResident;
 
 public abstract class Command {
-    protected ConnectivityResident app = new ConnectivityResident();
+    protected ConnectivityResident app;
 
     public void setApp(ConnectivityResident app) {
         this.app = app;

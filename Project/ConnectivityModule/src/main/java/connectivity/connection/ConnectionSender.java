@@ -17,7 +17,7 @@ public class ConnectionSender {
         String pathName = relative.toString();
         Path file = root.resolve(relative);
 
-        System.out.println("Path to send: " + file);
+        System.out.println("sending: " + pathName);
 
         try(InputStream is = new FileInputStream(file.toFile())){
             writer.writeUTF(pathName);

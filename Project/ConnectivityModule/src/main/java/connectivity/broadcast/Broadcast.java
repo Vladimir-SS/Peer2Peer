@@ -1,5 +1,7 @@
 package connectivity.broadcast;
 
+import connectivity.exceptions.BroadcastFailedException;
+
 import java.io.Closeable;
 import java.net.*;
 import java.util.*;
@@ -73,7 +75,7 @@ public class Broadcast implements Closeable {
     }
 
 
-    public Set<InetAddress> getAddresses(int timeout, boolean async) throws SocketException, UnknownHostException {
+    public Set<InetAddress> getAddresses(int timeout) throws BroadcastFailedException {
         var ignoredAddresses =
                 getAvailableInterfaces().stream()
                         .map(InterfaceAddress::getAddress)
@@ -81,10 +83,7 @@ public class Broadcast implements Closeable {
 
         BroadcastReceiver receiver = new BroadcastReceiver(port, timeout, ignoredAddresses);
 
-        if(async)
-            receiver.start();
-        else
-            receiver.run();
+        receiver.run();
 
         return receiver.getAddresses();
     }

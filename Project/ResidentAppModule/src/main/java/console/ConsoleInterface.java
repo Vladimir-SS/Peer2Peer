@@ -3,12 +3,15 @@ package console;
 import console.commands.Command;
 import console.commands.DeviceCommand;
 import connectivity.Peer;
-import console.commands.ExitCommand;
 import console.commands.SyncCommand;
-import george.ConnectivityResident;
-import george.SynchronizedDirectory;
+import george.resident.exceptions.BadSyncDirectory;
+import george.resident.sync.ConnectivityResident;
+import george.resident.SynchronizedDirectory;
 
-import java.nio.file.Files;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.PortUnreachableException;
+import java.net.SocketException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -16,70 +19,41 @@ import java.util.*;
 //TODO: MOVE THIS IN HIS OWN PACKAGE
 
 public class ConsoleInterface {
+    private static final String manual = "peer <port> <path> [--watch]";
 
     static final private Scanner input = new Scanner(System.in);
-    static private Peer peer;
-    static private SynchronizedDirectory synchronizedDirectory;
 
     private static final Map<String, Command> commands = new HashMap<>(){{
         put("device", new DeviceCommand());
-        put("exit", new ExitCommand());
         put("sync", new SyncCommand());
     }};
 
 
-    private static void setPort(){
-        do {
-            System.out.println("*** To start a connection enter a port ***:");
-
-
-            try {
-                int port = Integer.parseInt(input.nextLine());
-                System.out.println("Port: " + port);
-                if(!Peer.isAvailable(port)) {
-                    System.out.println("Port already in use");
-                    continue;
-                }
-                peer = new Peer(port);
-                break;
-            } catch (Exception e) {
-                System.out.println("Peer Error: " + e.getMessage());
-            }
-        }while (true);
-    }
-
-
-    private static void setPath(){
-        do{
-            System.out.println("*** Enter path to synchronized folder ***:");
-            Path path = Paths.get(input.nextLine());
-            System.out.println("Path: " + path);
-
-            try {
-                if(Files.notExists(path)) {
-                    System.out.println("Path doesn't exist");
-                    continue;
-                }
-                synchronizedDirectory = new SynchronizedDirectory(path);
-                break;
-            } catch (Exception e) {
-                System.out.println("Path Error: " + e.getMessage());
-            }
-        }while(true);
-    }
-
-
     public static void main(String[] args) {
+        if(args.length < 2){
+            System.out.println("Not enough arguments: ");
+            System.out.println(manual);
+        }
 
-        setPort();
-        setPath();
+        int port = Integer.parseInt(args[0]);
+        System.out.println("Port: " + port);
 
-        ConnectivityResident cr = new ConnectivityResident();
-        cr.setSynchronizedDirectory(synchronizedDirectory);
-        cr.setPeer(peer);
-        cr.start();
+        Path path = Paths.get(args[1]);
+        System.out.println("Path: " + port);
 
-        commands.forEach((k, v) -> v.setApp(cr));
+
+        try {
+            final ConnectivityResident cr = new ConnectivityResident(port, path);
+            commands.forEach((k, v) -> v.setApp(cr));
+        } catch (BadSyncDirectory e) {
+            System.out.println("Couldn't synchronize the directory: ");
+            System.err.println(e.getMessage());
+            System.exit(1);
+        } catch (SocketException e) {
+            System.out.println("Couldn't connect the device: ");
+            System.err.println(e.getMessage());
+            System.exit(1);
+        }
 
         while (true) {
             String line = input.nextLine();
@@ -88,18 +62,19 @@ public class ConsoleInterface {
             if(params.length == 0)
                 continue;
 
-            if(!commands.containsKey(params[0]))
+            String commandName = params[0];
+
+            if(!commands.containsKey(commandName))
             {
-                System.out.println("Commands not found");
+                System.out.println("Command \"" + commandName +  "\" not found");
                 continue;
             }
 
-            Command command = commands.get(params[0]);
+            Command command = commands.get(commandName);
             try {
                 command.run(Arrays.copyOfRange(params, 1, params.length));
             } catch (Exception e) {
-                System.out.println(params[0] + ": " + e.getMessage());
-                throw new RuntimeException(e);
+                System.out.println(commandName + ": " + e.getMessage());
             }
         }
     }

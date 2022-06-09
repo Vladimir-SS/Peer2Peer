@@ -1,5 +1,7 @@
 package connectivity.broadcast;
 
+import connectivity.exceptions.BroadcastFailedException;
+
 import java.io.IOException;
 import java.net.*;
 import java.util.*;
@@ -7,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class BroadcastReceiver extends Thread {
+public class BroadcastReceiver implements Runnable {
     private final DatagramSocket socket;
     private final Set<InetAddress> addresses;
     private final Set<InetAddress> toIgnore;
@@ -15,27 +17,21 @@ public class BroadcastReceiver extends Thread {
     private final int timeout;
 
 
-    BroadcastReceiver(int port, int timeout, Set<InetAddress> toIgnore) throws UnknownHostException, SocketException {
+    BroadcastReceiver(int port, int timeout, Set<InetAddress> toIgnore) throws BroadcastFailedException {
         this.timeout = timeout;
         this.addresses = new HashSet<>();
-        this.socket = new DatagramSocket(port, InetAddress.getByName("0.0.0.0"));
+        try {
+            this.socket = new DatagramSocket(port, InetAddress.getByName("0.0.0.0"));
+        } catch (IOException e) {
+            throw new BroadcastFailedException(e);
+        }
         this.toIgnore = toIgnore;
     }
 
     @Override
     public void run() {
-        byte[] myIPv4;
-        try {
-            //socket.setSoTimeout(2000);
-            myIPv4 = InetAddress.getLocalHost().getAddress();
-        } catch (UnknownHostException e) {
-            System.out.println(e.getMessage());
-            return;
-        }
-
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         executor.schedule(() -> {socket.close();executor.shutdown();}, timeout, TimeUnit.SECONDS);
-
 
         byte[] bytes = new byte[1024];
         DatagramPacket p = new DatagramPacket(bytes, bytes.length);
@@ -48,7 +44,6 @@ public class BroadcastReceiver extends Thread {
                         addresses.add(inetAddress);
                         System.out.println(inetAddress.getHostAddress() + " is reachable: ");
                     }
-                    String str = new String(p.getData(), 0, p.getLength());
                 } catch (IOException ignored) {
                 }
             }

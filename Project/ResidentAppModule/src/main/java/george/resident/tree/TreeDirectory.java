@@ -1,4 +1,4 @@
-package george.tree;
+package george.resident.tree;
 
 import java.util.*;
 
