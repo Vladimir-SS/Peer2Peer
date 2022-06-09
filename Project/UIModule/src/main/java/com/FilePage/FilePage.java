@@ -6,12 +6,199 @@ import java.awt.*;
 public class FilePage extends JPanel {
     private int dimension=5;
 
-    public FilePage(int width,int height, int dimension){
+    private static final Color panelcolor = Color.decode("#69A2B8");
+    private static final Color buttoncolor = Color.decode("#DC965A");
+    private static final Color buttonPressedcolor = Color.decode("#D4BA9E");
+    private static final Color textFieldColor = Color.decode("#CCDDE2");
+    private static final Color tablecolor = Color.decode("#CCDDE2");
 
-        this.setPreferredSize( new Dimension(width,height) );
+    private static int pageWidth, pageHeight;
+
+    private final JPanel container1, container2;
+
+    private JTable connectedDevicesTable;
+    private final JTable foundConnectionsTable;
+
+
+
+    public FilePage(int width,int height, int appWidth, int appHeight, int dimension){
+        super();
+        this.dimension=dimension;
+        this.setLayout(new BorderLayout());
+
+
+        int pageWidth = appWidth - menuWidth;
+        this.setPreferredSize(new Dimension(pageWidth, appHeight));
+
+        this.add( Box.createVerticalStrut(appHeight -(appHeight -50)), BorderLayout.NORTH);
+        this.add( Box.createVerticalStrut(appHeight -(appHeight -50)), BorderLayout.SOUTH);
+        this.add( Box.createHorizontalStrut(pageWidth -(pageWidth -50)), BorderLayout.WEST);
+        this.add( Box.createHorizontalStrut(pageWidth -(pageWidth -50)), BorderLayout.EAST);
+
+        int container1Height = appHeight -100;
+        int container1Width = pageWidth -100;
+
+        JPanel container1 = new JPanel(new BorderLayout());
+
+        // Panel for the sync options
+        JPanel filePagePanel = new JPanel();
+        filePagePanel.setLayout(null);
+        filePagePanel.setPreferredSize(new Dimension((int) (container1Width-container1Width/2.5),container1Height));
+
+        List<String[]> data = new ArrayList<>();
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+        data.add(new String[]{"Fisier1", "Fisier", "25MB"});
+
+        filesTable = createFilesTable(data);
+
+        JScrollPane tableScrollPane = new JScrollPane(filesTable);
+        tableScrollPane.setBounds(30,100,(int)(container1Width-container1Width/2.5)-60,container1Height-200 );
+
+        filePagePanel.add(tableScrollPane);
+        filePagePanel.add(new DrawRoundRectangle(radius)).setBounds(0,0,(int) (container1Width-container1Width/2.5),container1Height-39);
+        //JLabel syncText = new JLabel();
+        //syncText.setText("Connections");
+        //syncText.setFont(new Font( "Comic sans",Font.PLAIN,dimension+28 ));
+        //syncText.setBounds(50,20,(int) (container1Width-container1Width/2),50);
+        //syncPanel.add(syncText);
+
+        //JLabel syncdev = new JLabel();
+        //syncdev.setText("Synchronised devices");
+        //syncdev.setFont(new Font( "Comic sans",Font.PLAIN,dimension+18 ));
+        //syncdev.setBounds(50,60,(int) (container1Width-container1Width/2),50);
+        //syncPanel.add(syncdev);
+
+
+        connectedDevicesTable = createDeviceTable(DataController.getConnectedDevices());
+        connectedDevicesTable.setBounds(50,100,500,200);
+        connectedDevicesTable.setBackground(tablecolor1);
+        syncPanel.add(connectedDevicesTable);
+
+        //JLabel newcon = new JLabel();
+        //newcon.setText("New Connections");
+        //newcon.setFont(new Font( "Comic sans",Font.BOLD,dimension+20 ));
+        //newcon.setBounds(50,310,(int) (container1Width-container1Width/2),50);
+        //syncPanel.add(newcon);
+
+        //MyButton scanButton = new MyButton("Scan");
+        //scanButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+ 18));
+        //scanButton.setBackground(tablecolor1);
+        //scanButton.setFocusable(false);
+        //scanButton.setBorder(new LineBorder(Color.BLACK));
+        //scanButton.setBounds(350,320,200,30);
+        //scanButton.setPressedBackgroundColor(buttonPressedcolor);
+        //syncPanel.add(scanButton);
+
+        //foundConnectionsTable = createDeviceTable(DataController.getLastFoundDevices());
+        //foundConnectionsTable.setBounds(50,355,500,150);
+        //foundConnectionsTable.setBackground(tablecolor2);
+        //syncPanel.add(foundConnectionsTable);
+        //syncPanel.add( new DrawRoundRectangle(radius)).setBounds(0,0,(int) (container1Width-container1Width/2.5),container1Height-39);
+
+        //scanButton.addActionListener(event -> scanButtonHandler());
+
+        // Container for Time and Path Panels
+        JPanel container2 = new JPanel(new BorderLayout());
+        container2.setPreferredSize(new Dimension(container1Width-(container1Width-container1Width/3),container1Height));
+
+
+        int container2Height = appHeight -150;
+        int container2Width = container1Width-(container1Width-container1Width/3);
+
+        //
+        JPanel optionPanel = new JPanel();
+        optionPanel.setLayout(null);
+        optionPanel.setPreferredSize(new Dimension(container2Width,(int) (container1Height/1.07)));
+
+
+        //to be added here
+
+        JLabel optionstxt = new JLabel();
+        optionstxt.setText("Options");
+        optionstxt.setFont(new Font( "Comic sans",Font.PLAIN,dimension+28 ));
+        optionstxt.setBounds(50,20,(int) (container1Width-container1Width/2),50);
+        optionPanel.add(optionstxt);
+
+        JLabel removetxt1 = new JLabel();
+        removetxt1.setText("Remove selected device");
+        removetxt1.setFont(new Font( "Comic sans",Font.PLAIN,dimension+16 ));
+        removetxt1.setBounds(30,60,(int) (container1Width-container1Width/2),50);
+        optionPanel.add(removetxt1);
+
+        MyButton removeButton = new MyButton("Remove");
+        removeButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+18));
+        removeButton.setBackground(buttoncolor);
+        removeButton.setFocusable(false);
+        removeButton.setBorder(new LineBorder(Color.BLACK));
+        removeButton.setBounds(50,115,160,30);
+        removeButton.setPressedBackgroundColor(buttonPressedcolor);
+        optionPanel.add(removeButton);
+
+        removeButton.addActionListener(event -> removeButtonHandler());
+
+        JLabel syncNewDevTXT = new JLabel();
+        syncNewDevTXT.setText("Synchronize selected device");
+        syncNewDevTXT.setFont(new Font( "Comic sans",Font.PLAIN,dimension+16 ));
+        syncNewDevTXT.setBounds(30,310,(int) (container1Width-container1Width/2),50);
+        optionPanel.add(syncNewDevTXT);
+
+        MyButton syncNewDev = new MyButton("Sync");
+        syncNewDev.setFont(new Font("Comic Sans",Font.PLAIN,dimension+18));
+        syncNewDev.setBackground(buttoncolor);
+        syncNewDev.setFocusable(false);
+        syncNewDev.setBorder(new LineBorder(Color.BLACK));
+        syncNewDev.setBounds(50,355,160,30);
+        syncNewDev.setPressedBackgroundColor(buttonPressedcolor);
+        syncNewDev.addActionListener(event -> syncButtonHandler());
+        optionPanel.add(syncNewDev);
+
+        optionPanel.add(new DrawRoundRectangle(radius)).setBounds(0,0,container2Width,(int) (container1Height/1.07));
+
+
+
+        //Panel for "Choose path to synchronize to"
+
+
+        container2.add(optionPanel, BorderLayout.NORTH);
+        container1.add(syncPanel, BorderLayout.WEST);
+        container1.add(container2, BorderLayout.EAST);
+        this.add(container1, BorderLayout.CENTER);//////////////////////////////////////////////////////////////////////////////////////
 
         //Make the x coordinate smaller so that it fits better in the menu
         int surplusX=200;
+
+
 
         /*
         JButton connections = new JButton("Connections");
@@ -94,6 +281,63 @@ public class FilePage extends JPanel {
         this.add(pathPanel);
         this.add(mainPanel);
         this.add(label);
+    }
+    //functia scanButtonHandler trb modificata
+    private void scanButtonHandler(){
+        new Thread(()-> {
+            DefaultTableModel model = (DefaultTableModel) foundConnectionsTable.getModel();
+            model.setRowCount(0);
+            model.addRow(new String[]{"Finding Devices...", ""});
+            DataController.findDevices();
+
+            var data = DataController.getLastFoundDevices();
+
+            model.setRowCount(0);
+            if(data.size() == 0)
+                model.addRow(new String[]{"No devices were found.", ""});
+            else
+                data.forEach(model::addRow);
+        }).start();
+    }
+
+    public JTable createDeviceTable(List<String[]> data) {
+        DefaultTableModel model = new CustomTableModel();
+        model.addColumn("Name/Path");
+        model.addColumn("Time");
+        model.addColumn("Origin Device/Last Fetch");
+        model.addColumn("Type");
+        data.forEach(model::addRow);
+
+        final JTable table = new JTable(model);
+        table.setFont(new Font( "Courier New",Font.BOLD,dimension+15 ));
+        table.setRowHeight(25);
+        table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+
+        return table;
+    }
+
+    public void syncButtonHandler() {
+        int index = foundConnectionsTable.getSelectedRow();
+        if(index == -1)
+            return;
+
+        DataController.connectDevice(index);
+        DefaultTableModel model = (DefaultTableModel) connectedDevicesTable.getModel();
+
+        model.setRowCount(0);
+        DataController.getConnectedDevices().forEach(model::addRow);
+    }
+
+    public void removeButtonHandler() {
+        int index = connectedDevicesTable.getSelectedRow();
+        if(index == -1)
+            return;
+
+        DataController.disconnectDevice(index);
+        DefaultTableModel model = (DefaultTableModel) connectedDevicesTable.getModel();
+
+        model.setRowCount(0);
+        DataController.getConnectedDevices().forEach(model::addRow);
     }
 
 
