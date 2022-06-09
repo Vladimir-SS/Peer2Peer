@@ -16,10 +16,14 @@ public class FileSystemTree{
         this.root = root;
         this.action = action;
         this.path = "";
-    }
+    }   
 
     public Path getPath() {
         return Paths.get(path);
+    }
+
+    public void setPath(Path path) {
+        this.rootPath = path.toString();
     }
 
     public TreeActionsEnum getAction() {

@@ -18,16 +18,21 @@ import java.util.*;
 
 //TODO: MOVE THIS IN HIS OWN PACKAGE
 
+/**
+ * This class is used to establish a communication between the application
+ * and the user through the console.
+ * It displays instructions for the user and reads the commands given invoking
+ * the methods responsible for interpreting and executing them.
+ */
+
 public class ConsoleInterface {
     private static final String manual = "peer <port> <path> [--watch]";
 
     static final private Scanner input = new Scanner(System.in);
-
     private static final Map<String, Command> commands = new HashMap<>(){{
         put("device", new DeviceCommand());
         put("sync", new SyncCommand());
     }};
-
 
     public static void main(String[] args) {
         if(args.length < 2){
