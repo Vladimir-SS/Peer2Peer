@@ -1,6 +1,10 @@
 package com.SyncPage;
 
 import com.misc.CustomTableModel;
+import com.misc.color.ColorPallete;
+import com.misc.color.ColorPalleteController;
+import com.misc.color.ColorPalleteEnum;
+import com.misc.color.LightThemeColorPallete;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -61,6 +65,10 @@ public class SyncPage extends JPanel implements ActionListener {
 
         container1 = new JPanel(new BorderLayout());
 
+        ColorPalleteController controller = new ColorPalleteController();
+        ColorPalleteEnum theme;
+        theme = ColorPalleteEnum.LightThemeColorPalette;
+        controller.setColorPallete(theme);
         // Panel for the sync options
         filesPanel = new JPanel();
         filesPanel.setLayout(null);
