@@ -1,6 +1,9 @@
 package com.SettingsPage;
 
 import com.misc.DataController;
+import com.misc.color.ColorPalette;
+import com.misc.color.ColorPaletteController;
+import com.misc.color.DarkThemeColorPalette;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -21,6 +24,12 @@ public class SettingsPage extends JPanel implements ActionListener {
     private static final Color tablecolor2 = Color.decode("#CCDDE2");
     private static final Color buttonPressedcolor = Color.decode("#D4BA9E");
     private static final Color textFieldColor = Color.decode("#CCDDE2");
+
+    //DarkThemeColorPalette c1 = new DarkThemeColorPalette(new ColorPalette(color1, color2, color3...)) {}
+
+//    private static final Color textFieldColor = new ColorPaletteController()
+
+
 
     private static int pageWidth, pageHeight;
 
