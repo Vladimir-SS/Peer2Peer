@@ -1,22 +1,28 @@
+package com.misc;
 
-import java.utils.LinkedList;
+import java.awt.*;
+import java.util.List;
 
 
 public final class FontState{
 
 
+    private static final List<Integer> baseDimensions = List.of(12, 16, 20, 24, 28, 32);
+    private static List<Font> fonts;
 
-    private static List<Int> dimensions = {12, 16, 20, 24, 28, 6, 32};
-
-    public static FontState getFont(String index) {
-
-        return new Font("comic sans", Font.PLAIN, setDimensions(index));
-
-
+    static {
+        setDimensions(0);
     }
 
-    public static FontState setDimensions(String index) {
-        return dimensions.get(index) + dimensions.get(index) * (index/10);
+    public static Font getFont(int index) {
+
+        return fonts.get(index);
+    }
+
+    public static void setDimensions(int dimension) {
+        fonts = baseDimensions.stream()
+                .map(v -> new Font( "Comic sans",Font.PLAIN,v + dimension ))
+                .toList();
     }
 
 }
