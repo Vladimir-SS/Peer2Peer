@@ -1,6 +1,7 @@
 package com.menu;
 
 import com.FirstPage.RoundedButton;
+import com.misc.FontState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -121,7 +122,7 @@ public class MainMenu extends JPanel {
 
         button.setFocusable( false );
 
-        button.setFont(new Font( "Comic sans",Font.PLAIN,24 ));
+        button.setFont(FontState.getFont(2));
         button.setForeground( Color.black );
 
         button.setBackground( backgroundColor );

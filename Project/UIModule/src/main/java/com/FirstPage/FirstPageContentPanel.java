@@ -1,5 +1,7 @@
 package com.FirstPage;
 
+import com.misc.FontState;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,7 +32,7 @@ public class FirstPageContentPanel extends JPanel {
     private static final int inputMaximumHeightPercent=12;
 
     //The font used for the fields
-    private static final Font contentPanelFont=new Font("Comic sans",Font.PLAIN,25 );
+    private static final Font contentPanelFont=FontState.getFont(2);
 
     //The preferred size for the button
     private static final int connectButtonWidthPercent=30;
@@ -90,7 +92,7 @@ public class FirstPageContentPanel extends JPanel {
         JLabel titleLabel=new JLabel(title);
 
         titleLabel.setForeground( Color.white );
-        titleLabel.setFont(new Font( "Comic sans",Font.PLAIN,60 ));
+        titleLabel.setFont(FontState.getFont(1)FontState.getFont(6));
         titleLabel.setAlignmentX( Component.CENTER_ALIGNMENT );
 
         this.add( titleLabel );

@@ -1,5 +1,7 @@
 package com.FilePage;
 
+import com.misc.FontState;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -69,19 +71,19 @@ public class FilePage extends JPanel {
 
         JButton sync = new JButton("Sync");
         sync.setBounds(375-surplusX,240,100,50);
-        sync.setFont(new Font("Comic Sans",Font.PLAIN,dimension+14));
+        sync.setFont(FontState.getFont(0));
         sync.setFocusable(false);
         sync.setBackground(new Color(212,186,158,255));
 
         JButton newButton = new JButton("New");
         newButton.setBounds(375-surplusX,310,100,50);
-        newButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+14));
+        newButton.setFont(FontState.getFont(0));
         newButton.setFocusable(false);
         newButton.setBackground(new Color(212,186,158,255));
 
         JButton noBackup = new JButton("No Backup");
         noBackup.setBounds(375-surplusX,380,100,50);
-        noBackup.setFont(new Font("Comic Sans",Font.PLAIN,dimension+6));
+        noBackup.setFont(FontState.getFont(5);
         noBackup.setFocusable(false);
         noBackup.setBackground(new Color(212,186,158,255));
 

@@ -1,5 +1,6 @@
 package com.FirstPage;
 
+import com.misc.FontState;
 import javax.swing.*;
 import java.awt.*;
 

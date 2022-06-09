@@ -1,6 +1,7 @@
 package com.SettingsPage;
 
 import com.misc.DataController;
+import com.misc.FontState;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -73,13 +74,13 @@ public class SettingsPage extends JPanel implements ActionListener {
 
         JLabel settingText = new JLabel();
         settingText.setText("Settings");
-        settingText.setFont(new Font( "Comic sans",Font.PLAIN,28 ));
+        settingText.setFont(FontState.getFont(3));
         settingText.setBounds(50,20,(int) (container1Width-container1Width/2),50);
         syncPanel.add(settingText);
 
         JLabel username = new JLabel();
         username.setText("Your device:");
-        username.setFont(new Font( "Comic sans",Font.PLAIN, 20));
+        username.setFont(FontState.getFont(1));
         username.setBounds(400,20,(int) (container1Width-container1Width/2),50);
         syncPanel.add(username);
 
@@ -88,26 +89,26 @@ public class SettingsPage extends JPanel implements ActionListener {
 
 
         user.setText(userN);
-        user.setFont(new Font( "Comic sans",Font.PLAIN,18 ));
+        user.setFont(nFontState.getFont(1));
         user.setBounds(410,45,(int) (container1Width-container1Width/2),50);
         syncPanel.add(user);
 
         JLabel profile = new JLabel();
         profile.setText("Profile settings --------------------------------------------------");
         profile.setForeground(buttonPressedcolor);
-        profile.setFont(new Font( "Comic sans",Font.PLAIN,20 ));
+        profile.setFont(FontState.getFont(1));
         profile.setBounds(50,80,(int) (container1Width-container1Width/2),50);
         syncPanel.add(profile);
 
         JLabel changeN = new JLabel();
         changeN.setText("Rename Device: ");
-        changeN.setFont(new Font( "Comic sans",Font.PLAIN,26 ));
+        changeN.setFont(FontState.getFont(2));
         changeN.setBounds(50,120,(int) (container1Width-container1Width/2),50);
         syncPanel.add(changeN);
 
         JTextField inputUML = new JTextField("",20);
         inputUML.setText(userN);
-        inputUML.setFont(new Font( "Comic sans",Font.PLAIN,18 ));
+        inputUML.setFont(FontState.getFont(1));
         inputUML.setForeground(buttonPressedcolor);
         inputUML.setBounds(300,130,250,30);
         inputUML.setBackground(textFieldColor);
@@ -130,12 +131,12 @@ public class SettingsPage extends JPanel implements ActionListener {
 
         JLabel history = new JLabel();
         history.setText("Acces history: ");
-        history.setFont(new Font( "Comic sans",Font.PLAIN,26 ));
+        history.setFont(FontState.getFont(2));
         history.setBounds(50,180,(int) (container1Width-container1Width/2),50);
         syncPanel.add(history);
 
         com.SettingsPage.MyButton Remove1 = new com.SettingsPage.MyButton("History");
-        Remove1.setFont(new Font("Comic Sans",Font.PLAIN,18));
+        Remove1.setFont(FontState.getFont(1));
         Remove1.setBackground(buttoncolor);
         Remove1.setFocusable(false);
         Remove1.setBorder(new LineBorder(Color.BLACK));
@@ -146,17 +147,17 @@ public class SettingsPage extends JPanel implements ActionListener {
         JLabel design = new JLabel();
         design.setText("Design settings --------------------------------------------------");
         design.setForeground(buttonPressedcolor);
-        design.setFont(new Font( "Comic sans",Font.PLAIN,20 ));
+        design.setFont(new Font(FontState.getFont(1));
         design.setBounds(50,230,(int) (container1Width-container1Width/2),50);
         syncPanel.add(design);
 
         JLabel theme = new JLabel();
         theme.setText("Light theme ");
-        theme.setFont(new Font( "Comic sans",Font.PLAIN,26 ));
+        theme.setFont(FontState.getFont(2));
         theme.setBounds(70,280,(int) (container1Width-container1Width/2),50);
         syncPanel.add(theme);
         com.SettingsPage.MyButton font= new com.SettingsPage.MyButton("");
-        font.setFont(new Font("Comic Sans",Font.PLAIN,18));
+        font.setFont(FontState.getFont(1));
         font.setBackground(buttoncolor);
         font.setFocusable(false);
         font.setBorder(new LineBorder(Color.BLACK));
@@ -167,7 +168,7 @@ public class SettingsPage extends JPanel implements ActionListener {
 
         JLabel size = new JLabel();
         size.setText("Font dimension ");
-        size.setFont(new Font( "Comic sans",Font.PLAIN,26 ));
+        size.setFont(FontState.getFont(2));
         size.setBounds(50,390,(int) (container1Width-container1Width/2),50);
         syncPanel.add(size);
 
@@ -192,21 +193,21 @@ public class SettingsPage extends JPanel implements ActionListener {
                     int column = target.getSelectedColumn();
 
                     setDimension(column);
-                    settingText.setFont(new Font( "Comic sans",Font.PLAIN,dimension + 28 ));
-                    username.setFont(new Font( "Comic Sans",Font.PLAIN,dimension +20 ));
-                    user.setFont(new Font( "Comic sans",Font.PLAIN,dimension + 18 ));
-                    profile.setFont(new Font( "Comic sans",Font.PLAIN,dimension+ 20 ));
-                    changeN.setFont(new Font( "Comic sans",Font.PLAIN,dimension+23 ));
-                    history.setFont(new Font( "Comic sans",Font.PLAIN,dimension + 23 ));
-                    design.setFont(new Font( "Comic sans",Font.PLAIN,dimension+ 20 ));
-                    theme.setFont(new Font( "Comic sans",Font.PLAIN,dimension + 26 ));
-                    size.setFont(new Font( "Comic sans",Font.PLAIN,dimension + 23 ));
+                    settingText.setFont(FontState.getFont(FontState.getFont(3)));
+                    username.setFont(FontState.getFont(1));
+                    user.setFont(FontState.getFont(1));
+                    profile.setFont(FontState.getFont(1));
+                    changeN.setFont(FontState.getFont(2));
+                    history.setFont(FontState.getFont(2));
+                    design.setFont(FontState.getFont(1));
+                    theme.setFont(FontState.getFont(2));
+                    size.setFont(FontState.getFont(2));
                 }
             }
         });
 
         disconnect = new com.SettingsPage.MyButton("DISCONNECT");
-        disconnect.setFont(new Font("Comic Sans",Font.PLAIN,20));
+        disconnect.setFont(FontState.getFont(1));
         disconnect.setBackground(buttoncolorgreen);
         disconnect.setFocusable(false);
         disconnect.setBorder(new LineBorder(Color.BLACK));

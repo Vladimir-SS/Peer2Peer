@@ -1,5 +1,6 @@
 package com.ConnectionPage;
 
+import com.misc.FontState;
 import com.misc.CustomTableModel;
 import com.misc.DataController;
 
@@ -112,13 +113,13 @@ public class ConPage extends JPanel implements ActionListener {
 
         JLabel syncText = new JLabel();
         syncText.setText("Connections");
-        syncText.setFont(new Font( "Comic sans",Font.PLAIN,dimension+28 ));
+        syncText.setFont(FontState.getFont(2));
         syncText.setBounds(50,20,(int) (container1Width-container1Width/2),50);
         syncPanel.add(syncText);
 
         JLabel syncdev = new JLabel();
         syncdev.setText("Synchronised devices");
-        syncdev.setFont(new Font( "Comic sans",Font.PLAIN,dimension+18 ));
+        syncdev.setFont(FontState.getFont(1));
         syncdev.setBounds(50,60,(int) (container1Width-container1Width/2),50);
         syncPanel.add(syncdev);
 
@@ -130,12 +131,12 @@ public class ConPage extends JPanel implements ActionListener {
 
         JLabel newcon = new JLabel();
         newcon.setText("New Connections");
-        newcon.setFont(new Font( "Comic sans",Font.BOLD,dimension+20 ));
+        newcon.setFont(FontState.getFont(1));
         newcon.setBounds(50,310,(int) (container1Width-container1Width/2),50);
         syncPanel.add(newcon);
 
         MyButton scanButton = new MyButton("Scan");
-        scanButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+ 18));
+        scanButton.setFont(FontState.getFont(1));
         scanButton.setBackground(tablecolor1);
         scanButton.setFocusable(false);
         scanButton.setBorder(new LineBorder(Color.BLACK));
@@ -169,18 +170,18 @@ public class ConPage extends JPanel implements ActionListener {
 
         JLabel optionstxt = new JLabel();
         optionstxt.setText("Options");
-        optionstxt.setFont(new Font( "Comic sans",Font.PLAIN,dimension+28 ));
+        optionstxt.setFont(FontState.getFont(2));
         optionstxt.setBounds(50,20,(int) (container1Width-container1Width/2),50);
         optionPanel.add(optionstxt);
 
         JLabel removetxt1 = new JLabel();
         removetxt1.setText("Remove selected device");
-        removetxt1.setFont(new Font( "Comic sans",Font.PLAIN,dimension+16 ));
+        removetxt1.setFont(FontState.getFont(1));
         removetxt1.setBounds(30,60,(int) (container1Width-container1Width/2),50);
         optionPanel.add(removetxt1);
 
         MyButton removeButton = new MyButton("Remove");
-        removeButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+18));
+        removeButton.setFont(FontState.getFont(1));
         removeButton.setBackground(buttoncolor);
         removeButton.setFocusable(false);
         removeButton.setBorder(new LineBorder(Color.BLACK));
@@ -207,12 +208,12 @@ public class ConPage extends JPanel implements ActionListener {
 
         JLabel syncNewDevTXT = new JLabel();
         syncNewDevTXT.setText("Synchronize selected device");
-        syncNewDevTXT.setFont(new Font( "Comic sans",Font.PLAIN,dimension+16 ));
+        syncNewDevTXT.setFont(FontState.getFont(1));
         syncNewDevTXT.setBounds(30,310,(int) (container1Width-container1Width/2),50);
         optionPanel.add(syncNewDevTXT);
 
         MyButton syncNewDev = new MyButton("Sync");
-        syncNewDev.setFont(new Font("Comic Sans",Font.PLAIN,dimension+18));
+        syncNewDev.setFont(FontState.getFont(1));
         syncNewDev.setBackground(buttoncolor);
         syncNewDev.setFocusable(false);
         syncNewDev.setBorder(new LineBorder(Color.BLACK));

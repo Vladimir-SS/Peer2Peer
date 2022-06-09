@@ -1,5 +1,7 @@
 package com.SyncPage;
 
+import com.misc.FontState;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
@@ -57,12 +59,12 @@ public class SyncPage extends JPanel implements ActionListener {
 
         JLabel syncText = new JLabel();
         syncText.setText("Synchronize all files");
-        syncText.setFont(new Font( "Comic sans",Font.PLAIN,dimension+28 ));
+        syncText.setFont(FontState.getFont(3));
         syncText.setBounds(50,20,(int) (container1Width-container1Width/2),50);
         syncPanel.add(syncText);
 
         syncButton = new MyButton("Synchronize files");
-        syncButton.setFont(new Font("Comic Sans",Font.PLAIN,dimension+28));
+        syncButton.setFont(FontState.getFont(3));
         syncButton.setBackground(buttoncolor);
         syncButton.setFocusable(false);
         syncButton.setBorder(new LineBorder(Color.BLACK));
@@ -102,7 +104,7 @@ public class SyncPage extends JPanel implements ActionListener {
 
 
         fileChoserButton = new MyButton("Browse directory");
-        fileChoserButton.setFont(new Font( "Comic sans",Font.PLAIN,dimension+18 ));
+        fileChoserButton.setFont(FontState.getFont(1));
         fileChoserButton.setBackground(buttoncolor);
         fileChoserButton.setFocusable(false);
         fileChoserButton.setBounds(20,60,250,30);
@@ -112,7 +114,7 @@ public class SyncPage extends JPanel implements ActionListener {
 
         fileChoserLabel = new JLabel();
         fileChoserLabel.setText("Choose directory to synchronize files");
-        fileChoserLabel.setFont(new Font( "Comic sans",Font.PLAIN,18 ));
+        fileChoserLabel.setFont(FontState.getFont(1));
         fileChoserLabel.setBounds(10,20,300,25);
 
 
