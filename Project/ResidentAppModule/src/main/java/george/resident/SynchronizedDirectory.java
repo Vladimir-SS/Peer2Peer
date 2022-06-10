@@ -14,6 +14,11 @@ public class  SynchronizedDirectory {
 
     protected Path path;
 
+    /**
+     * Method to create the .peer folder starting from the path
+     * @param path
+     * @throws BadSyncDirectory This exception is thrown when the peer can not be created.
+     */
     public SynchronizedDirectory(Path path) throws BadSyncDirectory {
         this.path = path;
 
@@ -33,7 +38,9 @@ public class  SynchronizedDirectory {
         return path;
     }
 
-    //The old File API would do just fine
+    /**
+     * Private recursive method that returns a tree for a directory given as a parameter
+     */
     private static TreeDirectory getTreeFromFile(File directory) {
 
         TreeDirectory treeDirectory = new TreeDirectory();
