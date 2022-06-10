@@ -59,13 +59,28 @@ public class ActionHandler {
     public void sendAction(Connection connection, TreeActionsEnum action, Path ...paths) throws IOException {
         Path path = Arrays.stream(paths).reduce(Paths.get(""), Path::resolve);
 
-        System.out.println("sendAction paaath: " + path);
         TreeDirectory root = synchronizedDirectory.getTree(path);
         FileSystemTree fileSystemTree = new FileSystemTree(root, action);
         fileSystemTree.setPath(path);
 
+
+        Path absolutePath = synchronizedDirectory.getPath().resolve(path);
+
+        if(!Files.exists(absolutePath)){
+            root.addFile("", 0);
+        } else if(!Files.isDirectory(absolutePath)){
+            root.addFile("", Files.getLastModifiedTime(absolutePath).toMillis());
+        }
+
         if(action == TreeActionsEnum.Delete){
-            new DeleteDeal(root, synchronizedDirectory.getPath().resolve(path)).deal();
+            if(!Files.isSameFile(synchronizedDirectory.getPath(), absolutePath)) {
+                if (Files.isDirectory(absolutePath)){
+                    root.getFiles().clear();
+                    root.getDirectories().clear();
+                }
+            }
+
+            new DeleteDeal(root, absolutePath).deal();
         }
 
         try {
@@ -76,11 +91,9 @@ public class ActionHandler {
     }
 
     private void sendModifiedFiles(Connection connection, FileSystemTree fileSystemTree) throws IOException {
-        TreeDirectory ourTree = synchronizedDirectory.getTree(fileSystemTree.getPath());
         TreeDeal action = new PushDeal(
                 connection,
-                ourTree,
-                fileSystemTree.getRoot(),
+                fileSystemTree,
                 synchronizedDirectory.getPath().resolve(fileSystemTree.getPath())
         );
 
@@ -92,18 +105,17 @@ public class ActionHandler {
 
             switch (fileSystemTree.getAction()) {
                 case Sync -> {
-                    System.out.println("Request Sync");
                     sendModifiedFiles(connection, fileSystemTree);
                     sendAction(connection, TreeActionsEnum.Fetch, fileSystemTree.getPath());
                 }
                 case Fetch -> {
-                    System.out.println("Request Fetch");
                     sendModifiedFiles(connection, fileSystemTree);
                 }
                 case Delete -> {
-                    System.out.println("Delete Request");
-                    DeleteDeal deleteDeal = new DeleteDeal(fileSystemTree.getRoot(), fileSystemTree.getPath());
-                    deleteDeal.deal();
+                    new DeleteDeal(
+                            fileSystemTree.getRoot(),
+                            synchronizedDirectory.getPath().resolve(fileSystemTree.getPath())
+                    ).deal();
                 }
             }
 

@@ -78,7 +78,6 @@ public class BroadcastReceiver extends Thread {
                 var inetAddress = p.getAddress();
                 if (!toIgnore.contains(inetAddress)) {
                     addresses.add(inetAddress);
-                    System.out.println(inetAddress.getHostAddress() + " is reachable: ");
                 }
             } catch (IOException ignored) {
             }

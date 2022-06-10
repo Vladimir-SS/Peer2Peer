@@ -25,12 +25,9 @@ public class DeleteDeal implements TreeDeal {
         theirDirectories.remove(".peer");
 
         if(theirFiles.size() == 0 && theirDirectories.size() == 0){
-            System.out.println("delete all");
             try {
                 FileUtils.deleteDirectory(path.toFile());
-            } catch (Exception e){
-                System.err.println(e.getMessage());
-                e.printStackTrace();
+            } catch (Exception ignored){
             }
             return;
         }
@@ -39,13 +36,9 @@ public class DeleteDeal implements TreeDeal {
             String name = pair.getKey();
             Path newPath = path.resolve(name);
 
-            System.out.println("delete file " + newPath);
-
             try {
                 Files.deleteIfExists(newPath);
-            } catch (Exception e){
-                System.err.println(e.getMessage());
-                e.printStackTrace();
+            } catch (Exception ignored){
             }
         }
 

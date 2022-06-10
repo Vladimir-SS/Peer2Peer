@@ -36,7 +36,6 @@ public class ConnectionReceiver {
             return null;
         Path relativePath = Paths.get(reader.readUTF());
         Path path = to.resolve(relativePath);
-        System.out.println("receiving: " + path);
         long modified = reader.readLong();
         long size = reader.readLong();
         Files.createDirectories(path.getParent());
@@ -61,8 +60,6 @@ public class ConnectionReceiver {
         } catch (Exception e){
             reader.skipNBytes(size);
         }
-
-        System.out.println("done receive");
         return relativePath;
     }
 }
