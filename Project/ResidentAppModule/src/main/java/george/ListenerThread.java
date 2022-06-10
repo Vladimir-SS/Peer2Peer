@@ -11,9 +11,6 @@ import static java.lang.System.exit;
 
 public class ListenerThread extends FileListener implements Runnable{
 
-
-
-
     public ListenerThread(Path root) {
         super(root);
 

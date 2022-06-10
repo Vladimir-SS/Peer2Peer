@@ -30,7 +30,6 @@ public class UpcomingFileThread extends Thread{
     @Override
     public void run() {
         while (isAlive()) {
-            System.out.println("Alive");
             var entry = peerManager.getPeer()
                     .incomingFile(actionHandler.getSynchronizedDirectory().getPath());
             Connection connection = entry.getKey();
@@ -48,13 +47,16 @@ public class UpcomingFileThread extends Thread{
                             && fileName.startsWith("action")
                             && fileName.endsWith(".json")
             ){
-                System.out.println("Action came");
                 try(InputStream inputStream = new FileInputStream(path.toFile())) {
                     Gson gson = new Gson();
                     Reader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 
                     FileSystemTree fileSystemTree = gson.fromJson(reader, FileSystemTree.class);
                     actionHandler.incomingAction(connection, fileSystemTree);
+                } catch (IOException ignored) {
+
+                }
+                try {
                     Files.delete(path);
                 } catch (IOException ignored) {
 

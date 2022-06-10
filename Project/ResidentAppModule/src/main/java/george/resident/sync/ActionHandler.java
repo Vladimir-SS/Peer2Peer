@@ -4,6 +4,7 @@ import connectivity.connection.Connection;
 import george.resident.SynchronizedDirectory;
 import george.resident.tree.FileSystemTree;
 import george.resident.tree.TreeDirectory;
+import george.resident.tree.actions.DeleteDeal;
 import george.resident.tree.actions.PushDeal;
 import george.resident.tree.actions.TreeActionsEnum;
 import george.resident.tree.actions.TreeDeal;
@@ -14,6 +15,8 @@ import java.io.IOException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class ActionHandler {
 
@@ -53,9 +56,32 @@ public class ActionHandler {
     }
 
     //This exists because I have to deal with temp file not working
-    public void sendAction(Connection connection, TreeActionsEnum action) throws IOException {
-        TreeDirectory root = synchronizedDirectory.getTree();
+    public void sendAction(Connection connection, TreeActionsEnum action, Path ...paths) throws IOException {
+        Path path = Arrays.stream(paths).reduce(Paths.get(""), Path::resolve);
+
+        TreeDirectory root = synchronizedDirectory.getTree(path);
         FileSystemTree fileSystemTree = new FileSystemTree(root, action);
+        fileSystemTree.setPath(path);
+
+
+        Path absolutePath = synchronizedDirectory.getPath().resolve(path);
+
+        if(!Files.exists(absolutePath)){
+            root.addFile("", 0);
+        } else if(!Files.isDirectory(absolutePath)){
+            root.addFile("", Files.getLastModifiedTime(absolutePath).toMillis());
+        }
+
+        if(action == TreeActionsEnum.Delete){
+            if(!Files.isSameFile(synchronizedDirectory.getPath(), absolutePath)) {
+                if (Files.isDirectory(absolutePath)){
+                    root.getFiles().clear();
+                    root.getDirectories().clear();
+                }
+            }
+
+            new DeleteDeal(root, absolutePath).deal();
+        }
 
         try {
             sendFileSystemTree(connection, fileSystemTree);
@@ -65,12 +91,10 @@ public class ActionHandler {
     }
 
     private void sendModifiedFiles(Connection connection, FileSystemTree fileSystemTree) throws IOException {
-        TreeDirectory ourTree = synchronizedDirectory.getTree();
         TreeDeal action = new PushDeal(
                 connection,
-                ourTree,
-                fileSystemTree.getRoot(),
-                synchronizedDirectory.getPath().resolve(fileSystemTree.getPath())
+                fileSystemTree,
+                synchronizedDirectory.getPath()
         );
 
         action.deal();
@@ -80,17 +104,19 @@ public class ActionHandler {
         try {
 
             switch (fileSystemTree.getAction()) {
-                case Sync:
-                    System.out.println("Request Sync");
+                case Sync -> {
                     sendModifiedFiles(connection, fileSystemTree);
-                    sendAction(connection, TreeActionsEnum.Fetch);
-                    break;
-                case Fetch:
-                    System.out.println("Request Fetch");
+                    sendAction(connection, TreeActionsEnum.Fetch, fileSystemTree.getPath());
+                }
+                case Fetch -> {
                     sendModifiedFiles(connection, fileSystemTree);
-                    break;
-                case Delete:
-                    break;
+                }
+                case Delete -> {
+                    new DeleteDeal(
+                            fileSystemTree.getRoot(),
+                            synchronizedDirectory.getPath().resolve(fileSystemTree.getPath())
+                    ).deal();
+                }
             }
 
         } catch (Exception e) {

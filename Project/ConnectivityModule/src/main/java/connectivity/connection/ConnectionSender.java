@@ -33,8 +33,6 @@ public class ConnectionSender {
         String pathName = relative.toString();
         Path file = root.resolve(relative);
 
-        System.out.println("sending: " + pathName);
-
         try(InputStream is = new FileInputStream(file.toFile())){
             writer.writeUTF(pathName);
             writer.writeLong(Files.getLastModifiedTime(file).toMillis());
@@ -49,14 +47,12 @@ public class ConnectionSender {
                 int sendSize = is.read(buffer);
                 if(sendSize == 0)
                     break;
-                System.out.println();
                 writer.write(buffer, 0, sendSize);
                 size -= sendSize;
             }
 
             writer.flush();
         }
-        System.out.println("done send");
     }
 
 }

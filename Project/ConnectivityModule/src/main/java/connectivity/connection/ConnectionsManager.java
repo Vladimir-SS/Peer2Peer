@@ -83,8 +83,8 @@ public class ConnectionsManager implements Runnable {
         }
         try {
             openServerSocket();
-        } catch (PortException e) {
-            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         Socket clientSocket;
         while (!serverSocket.isClosed()) {
@@ -101,23 +101,20 @@ public class ConnectionsManager implements Runnable {
 
             try {
                 LocalConnection connection = new LocalConnection(clientSocket);
-                if(!connections.contains(connection)) {
-                    connections.add(connection);
-                    System.out.println("Peer: " + clientSocket.getRemoteSocketAddress().toString() + " connected!");
-                }
-                else {
-                    //TODO: connections as HASHMAP<INTEGER/STRING, CONNECTION>
-                    connections .stream()
-                            .filter(c -> c.equals(connection))
-                            .findFirst()
-                            .ifPresent(c -> {
-                                try {
-                                    c.close();
-                                } catch (IOException ignored) {
-                                }
-                            });
-                    connections.add(connection);
-                }
+
+                //TODO: connections as HASHMAP<INTEGER/STRING, CONNECTION>
+                connections .stream()
+                        .filter(c -> c.equals(connection))
+                        .findFirst()
+                        .ifPresent(c -> {
+                            try {
+                                connections.remove(c);
+                                c.close();
+                            } catch (IOException ignored) {
+                            }
+                        });
+                connections.add(connection);
+                System.out.println("Peer: " + clientSocket.getRemoteSocketAddress().toString() + " connected!");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -140,14 +137,16 @@ public class ConnectionsManager implements Runnable {
     /**
      * This method will open a new socket, initializing the variable serverSocket with a new instance of ServerSocket
      * type, using as port the serverPort variable.
-     * @throws PortException A custom exception thrown if the given port is already in use
+     * @throws     IOException  if an I/O error occurs when opening the socket.
+     * @throws     SecurityException
+     * if a security manager exists and its {@code checkListen}
+     * method doesn't allow the operation.
+     * @throws     IllegalArgumentException if the port parameter is outside
+     *             the specified range of valid port values, which is between
+     *             0 and 65535, inclusive.
      */
-    private void openServerSocket() throws PortException {
-        try {
-            this.serverSocket = new ServerSocket(this.serverPort);
-        }  catch (IOException e) {
-            throw new PortException(serverPort);
-        }
+    private void openServerSocket() throws IOException {
+        this.serverSocket = new ServerSocket(this.serverPort);
     }
 
     /**

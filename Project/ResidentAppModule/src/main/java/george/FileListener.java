@@ -15,12 +15,7 @@ public  class FileListener {
     protected  void createEvent(Path absolutePath){};
 
     FileListener(Path root){
-
         this.root=root;
-
-
-
-
 
     }
     public void startL(){

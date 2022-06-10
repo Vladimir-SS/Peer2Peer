@@ -6,6 +6,7 @@ import connectivity.exceptions.DeviceAlreadyConnectedException;
 import george.resident.SynchronizedDirectory;
 import george.resident.exceptions.BadSyncDirectory;
 import george.resident.exceptions.DeviceNotFound;
+import george.resident.tree.actions.DeleteDeal;
 import george.resident.tree.actions.TreeActionsEnum;
 
 import java.io.*;
@@ -73,6 +74,16 @@ public class ConnectivityResident {
         this.thread = new UpcomingFileThread(actionHandler, peerManager);
     }
 
+    public void disconnect(){
+        thread.interrupt();
+        try {
+            thread.getPeerManager().getPeer().close();
+        } catch (IOException ignored) {
+
+        }
+    }
+
+
     /**
      * This method is used to send an action request to a specified device.
      * @param index The position where the desired device is found
@@ -83,14 +94,15 @@ public class ConnectivityResident {
      *                       found.
      * @throws IOException
      */
-    private void actionFiles(int index, TreeActionsEnum action, Path... subPath) throws DeviceNotFound, IOException {
+    private void actionFiles(int index, TreeActionsEnum action, Path... paths) throws DeviceNotFound, IOException {
         thread.getActionHandler().sendAction(
                 thread.getPeerManager().getConnectedDevice(index),
-                action
+                action,
+                paths
         );
     }
 
-    /**
+   /**
      * This method is used to invoke the method that will send the
      * fetch action.
      * @param index The position where the desired device is found
@@ -100,11 +112,11 @@ public class ConnectivityResident {
      *                        found.
      * @throws IOException
      */
-    public void fetchFiles(int index, Path... subPath) throws DeviceNotFound, IOException {
-        actionFiles(index, TreeActionsEnum.Fetch, subPath);
+    public void fetchFiles(int index, Path... paths) throws DeviceNotFound, IOException {
+        actionFiles(index, TreeActionsEnum.Fetch, paths);
     }
 
-    /**
+      /**
      * This method is used to invoke the method that will send the
      * sync action.
      * @param index The position where the desired device is found
@@ -113,11 +125,11 @@ public class ConnectivityResident {
      * @throws DeviceNotFound The device at the given index was not found.
      * @throws IOException
      */
-    public void syncFiles(int index, Path... subPath) throws DeviceNotFound, IOException {
-        actionFiles(index, TreeActionsEnum.Sync, subPath);
+    public void syncFiles(int index, Path... paths) throws DeviceNotFound, IOException {
+        actionFiles(index, TreeActionsEnum.Sync, paths);
     }
 
-    /**
+      /**
      * This method is used to invoke the method that will send the
      * delete action.
      * @param index The position where the desired device is found
@@ -126,8 +138,9 @@ public class ConnectivityResident {
      * @throws DeviceNotFound The device at the given index was not found.
      * @throws IOException
      */
-    public void deleteFiles(int index, Path... subPath) throws DeviceNotFound, IOException {
-        actionFiles(index, TreeActionsEnum.Delete, subPath);
+    public void deleteFiles(int index, Path... paths) throws DeviceNotFound, IOException {
+        actionFiles(index, TreeActionsEnum.Delete, paths);
+
     }
 
     /**

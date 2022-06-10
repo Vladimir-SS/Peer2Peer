@@ -32,16 +32,12 @@ public class ConnectionReceiver {
      * @throws IOException
      */
     public synchronized Path receiveFile(Path to) throws IOException {
-
-        //available bytes... if it is closed... this gives 0 anyway
         if(reader.available() == 0)
             return null;
         Path relativePath = Paths.get(reader.readUTF());
         Path path = to.resolve(relativePath);
-        System.out.println("receiving: " + path);
         long modified = reader.readLong();
         long size = reader.readLong();
-
         Files.createDirectories(path.getParent());
 
         try(OutputStream os = new FileOutputStream(path.toFile())){
@@ -62,11 +58,8 @@ public class ConnectionReceiver {
             Files.setLastModifiedTime(path, FileTime.fromMillis(modified));
 
         } catch (Exception e){
-            System.out.println("Receive Exception: " + e.getMessage());
             reader.skipNBytes(size);
         }
-
-        System.out.println("done receive");
         return relativePath;
     }
 }

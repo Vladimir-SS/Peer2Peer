@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 public class  SynchronizedDirectory {
 
@@ -25,7 +26,9 @@ public class  SynchronizedDirectory {
 
         try {
             Files.createDirectory(peerPath);
-        } catch (IOException e) {
+        }
+        catch (FileAlreadyExistsException ignored){}
+        catch (IOException e) {
             throw new BadSyncDirectory(e);
         }
         //TODO: hide this folder
@@ -59,7 +62,7 @@ public class  SynchronizedDirectory {
         return treeDirectory;
     }
 
-    public TreeDirectory getTree() {
-        return getTreeFromFile(path.toFile());
+    public TreeDirectory getTree(Path relativePath) {
+        return getTreeFromFile(path.resolve(relativePath).toFile());
     }
 }

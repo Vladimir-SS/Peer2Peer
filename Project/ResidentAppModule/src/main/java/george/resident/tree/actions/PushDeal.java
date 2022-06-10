@@ -1,31 +1,31 @@
 package george.resident.tree.actions;
 
 import connectivity.connection.Connection;
+import george.resident.tree.FileSystemTree;
 import george.resident.tree.TreeDirectory;
 import george.resident.tree.WildcardTreeDirectory;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Map;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  *  PushDeal class helps to transfer data between two devices
  */
 public class PushDeal implements TreeDeal {
     private final Connection connection;
-    private final TreeDirectory ourTree;
-    private final TreeDirectory theirTree;
+    private final FileSystemTree theirSystemTree;
     private final Path root;
 
-    public PushDeal(Connection connection, TreeDirectory ourTree, TreeDirectory theirTree, Path root) {
+    public PushDeal(Connection connection, FileSystemTree theirSystemTree, Path root) {
         this.connection = connection;
-        this.ourTree = ourTree;
-        this.theirTree = theirTree;
+        this.theirSystemTree = theirSystemTree;
         this.root = root;
     }
 
-    /**
+      /**
      * The method receives three parameters and perform synchronization between two devices starting from ourTree.
      * In a recursive way all files that are in ourTree and not in theirTree will be sent to theirTree.
      * The device that sent the request will have all the new/modified files.
@@ -34,37 +34,57 @@ public class PushDeal implements TreeDeal {
      * @param ourTree The tree from where the synchronization is done.
      * @throws IOException This exception is thrown when the connection between the two devices does not work.
      */
-    private void deal(Path path, TreeDirectory ourTree, TreeDirectory theirTree) throws IOException {
-        System.out.println("DEAL DIRECTORY: " + path);
+    private void deal(Path path, TreeDirectory theirTree) throws IOException {
+        if(path.startsWith(".peer"))
+            return;
+        Path absolutePath = root.resolve(path);
 
-        for (Map.Entry<String, Long> pair : ourTree.getFiles().entrySet()) {
-            String name = pair.getKey();
-            Path newPath = path.resolve(name);
+        File absoluteFile= absolutePath.toFile();
 
-            if (theirTree.containsFile(name) && pair.getValue() <= theirTree.getModified(name))
-                continue;
-            connection.sendFile(root, newPath);
-            System.out.println("DEAL SENT " + newPath);
-        }
+        File[] children = absoluteFile.listFiles();
 
-        var ourDirectories = ourTree.getDirectories();
-        ourDirectories.remove(".peer");
+        if (children == null)
+            return;
 
-        for (Map.Entry<String, TreeDirectory> pair : ourDirectories.entrySet()) {
-            String nameNextDirectory = pair.getKey();
-            System.out.println("DEAL NEXT DIRECTORY: " + nameNextDirectory);
+        for (File file : children) {
+            String fileName = file.getName();
+            Path newPath = path.resolve(fileName);
+            BasicFileAttributes basicFileAttributes = Files.readAttributes(root.resolve(newPath), BasicFileAttributes.class);
 
-            TreeDirectory theirNextTree = theirTree.containsDirectory(nameNextDirectory)
-                    ? theirTree.getSubDirectory(nameNextDirectory)
-                    : new WildcardTreeDirectory();
+            if (basicFileAttributes.isDirectory()) {
+                TreeDirectory theirNextTree = theirTree.containsDirectory(fileName)
+                        ? theirTree.getSubDirectory(fileName)
+                        : new WildcardTreeDirectory();
 
-            Path newPath = path.resolve(pair.getKey());
-            deal(newPath, pair.getValue(), theirNextTree);
+                deal(newPath, theirNextTree);
+            } else {
+                if (theirTree.containsFile(fileName)
+                        && basicFileAttributes.lastModifiedTime().toMillis() <= theirTree.getModified(fileName))
+                    continue;
+                connection.sendFile(root, newPath);
+            }
         }
     }
 
     @Override
     public void deal() throws IOException {
-        deal(Paths.get(""), ourTree, theirTree);
+        var theirTree = theirSystemTree.getRoot();
+
+        if(theirTree.containsFile(""))
+        {
+            var absolutePath = root.resolve(theirSystemTree.getPath());
+            try {
+                if(Files.isDirectory(absolutePath)){
+                    theirTree = new WildcardTreeDirectory();
+                }
+                else if (Files.getLastModifiedTime(absolutePath).toMillis() > theirTree.getModified("")){
+                    connection.sendFile(root, theirSystemTree.getPath());
+                    return;
+                }
+            } catch (Exception ignored) {
+                return;
+            }
+        }
+        deal(theirSystemTree.getPath(), theirTree);
     }
 }

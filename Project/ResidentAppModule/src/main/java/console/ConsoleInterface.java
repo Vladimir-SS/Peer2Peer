@@ -1,51 +1,47 @@
 package console;
 
-import console.commands.Command;
-import console.commands.DeviceCommand;
-import connectivity.Peer;
-import console.commands.SyncCommand;
+import console.commands.*;
 import george.resident.exceptions.BadSyncDirectory;
 import george.resident.sync.ConnectivityResident;
-import george.resident.SynchronizedDirectory;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.PortUnreachableException;
 import java.net.SocketException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
-
-//TODO: MOVE THIS IN HIS OWN PACKAGE
-
-/**
- * This class is used to establish a communication between the application
- * and the user through the console.
- * It displays instructions for the user and reads the commands given invoking
- * the methods responsible for interpreting and executing them.
- */
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ConsoleInterface {
     private static final String manual = "peer <port> <path> [--watch]";
 
     static final private Scanner input = new Scanner(System.in);
-    private static final Map<String, Command> commands = new HashMap<>(){{
-        put("device", new DeviceCommand());
-        put("sync", new SyncCommand());
-    }};
+    static final private Stream<Command> commandStream = Stream.of(
+            new FindCommand(),
+            new DeleteCommand(),
+            new FetchCommand(),
+            new SyncCommand(),
+            new ExitCommand(),
+            new ConnectCommand(),
+            new ConnectedCommand()
+    );
 
     public static void main(String[] args) {
+
         if(args.length < 2){
             System.out.println("Not enough arguments: ");
-            System.out.println(manual);
+            System.out.println("manual: " + manual);
+            System.exit(1);
         }
 
         int port = Integer.parseInt(args[0]);
         System.out.println("Port: " + port);
 
         Path path = Paths.get(args[1]);
-        System.out.println("Path: " + port);
+        System.out.println("Path: " + path);
 
+        final Map<String, Command> commands = commandStream.collect(
+                Collectors.toMap(Command::getName, command -> command)
+        );
 
         try {
             final ConnectivityResident cr = new ConnectivityResident(port, path);

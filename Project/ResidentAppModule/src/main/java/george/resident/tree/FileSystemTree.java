@@ -23,7 +23,7 @@ public class FileSystemTree{
     }
 
     public void setPath(Path path) {
-        this.rootPath = path.toString();
+        this.path = path.toString();
     }
 
     public TreeActionsEnum getAction() {
