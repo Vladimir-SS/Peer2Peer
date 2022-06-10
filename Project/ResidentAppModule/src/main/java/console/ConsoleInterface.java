@@ -19,7 +19,10 @@ public class ConsoleInterface {
             new FindCommand(),
             new DeleteCommand(),
             new FetchCommand(),
-            new SyncCommand()
+            new SyncCommand(),
+            new ExitCommand(),
+            new ConnectCommand(),
+            new ConnectedCommand()
     );
 
     public static void main(String[] args) {

@@ -49,7 +49,6 @@ public class ConnectionSender {
                 int sendSize = is.read(buffer);
                 if(sendSize == 0)
                     break;
-                System.out.println();
                 writer.write(buffer, 0, sendSize);
                 size -= sendSize;
             }
@@ -57,6 +56,7 @@ public class ConnectionSender {
             writer.flush();
         }
         System.out.println("done send");
+        System.out.println();
     }
 
 }

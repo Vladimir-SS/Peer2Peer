@@ -98,6 +98,10 @@ public class LocalConnection implements Connection {
         clientSocket.close();
     }
 
+    public boolean isClosed() {
+        return clientSocket.isClosed();
+    }
+
     /**
      * The method overrides the equals() method of class Object in order to compare two object of type LocalConnection
      * @param o An object

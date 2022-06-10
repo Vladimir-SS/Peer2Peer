@@ -28,4 +28,6 @@ public interface Connection extends Closeable {
      * @return Address of the host
      */
     String getAddress();
+
+    boolean isClosed();
 }

@@ -22,8 +22,6 @@ public class PushDeal implements TreeDeal {
         this.root = root;
     }
     private void deal(Path path, TreeDirectory ourTree, TreeDirectory theirTree) throws IOException {
-        System.out.println("DEAL DIRECTORY: " + path);
-
         for (Map.Entry<String, Long> pair : ourTree.getFiles().entrySet()) {
             String name = pair.getKey();
             Path newPath = path.resolve(name);
@@ -31,7 +29,6 @@ public class PushDeal implements TreeDeal {
             if (theirTree.containsFile(name) && pair.getValue() <= theirTree.getModified(name))
                 continue;
             connection.sendFile(root, newPath);
-            System.out.println("DEAL SENT " + newPath);
         }
 
         var ourDirectories = ourTree.getDirectories();
@@ -39,8 +36,6 @@ public class PushDeal implements TreeDeal {
 
         for (Map.Entry<String, TreeDirectory> pair : ourDirectories.entrySet()) {
             String nameNextDirectory = pair.getKey();
-            System.out.println("DEAL NEXT DIRECTORY: " + nameNextDirectory);
-
             TreeDirectory theirNextTree = theirTree.containsDirectory(nameNextDirectory)
                     ? theirTree.getSubDirectory(nameNextDirectory)
                     : new WildcardTreeDirectory();

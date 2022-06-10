@@ -37,14 +37,14 @@ public class Peer implements Closeable {
      * 5 seconds. In the same time, a new instance of connection manager is created
      * and a new thread is created in order
      * to keep a track of all connections of that client
-     * 
+     *
      * @param port The port value of a client through which every connection will be
      *             made
      * @throws PortUnreachableException
      * @throws SocketException
      */
     public Peer(int port) throws PortUnreachableException, SocketException {
-        if (!isAvailable(port))
+        if (!portIsAvailable(port))
             throw new PortUnreachableException("port " + port + " is not available");
         this.broadcast = new Broadcast(port, 5);
         connectionsManager = ConnectionsManager.getInstance(port);
@@ -54,10 +54,7 @@ public class Peer implements Closeable {
     /**
      * This method get a set of addresses that can be reached from the client who is
      * calling this method
-     * 
-     * @param async If this variable is set to "true",
-     *              the function returns an empty container which will be later
-     *              filled.
+     *
      * @return Available devices after listening to broadcasts.
      * @throws BroadcastFailedException Broadcasting is not working
      */
@@ -67,7 +64,7 @@ public class Peer implements Closeable {
 
     /**
      * The method is used to get an array list of active connections
-     * 
+     *
      * @return A list of active connections
      */
     public List<Connection> getConnectedDevices() {
@@ -78,7 +75,7 @@ public class Peer implements Closeable {
      * This method search through all available connections and when a connection is
      * sending a file, a new map entry in
      * returned, having as key that connection, and as value the path to that file
-     * 
+     *
      * @param to A path to the new received file
      * @return A map entry having as key a connection, and as value the path to a
      *         new received file
@@ -87,7 +84,8 @@ public class Peer implements Closeable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 for (Connection connection : connectionsManager.getConnections()) {
-
+                    if(connection.isClosed())
+                        disconnectDevice(connection);
                     try {
                         Path path = connection.receiveFile(to);
                         if (path != null)
@@ -96,7 +94,7 @@ public class Peer implements Closeable {
                         return new AbstractMap.SimpleImmutableEntry<>(connection, null);
                     }
                 }
-                wait(1000);
+                wait(5000);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }
@@ -108,7 +106,7 @@ public class Peer implements Closeable {
     /**
      * This method is adding a new connection to the list of current active
      * connections
-     * 
+     *
      * @param device The address of the new device which is wanted to be added in
      *               the list of active connections
      * @throws DeviceConnectException
@@ -116,7 +114,7 @@ public class Peer implements Closeable {
      *                                         device is
      *                                         already in the list of connections
      */
-    public void connectDevice(InetAddress device) throws DeviceAlreadyConnectedException, DeviceConnectException {
+    public void connectDevice(InetAddress device) throws DeviceConnectException {
         LocalConnection connection;
         try {
             connection = new LocalConnection(device, getPort());
@@ -125,17 +123,18 @@ public class Peer implements Closeable {
         }
 
         var connections = connectionsManager.getConnections();
-        if (!connections.contains(connection))
-            connections.add(connection);
-        else
-            throw new DeviceAlreadyConnectedException();
+        connections.stream()
+                .filter(c -> c.equals(connection))
+                .findFirst()
+                .ifPresent(this::disconnectDevice);
+        connections.add(connection);
     }
 
     /**
      * This method closed a connection of a device, removing the connection from the
      * list of connections and closing the
      * connection
-     * 
+     *
      * @param device The connection which is wanted to be closed
      */
     public void disconnectDevice(Connection device) {
@@ -148,7 +147,7 @@ public class Peer implements Closeable {
 
     /**
      * This method returns the port value of the connections
-     * 
+     *
      * @return The port value of the server client
      */
     public int getPort() {
@@ -158,11 +157,11 @@ public class Peer implements Closeable {
     /**
      * This method check if a given port value is available or not, returning a
      * boolean value
-     * 
+     *
      * @param port The port value to be checked if is available
      * @return A boolean value checking if a given port is available or not
      */
-    public static boolean isAvailable(int port) {
+    public static boolean portIsAvailable(int port) {
         /*
          * TODO
          * Add IllegalArgumentException without ruining the code
@@ -171,7 +170,7 @@ public class Peer implements Closeable {
          * }
          */
         try (ServerSocket tempSocket = new ServerSocket(port);
-                DatagramSocket tempDatagram = new DatagramSocket(port)) {
+             DatagramSocket tempDatagram = new DatagramSocket(port)) {
             tempSocket.setReuseAddress(true);
             tempDatagram.setReuseAddress(true);
             return true;
@@ -183,7 +182,7 @@ public class Peer implements Closeable {
     /**
      * This method is used to auto close the broadcast variable and the
      * connectionManager variable
-     * 
+     *
      * @throws IOException
      */
     @Override

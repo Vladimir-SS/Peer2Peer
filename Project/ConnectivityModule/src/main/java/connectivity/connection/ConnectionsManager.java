@@ -101,23 +101,20 @@ public class ConnectionsManager implements Runnable {
 
             try {
                 LocalConnection connection = new LocalConnection(clientSocket);
-                if(!connections.contains(connection)) {
-                    connections.add(connection);
-                    System.out.println("Peer: " + clientSocket.getRemoteSocketAddress().toString() + " connected!");
-                }
-                else {
-                    //TODO: connections as HASHMAP<INTEGER/STRING, CONNECTION>
-                    connections .stream()
-                            .filter(c -> c.equals(connection))
-                            .findFirst()
-                            .ifPresent(c -> {
-                                try {
-                                    c.close();
-                                } catch (IOException ignored) {
-                                }
-                            });
-                    connections.add(connection);
-                }
+
+                //TODO: connections as HASHMAP<INTEGER/STRING, CONNECTION>
+                connections .stream()
+                        .filter(c -> c.equals(connection))
+                        .findFirst()
+                        .ifPresent(c -> {
+                            try {
+                                connections.remove(c);
+                                c.close();
+                            } catch (IOException ignored) {
+                            }
+                        });
+                connections.add(connection);
+                System.out.println("Peer: " + clientSocket.getRemoteSocketAddress().toString() + " connected!");
             } catch (IOException e) {
                 e.printStackTrace();
             }

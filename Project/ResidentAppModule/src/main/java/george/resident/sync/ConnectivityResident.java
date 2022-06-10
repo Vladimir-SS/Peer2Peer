@@ -6,6 +6,7 @@ import connectivity.exceptions.DeviceAlreadyConnectedException;
 import george.resident.SynchronizedDirectory;
 import george.resident.exceptions.BadSyncDirectory;
 import george.resident.exceptions.DeviceNotFound;
+import george.resident.tree.actions.DeleteDeal;
 import george.resident.tree.actions.TreeActionsEnum;
 
 import java.io.*;
@@ -57,6 +58,7 @@ public class ConnectivityResident {
     }
 
     private void actionFiles(int index, TreeActionsEnum action, Path... paths) throws DeviceNotFound, IOException {
+
         thread.getActionHandler().sendAction(
                 thread.getPeerManager().getConnectedDevice(index),
                 action,

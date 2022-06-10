@@ -1,8 +1,10 @@
 package console.commands;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class ConnectedCommand extends Command{
 
-    protected ConnectedCommand() {
+    public ConnectedCommand() {
         super("connected", "");
     }
 
@@ -11,6 +13,8 @@ public class ConnectedCommand extends Command{
         if(arguments.length > 0)
             throw manual();
 
-
+        System.out.println("Connected Devices: ");
+        AtomicInteger i = new AtomicInteger();
+        app.getConnectedDevices().forEach(device -> System.out.println((i.getAndIncrement()) + ". " + device));
     }
 }

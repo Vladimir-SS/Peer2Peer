@@ -190,7 +190,7 @@ public class MainFrame {
 
             this.portNumber=-1;
 
-            if(Peer.isAvailable( portNumber )){
+            if(Peer.portIsAvailable( portNumber )){
                 //the port is good,we save it
                 this.portNumber=portNumber;
 

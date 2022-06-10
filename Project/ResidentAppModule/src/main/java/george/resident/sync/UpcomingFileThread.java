@@ -36,6 +36,8 @@ public class UpcomingFileThread extends Thread{
             Connection connection = entry.getKey();
             Path relativePath = entry.getValue();
 
+            System.out.println("RVVV = " + relativePath);
+
             if (relativePath == null) {
                 this.peerManager.getPeer().disconnectDevice(connection);
                 continue;

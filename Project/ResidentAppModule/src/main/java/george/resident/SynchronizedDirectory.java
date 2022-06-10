@@ -55,8 +55,7 @@ public class  SynchronizedDirectory {
         return treeDirectory;
     }
 
-    public TreeDirectory getTree(Path ...relativePath) {
-        Path absolutePath = Arrays.stream(relativePath).reduce(path, Path::resolve);
-        return getTreeFromFile(path.resolve(absolutePath).toFile());
+    public TreeDirectory getTree(Path relativePath) {
+        return getTreeFromFile(path.resolve(relativePath).toFile());
     }
 }

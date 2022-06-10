@@ -14,11 +14,12 @@ public class ConnectCommand extends Command{
             throw manual();
 
         int index = parseUnsigned(arguments[0]);
-        app.connectTo(0);
+        app.connectTo(index);
 
-        System.out.println();
+
         System.out.println("Connected Devices: ");
         AtomicInteger i = new AtomicInteger();
         app.getConnectedDevices().forEach(device -> System.out.println((i.getAndIncrement()) + ". " + device));
+        System.out.println();
     }
 }
