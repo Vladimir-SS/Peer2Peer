@@ -27,16 +27,6 @@ public class PushDeal implements TreeDeal {
             return;
         Path absolutePath = root.resolve(path);
 
-        if(!Files.isDirectory(absolutePath))
-        {
-            if (theirTree.containsFile("")
-                    && Files.getLastModifiedTime(absolutePath).toMillis() > theirTree.getModified(""))
-                connection.sendFile(root, path);
-
-            return;
-        }
-
-
         File absoluteFile= absolutePath.toFile();
 
         File[] children = absoluteFile.listFiles();
@@ -66,8 +56,23 @@ public class PushDeal implements TreeDeal {
 
     @Override
     public void deal() throws IOException {
-        System.out.println(theirSystemTree.getPath());
-        System.out.println(theirSystemTree.getRoot());
-        deal(theirSystemTree.getPath(), theirSystemTree.getRoot());
+        var theirTree = theirSystemTree.getRoot();
+
+        if(theirTree.containsFile(""))
+        {
+            var absolutePath = root.resolve(theirSystemTree.getPath());
+            try {
+                if(Files.isDirectory(absolutePath)){
+                    theirTree = new WildcardTreeDirectory();
+                }
+                else if (Files.getLastModifiedTime(absolutePath).toMillis() > theirTree.getModified("")){
+                    connection.sendFile(root, theirSystemTree.getPath());
+                    return;
+                }
+            } catch (Exception ignored) {
+                return;
+            }
+        }
+        deal(theirSystemTree.getPath(), theirTree);
     }
 }

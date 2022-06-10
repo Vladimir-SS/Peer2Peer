@@ -94,7 +94,7 @@ public class ActionHandler {
         TreeDeal action = new PushDeal(
                 connection,
                 fileSystemTree,
-                synchronizedDirectory.getPath().resolve(fileSystemTree.getPath())
+                synchronizedDirectory.getPath()
         );
 
         action.deal();

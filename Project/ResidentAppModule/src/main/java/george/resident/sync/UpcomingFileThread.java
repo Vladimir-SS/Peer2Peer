@@ -56,11 +56,11 @@ public class UpcomingFileThread extends Thread{
                 } catch (IOException ignored) {
 
                 }
-                try {
-                    Files.delete(path);
-                } catch (IOException ignored) {
-
-                }
+//                try {
+//                    Files.delete(path);
+//                } catch (IOException ignored) {
+//
+//                }
             }
         }
     }
